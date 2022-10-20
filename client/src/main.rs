@@ -1,12 +1,17 @@
+mod pages;
+mod router;
+
+use crate::router::{switch, Route};
+
 use yew::prelude::*;
+use yew_router::prelude::*;
 
 #[function_component(App)]
 fn app() -> Html {
-    html! {
-        <>
-        <h1>{"Nazdárek!"}</h1>
-        <h2>{"Ahojky!"}</h2>
-        </>
+    html!{
+        <BrowserRouter>
+            <Switch<Route> render={Switch::render(switch)} />
+        </BrowserRouter>
     }
 }
 
