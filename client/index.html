@@ -6,7 +6,17 @@
 		<title>Mosty - Symposion 2022 | Gymnázium Jana Keplera</title>
 	</head>
 	<body>
-		<div class="unsupported_browser">
+		<noscript class="unsupported_browser">
+			<h1>
+				Pro zobrazení této stránky je potřeba nemít zapnuté blokování
+				scriptů.
+			</h1>
+		</noscript>
+		<div
+			class="unsupported_browser"
+			id="unsupported_browser"
+			style="opacity: 0"
+		>
 			<h1>
 				Pro zobrazení této stránky je potřeba používat prohlížeč
 				podporující WebAssembly a nemít zapnuté blokování scriptů.
@@ -40,4 +50,46 @@
 			</ul>
 		</div>
 	</body>
+
+	<script>
+		// Check if webassembly is supported
+		// https://stackoverflow.com/a/63208798/14133159
+
+		const webassembly_supported = (function () {
+			try {
+				if (
+					typeof WebAssembly === 'object' &&
+					typeof WebAssembly.instantiate === 'function'
+				) {
+					const module = new WebAssembly.Module(
+						Uint8Array.of(
+							0x0,
+							0x61,
+							0x73,
+							0x6d,
+							0x01,
+							0x00,
+							0x00,
+							0x00
+						)
+					);
+					if (module instanceof WebAssembly.Module)
+						return (
+							new WebAssembly.Instance(module) instanceof
+							WebAssembly.Instance
+						);
+				}
+			} catch (error) {}
+			return false;
+		})();
+
+		// Older browsers e.g. IE11
+		// Shows the notice about WebAssembly not being supported
+		if (!webassembly_supported) {
+			const unsupported_browser_notice = document.getElementById(
+				'unsupported_browser'
+			);
+			unsupported_browser_notice.style.opacity = 1;
+		}
+	</script>
 </html>
