@@ -1,3 +1,7 @@
+.unsupported_browser {
+	color: black;
+}
+
 body {
 	color: red
 }
