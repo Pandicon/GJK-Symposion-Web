@@ -30,3 +30,13 @@ pub fn set_local_storage_key(local_storage: &Option<Storage>, key: &str, value: 
     }
 	res
 }
+
+pub fn remove_local_storage_key(local_storage: &Option<Storage>, key: &str) -> Result<(), ()> {
+    let mut res = Err(());
+	if let Some(storage) = local_storage {
+        if storage.remove_item(key).is_ok() {
+			res = Ok(());
+		};
+    }
+	res
+}
