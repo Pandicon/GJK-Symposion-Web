@@ -1,0 +1,6 @@
+/build/*
+/bin/api_server
+/include/*
+/.vscode/*
+*.pem
+*.csr
