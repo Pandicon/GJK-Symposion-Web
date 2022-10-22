@@ -8,30 +8,11 @@
 #include <vector>
 #include "../include/asio.hpp"
 #include "../include/asio/ssl.hpp"
+#include "http.hpp"
 
 namespace api_server {
-	constexpr unsigned int buffer_size = 1024;
-
-	struct http_request {
-	public:
-		enum method_t {
-			GET, HEAD, POST, PUT, DELETE, CONNECT, OPTIONS, TRACE, PATCH
-		};
-
-		method_t method;
-		std::string url;
-		std::unordered_map<std::string, std::string> fields;
-		std::string content;
-	};
-	struct http_response {
-	public:
-		unsigned short code;
-		std::string content;
-		std::string content_type;
-		bool close;
-
-		std::string encode() const;
-	};
+	constexpr unsigned int buffer_size = 2048;
+	
 	using request_callback_fun = http_response (*)(const http_request &);
 	using ssl_socket = asio::ssl::stream<asio::ip::tcp::socket>;
 	class wsession {
