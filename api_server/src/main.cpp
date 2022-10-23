@@ -18,6 +18,20 @@ fetch_task_t current_fetch_task;
 std::queue<fetch_task_t> fetch_tasks;
 api_server::cache<api_server::schedule> schedule_cache;
 
+void day_schedule_response(api_server::http_response &res, unsigned int day) {
+	if (schedule_cache.get().day_jsons.size() < 3 || schedule_cache.get().day_jsons[day].empty()) {
+		res.code = 500;
+		res.content = "{\"data\":null,\"error\":\"Could not retrieve schedule.\"}";
+	} else {
+		res.code = 200;
+		res.content = "{\"data\":{\"harmonogram\":" + schedule_cache.get().day_jsons[day] + ","
+			"\"last_updated\":" + std::to_string(schedule_cache.get_last_update_time_since_epoch()) + "},\"error\":null}";
+	}
+	if (schedule_cache.should_update(std::chrono::minutes(30))) {
+		fetch_tasks.emplace(fetch_task_t::SCHEDULE);
+	}
+}
+
 api_server::http_response reqest_callback(const api_server::http_request &req) {
 	api_server::http_response res;
 	res.close = true;
@@ -31,17 +45,11 @@ api_server::http_response reqest_callback(const api_server::http_request &req) {
 		res.code = 200;
 		res.content = "{\"data\":{\"secret_message\":\"Nazdárek!\"},\"error\":null}";
 	} else if (req.url == "/streda") {
-		if (schedule_cache.get().day_jsons.size() < 3 || schedule_cache.get().day_jsons[0].empty()) {
-			res.code = 500;
-			res.content = "{\"data\":null,\"error\":\"Could not retrieve schedule.\"}";
-		} else {
-			res.code = 200;
-			res.content = "{\"data\":{\"harmonogram\":" + schedule_cache.get().day_jsons[0] + ","
-				"\"last_updated\":" + std::to_string(schedule_cache.get_last_update_time_since_epoch()) + "},\"error\":null}";
-		}
-		if (schedule_cache.should_update(std::chrono::minutes(30))) {
-			fetch_tasks.emplace(fetch_task_t::SCHEDULE);
-		}
+		day_schedule_response(res, 0);
+	} else if (req.url == "/ctvrtek") {
+		day_schedule_response(res, 1);
+	} else if (req.url == "/patek") {
+		day_schedule_response(res, 2);
 	}
 	return res;
 }
