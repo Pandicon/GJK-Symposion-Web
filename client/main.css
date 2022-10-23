@@ -18,7 +18,7 @@ body {
 
 
 header {
-	height: 5rem;
+	min-height: 8rem;
 	display: flex;
 	flex-direction: row;
 }
@@ -27,6 +27,22 @@ header h1 {
 	color: black;
 	display: block;
 	width: auto;
+	height: 4rem;
+	line-height: 3rem;
+	margin-left: 3rem;
+	margin-top: 3rem;
+	font-size: 3rem;
+	padding-right: 1rem;
+}
+
+.hlavicka_most_nad {
+	height: 2.5rem;
+	margin-top: 3.5rem;
+}
+
+.hlavicka_most_nad .opakujici_most {
+	height: 12px !important;
+	background-size: cover;
 }
 
 header h1 a {
@@ -46,7 +62,7 @@ header h1 a {
 .opakujici_most {
 	background-image: url("images/oblouky.png");
 	background-repeat: repeat-x;
-	min-height: 23px;
+	height: 23px;
 }
 
 .opakujici_most_naopak {
@@ -97,12 +113,12 @@ main {
 
 main .opakujici_most {
 	width: 100%;
-	animation: posun_most 10s linear infinite;
+	animation: posun_most 30s linear infinite;
 }
 
 main .opakujici_most_naopak {
 	width: 100%;
-	animation: posun_most 10s linear infinite;
+	animation: posun_most 30s linear infinite;
 	animation-direction: reverse;
 	position: absolute;
 	bottom: 0;
