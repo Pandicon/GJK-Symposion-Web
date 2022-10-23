@@ -131,6 +131,7 @@ pub fn harmonogram(props: &Props) -> Html {
 		}
 		<div class="opakujici_most_naopak"></div>
 		</main>
+		<footer></footer>
 		</>
 	}
 }
