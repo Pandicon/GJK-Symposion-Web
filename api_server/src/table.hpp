@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 #include <chrono>
+#include <string>
+#include <vector>
 
 namespace api_server {
 	template<typename T>
@@ -17,14 +19,24 @@ namespace api_server {
 	protected:
 		std::chrono::system_clock::time_point last_update;
 		T cached;
-	};
+	};/*
 	template<typename T>
 	class json_cache : public cache<T> {
 	public:
 		inline void update(const T &src, const std::string &json) { this->last_update = std::chrono::system_clock::now(); this->cached = src; cached_json = json; }
 		inline std::string json() { return cached_json; }
-	private:
+	protected:
 		std::string cached_json;
+	};*/
+
+	class schedule {
+	public:
+		schedule() = default;
+		schedule(const std::vector<std::vector<std::string>> &sheet);
+
+		std::vector<std::string> day_jsons;
+		std::vector<std::string> annotations;
+		std::vector<std::vector<size_t>> annotation_indices;
 	};
 }
 

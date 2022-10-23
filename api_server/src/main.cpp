@@ -9,15 +9,14 @@
 #include "./wserver.hpp"
 
 enum class fetch_task_t {
-	NONE, SHEET_TEST
+	NONE, SCHEDULE
 };
 const char *fetch_task_strs[] {
-	"none",
-	"sheet_test",
+	"none", "schedule"
 };
 fetch_task_t current_fetch_task;
 std::queue<fetch_task_t> fetch_tasks;
-api_server::cache<std::string> sheet_test_cache;
+api_server::cache<api_server::schedule> schedule_cache;
 
 api_server::http_response reqest_callback(const api_server::http_request &req) {
 	api_server::http_response res;
@@ -31,17 +30,17 @@ api_server::http_response reqest_callback(const api_server::http_request &req) {
 	} else if (req.url == "/secret") {
 		res.code = 200;
 		res.content = "{\"data\":{\"secret_message\":\"Nazdárek!\"},\"error\":null}";
-	} else if (req.url == "/sheet_test") {
-		if (sheet_test_cache.get().empty()) {
+	} else if (req.url == "/streda") {
+		if (schedule_cache.get().day_jsons.size() < 3 || schedule_cache.get().day_jsons[0].empty()) {
 			res.code = 500;
-			res.content = "{\"data\":null,\"error\":\"Could not retrieve test sheet.\"}";
+			res.content = "{\"data\":null,\"error\":\"Could not retrieve schedule.\"}";
 		} else {
 			res.code = 200;
-			res.content = "{\"data\":{\"sheet\":" + sheet_test_cache.get() + ","
-				"\"last_updated\":\"" + std::to_string(sheet_test_cache.get_last_update_time_since_epoch()) + "\"},\"error\":null}";
+			res.content = "{\"data\":{\"harmonogram\":" + schedule_cache.get().day_jsons[0] + ","
+				"\"last_updated\":" + std::to_string(schedule_cache.get_last_update_time_since_epoch()) + "},\"error\":null}";
 		}
-		if (sheet_test_cache.should_update(std::chrono::minutes(30))) {
-			fetch_tasks.emplace(fetch_task_t::SHEET_TEST);
+		if (schedule_cache.should_update(std::chrono::minutes(30))) {
+			fetch_tasks.emplace(fetch_task_t::SCHEDULE);
 		}
 	}
 	return res;
@@ -59,33 +58,18 @@ int main(int, char**) {
 	}
 	api_server::wserver server(io_service, port, reqest_callback);
 	api_server::sheet_fetcher fetcher(io_service);
-	fetch_tasks.push(fetch_task_t::SHEET_TEST);
+	fetch_tasks.push(fetch_task_t::SCHEDULE);
 	while (true) {
 		io_service.poll();
 		if (fetcher.is_done()) {
 			switch (current_fetch_task) {
 			case fetch_task_t::NONE: break;
-			case fetch_task_t::SHEET_TEST:{
+			case fetch_task_t::SCHEDULE:{
 				if (fetcher.is_success()) {
-					std::ostringstream oss;
-					oss << "[";
-					bool first_row = true;
-					for (const auto &row : fetcher.get_sheet()) {
-						oss << (first_row ? "[" : ",[");
-						first_row = false;
-						bool first_cell = true;
-						for (const auto &cell : row) {
-							if (!first_cell) oss << ',';
-							first_cell = false;
-							oss << '"' << cell << '"';
-						}
-						oss << "]";
-					}
-					oss << "]";
-					sheet_test_cache.update(oss.str());
-					std::cout << "\x1b[1m\x1b[96m[tasks::fetcher]: fetched sheet test\x1b[0m" << std::endl;
+					schedule_cache.update(api_server::schedule(fetcher.get_sheet()));
+					std::cout << "\x1b[1m\x1b[96m[tasks::fetcher]: fetched schedule\x1b[0m" << std::endl;
 				} else {
-					std::cout << "\x1b[1m\x1b[91m[tasks::fetcher::error]: failed to fetch sheet test\x1b[0m" << std::endl;
+					std::cout << "\x1b[1m\x1b[91m[tasks::fetcher::error]: failed to fetch schedule\x1b[0m" << std::endl;
 				}
 				break;
 			}
@@ -97,17 +81,17 @@ int main(int, char**) {
 				current_fetch_task = fetch_tasks.front();
 				fetch_tasks.pop();
 				switch (current_fetch_task) {
-				case fetch_task_t::SHEET_TEST:
-					if (!sheet_test_cache.should_update(std::chrono::seconds(10))) {
+				case fetch_task_t::SCHEDULE:
+					if (!schedule_cache.should_update(std::chrono::seconds(10))) {
 						current_fetch_task = fetch_task_t::NONE;
 						goto skip_fetch_task_assign;
 					}
 					if (!sheet.empty())
-						fetcher.start_fetch(sheet, "test");
+						fetcher.start_fetch(sheet, "harmonogramnaweb");
 					break;
 				default: break;
 				}
-				std::cout << "[tasks::fetcher]: assigned fetcher task " << fetch_task_strs[static_cast<size_t>(fetch_tasks.front())] << std::endl;
+				std::cout << "[tasks::fetcher]: assigned fetcher task " << fetch_task_strs[static_cast<size_t>(current_fetch_task)] << std::endl;
 			}
 		skip_fetch_task_assign:;
 		}

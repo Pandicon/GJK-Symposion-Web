@@ -10,7 +10,7 @@ include(CTest)
 enable_testing()
 
 add_executable(api_server ${CMAKE_SOURCE_DIR}/src/main.cpp ${CMAKE_SOURCE_DIR}/src/wserver.cpp ${CMAKE_SOURCE_DIR}/src/http.cpp
-	${CMAKE_SOURCE_DIR}/src/fetch.cpp)
+	${CMAKE_SOURCE_DIR}/src/fetch.cpp ${CMAKE_SOURCE_DIR}/src/table.cpp)
 target_include_directories(api_server PUBLIC ${CMAKE_SOURCE_DIR}/include/)
 if(MSVC)
 	target_compile_options(api_server PRIVATE /W4 /WX)

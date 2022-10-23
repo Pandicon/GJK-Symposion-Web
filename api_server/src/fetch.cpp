@@ -72,8 +72,8 @@ namespace api_server {
 				if (chunked) {
 					asio::error_code cec;
 					// TODO: read the chunk size
-					// I tried to do it, but I couldn't get it to work, so the data limit is 64KiB now
-					constexpr size_t limit = 65536;
+					// I tried to do it, but I couldn't get it to work, so the data limit is 512KiB now
+					constexpr size_t limit = 524288;
 					char arr[limit];
 					size_t nbytes = socket->read_some(asio::buffer(arr, limit), cec);
 					if (cec) { std::cerr << "[sheet_fetcher]: unable to retrieve content " << cec.value() << " " << cec.message() << std::endl; done = true; return; }
@@ -109,23 +109,26 @@ namespace api_server {
 						ln.erase(std::find_if(ln.rbegin(), ln.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), ln.end());
 						std::string cell;
 						data.emplace_back();
-						for (auto it = ln.find(','); it != std::string::npos; it = ln.find(',')) {
-							cell = ln.substr(0, it);
-							ln = ln.substr(it + 1);
-							if (cell.empty()) continue;
-							if (cell.size() > 1 && cell.front() == '"' && cell.back() == '"') {
-								cell = cell.substr(1, cell.size() - 2);
+						std::string b;
+						bool in_text = false;
+						bool prev_quotes = false;
+						for (const char &c : ln) {
+							if (c == '"') {
+								if (!in_text && prev_quotes) {
+									b.push_back(c);
+								}
+								prev_quotes = true;
+								in_text = !in_text;
+							} else if (!in_text && c == ',') {
+								data.back().emplace_back(b);
+								b.clear();
+								prev_quotes = false;
+							} else {
+								b.push_back(c);
+								prev_quotes = false;
 							}
-							//std::cout << "cell " << cell << std::endl;
-							data.back().emplace_back(cell);
 						}
-						if (!ln.empty()) {
-							if (ln.size() > 1 && ln.front() == '"' && ln.back() == '"') {
-								ln = ln.substr(1, ln.size() - 2);
-							}
-							//std::cout << "cell " << ln << std::endl;
-							data.back().emplace_back(ln);
-						}
+						data.back().emplace_back(b);
 					}
 				}
 				buff.clear();
