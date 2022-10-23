@@ -8,7 +8,7 @@ pub fn home() -> Html {
     let local_storage = utils::get_local_storage();
     let value = utils::get_local_storage_key(&local_storage, "test");
     if value.is_none() {
-        if utils::set_local_storage_key(&local_storage, "test", "test value").is_err() {
+        if utils::set_local_storage_key(&local_storage, "test", &format!("Current timestamp is {}", js_sys::Date::now())).is_err() {
             console::log!("Something went wrong when putting the value into the local storage");
         }
     } else {
