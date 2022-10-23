@@ -10,3 +10,7 @@ gloo = "0.8.0"
 yew = "0.19"
 yew-router = "0.16"
 web-sys = "0.3.60"
+
+[profile.release]
+lto = true
+opt-level = 's'
