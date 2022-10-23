@@ -116,14 +116,14 @@ namespace api_server {
 							if (cell.size() > 1 && cell.front() == '"' && cell.back() == '"') {
 								cell = cell.substr(1, cell.size() - 2);
 							}
-							std::cout << "cell " << cell << std::endl;
+							//std::cout << "cell " << cell << std::endl;
 							data.back().emplace_back(cell);
 						}
 						if (!ln.empty()) {
 							if (ln.size() > 1 && ln.front() == '"' && ln.back() == '"') {
 								ln = ln.substr(1, ln.size() - 2);
 							}
-							std::cout << "cell " << ln << std::endl;
+							//std::cout << "cell " << ln << std::endl;
 							data.back().emplace_back(ln);
 						}
 					}
