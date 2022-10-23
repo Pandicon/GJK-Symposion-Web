@@ -27,11 +27,11 @@ pub fn harmonogram(props: &Props) -> Html {
 	let mut days = vec![];
 	let cache = get_harmonogram_cache(&day);
 	for day_cache_all in &cache {
+		let day = &day_cache_all.day;
 		let day_cache = day_cache_all.cache.as_ref();
 		if day_cache.is_some() && day_cache.as_ref().unwrap().timestamp >= current_ms - CACHE_LIFETIME {
-			days.push(day_cache.unwrap().to_owned().data);
+			days.push((day, day_cache.unwrap().to_owned().data));
 		} else {
-			let _day = &day_cache_all.day; // To be used in the request
 			let response_raw = r#"{
                 "data": {
                     "harmonogram": [
@@ -45,12 +45,11 @@ pub fn harmonogram(props: &Props) -> Html {
                             { "lecturer": "", "title": "8:00 - 9:00" },
                             { "lecturer": "Person 1", "title": "Lecture 1" },
                             { "lecturer": "Person 2", "title": "Lecture 2" },
-                            { "col_span": 2, "lecturer": "Person 3", "title": "Lecture 3" }
+                            { "row_span": 2, "lecturer": "Person 3", "title": "Lecture 3" }
                         ],
                         [
                             { "lecturer": "", "title": "9:00-10:30" },
-                            { "lecturer": "Person 4", "title": "Lecture 4" },
-                            { "lecturer": "Person 2", "title": "Lecture 5" }
+                            { "col_span": 2, "lecturer": "Person 4", "title": "Lecture 4" }
                         ]
                     ],
                     "last_updated": 1666531231
@@ -61,7 +60,7 @@ pub fn harmonogram(props: &Props) -> Html {
 			let response = serde_json::from_str::<HarmonogramDayResponse>(response_raw);
 			if let Ok(schedule) = response {
 				if let Some(data) = schedule.data {
-					days.push(data);
+					days.push((day, data));
 				} else if let Some(error) = schedule.error {
 					gloo::console::error!("Received an error: ", format!("{}", error));
 				} else {
@@ -76,31 +75,46 @@ pub fn harmonogram(props: &Props) -> Html {
 		<>
 		<h1>{"Nazdárek!"}</h1>
 		<h2>{"Zde je harmonogram :D"}</h2>
-		<p>{"Den: "}{&day}</p>
 		{
-			days.iter().map(|day| {
-				let date = chrono::NaiveDateTime::from_timestamp(day.last_updated, 0); //chrono::offset::Local::now().format("%d.%m.%Y, %H:%M:%S");
+			days.iter().map(|(day, day_data)| {
+				let date = chrono::NaiveDateTime::from_timestamp(day_data.last_updated, 0); //chrono::offset::Local::now().format("%d.%m.%Y, %H:%M:%S");
 				html!{
+					<>
+					{day}
+					<table style="width:100%">
+					{
+						day_data.harmonogram.iter().map(|row| {
+							html!{
+								<tr>
+								{
+									row.iter().map(|cell| {
+										let col_span = if let Some(span) = cell.col_span {
+											span
+										} else {
+											1
+										};
+										let row_span = if let Some(span) = cell.row_span {
+											span
+										} else {
+											1
+										};
+										html!{
+											<td colspan={format!("{col_span}")} rowspan={format!("{row_span}")}>
+												<b>{&cell.lecturer}</b><br />{&cell.title}
+											</td>
+										}
+									}).collect::<Html>()
+								}
+								</tr>
+							}
+						}).collect::<Html>()
+					}
+					</table>
 					<p>{date.format("Data z %d.%m.%Y %H:%M:%S").to_string()}</p>
+					</>
 				}
 			}).collect::<Html>()
 		}
-		<table style="width:100%">
-			<tr>
-				<td>{"A"}</td><td>{"B"}</td>
-			</tr>
-			<tr>
-				<td colspan=2>{"C"}</td>
-			</tr>
-			<tr>
-				<td rowspan=2>{"D"}</td><td>{"E"}</td>
-			</tr>
-			<tr>
-				<td>{"F"}</td>
-			</tr>
-		</table>
-		<p>{format!("{:?}", cache)}</p>
-		<p>{format!("{:#?}", days)}</p>
 		</>
 	}
 }
