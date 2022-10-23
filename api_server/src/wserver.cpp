@@ -132,31 +132,6 @@ namespace api_server {
 			}
 		});
 	}
-	std::string http_response::encode() const {
-		std::ostringstream oss;
-		oss << "HTTP/1.0 " << code << " ";
-		switch (code) {
-		case 200: oss << "OK"; break;
-		case 400: oss << "Bad Request"; break;
-		case 401: oss << "Unauthorized"; break;
-		case 403: oss << "Forbidden"; break;
-		case 404: oss << "Not found"; break;
-		default: oss << "Unknown code"; break;
-		}
-		oss << "\r\n";
-		if (!content.empty()) {
-			oss << "Content-Type: " << content_type << "\r\n";
-			oss << "Content-Length: " << content.size() << "\r\n";
-		}
-		//if (close) {
-		//	oss << "Connection: close\r\n";
-		//}
-		oss << "\r\n";
-		if (!content.empty()) {
-			oss << content;
-		}
-		return oss.str();
-	}
 	wserver::wserver(asio::io_service &io_service, unsigned short port, request_callback_fun cb) :
 		io_service(io_service), ssl_ctx(asio::ssl::context::tls), req_cb(cb) {
 		ssl_ctx.set_options(
