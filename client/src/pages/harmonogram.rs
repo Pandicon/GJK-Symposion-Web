@@ -37,20 +37,20 @@ pub fn harmonogram(props: &Props) -> Html {
                 "data": {
                     "harmonogram": [
                         [
-                            { "lecturer": "", "title": "" },
-                            { "lecturer": "", "title": "USV" },
-                            { "lecturer": "", "title": "P2.3" },
-                            { "lecturer": "", "title": "Tělocvična" }
+                            { "lecturer": "", "title": "", "for_younger": false },
+                            { "lecturer": "", "title": "USV", "for_younger": false },
+                            { "lecturer": "", "title": "P2.3", "for_younger": false },
+                            { "lecturer": "", "title": "Tělocvična", "for_younger": false }
                         ],
                         [
-                            { "lecturer": "", "title": "8:00 - 9:00" },
-                            { "lecturer": "Person 1", "title": "Lecture 1" },
-                            { "lecturer": "Person 2", "title": "Lecture 2" },
-                            { "row_span": 2, "lecturer": "Person 3", "title": "Lecture 3" }
+                            { "lecturer": "", "title": "8:00 - 9:00", "for_younger": false },
+                            { "lecturer": "Person 1", "title": "Lecture 1", "for_younger": false },
+                            { "lecturer": "Person 2", "title": "Lecture 2", "for_younger": true },
+                            { "row_span": 2, "lecturer": "Person 3", "title": "Lecture 3", "for_younger": false }
                         ],
                         [
-                            { "lecturer": "", "title": "9:00-10:30" },
-                            { "col_span": 2, "lecturer": "Person 4", "title": "Lecture 4" }
+                            { "lecturer": "", "title": "9:00-10:30", "for_younger": false },
+                            { "col_span": 2, "lecturer": "Person 4", "title": "Lecture 4", "for_younger": true }
                         ]
                     ],
                     "last_updated": 1666531231
@@ -115,6 +115,9 @@ pub fn harmonogram(props: &Props) -> Html {
 										html!{
 											<td colspan={format!("{col_span}")} rowspan={format!("{row_span}")}>
 												<b>{&cell.lecturer}</b><br />{&cell.title}
+												if cell.for_younger {
+													<br /><i>{"Vhodné i pro mladší diváky"}</i>
+												}
 											</td>
 										}
 									}).collect::<Html>()
@@ -164,6 +167,7 @@ struct HarmonogramData {
 struct HarmonogramField {
 	col_span: Option<u8>,
 	row_span: Option<u8>,
+	for_younger: bool,
 	lecturer: String,
 	title: String,
 }
