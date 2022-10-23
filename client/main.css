@@ -3,7 +3,7 @@
 }
 
 body {
-	color: red
+	color: black
 }
 
 h1 {
@@ -13,3 +13,8 @@ h1 {
 h2 {
 	opacity: 0.7;
 }
+
+table, th, td {
+	border: 1px solid black;
+	border-collapse: collapse;
+  }
