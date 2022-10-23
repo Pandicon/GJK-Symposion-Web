@@ -1,5 +1,6 @@
 use crate::utils;
 
+use chrono::TimeZone;
 use serde_derive::{Deserialize, Serialize};
 use yew::prelude::*;
 
@@ -13,7 +14,7 @@ pub struct Props {
 
 #[function_component(Harmonogram)]
 pub fn harmonogram(props: &Props) -> Html {
-	let current_ms = chrono::offset::Local::now().timestamp();
+	let current_timestamp_seconds = chrono::offset::Local::now().timestamp();
 	let day = if let Some(day) = &props.day {
 		let day_lowercase = day.to_ascii_lowercase();
 		if !VALID_DAYS.contains(&day_lowercase.as_str()) {
@@ -29,7 +30,7 @@ pub fn harmonogram(props: &Props) -> Html {
 	for day_cache_all in &cache {
 		let day = &day_cache_all.day;
 		let day_cache = day_cache_all.cache.as_ref();
-		if day_cache.is_some() && day_cache.as_ref().unwrap().timestamp >= current_ms - CACHE_LIFETIME {
+		if day_cache.is_some() && day_cache.as_ref().unwrap().timestamp >= current_timestamp_seconds - CACHE_LIFETIME {
 			days.push((day, day_cache.unwrap().to_owned().data));
 		} else {
 			let response_raw = r#"{
@@ -77,7 +78,8 @@ pub fn harmonogram(props: &Props) -> Html {
 		<h2>{"Zde je harmonogram :D"}</h2>
 		{
 			days.iter().map(|(day, day_data)| {
-				let date = chrono::NaiveDateTime::from_timestamp(day_data.last_updated, 0); //chrono::offset::Local::now().format("%d.%m.%Y, %H:%M:%S");
+				let utc_date = chrono::Utc.timestamp(day_data.last_updated, 0);
+				let update_date_local: chrono::DateTime<chrono::Local> = chrono::DateTime::from(utc_date);
 				html!{
 					<>
 					{day}
@@ -110,7 +112,7 @@ pub fn harmonogram(props: &Props) -> Html {
 						}).collect::<Html>()
 					}
 					</table>
-					<p>{date.format("Data z %d.%m.%Y %H:%M:%S").to_string()}</p>
+					<p>{update_date_local.format("Data z %d.%m.%Y %H:%M:%S").to_string()}</p>
 					</>
 				}
 			}).collect::<Html>()
