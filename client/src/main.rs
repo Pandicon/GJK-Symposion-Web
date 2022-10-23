@@ -9,13 +9,13 @@ use yew_router::prelude::*;
 
 #[function_component(App)]
 fn app() -> Html {
-    html!{
-        <BrowserRouter>
-            <Switch<Route> render={Switch::render(switch)} />
-        </BrowserRouter>
-    }
+	html! {
+		<BrowserRouter>
+			<Switch<Route> render={Switch::render(switch)} />
+		</BrowserRouter>
+	}
 }
 
 fn main() {
-    yew::start_app::<App>();
+	yew::start_app::<App>();
 }
