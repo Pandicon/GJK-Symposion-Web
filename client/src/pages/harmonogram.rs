@@ -19,11 +19,11 @@ pub fn harmonogram(props: &Props) -> Html {
     } else {
         String::from("all")
     };
-    gloo::console::log!(day);
     html! {
         <>
         <h1>{"Nazdárek!"}</h1>
         <h2>{"Zde je harmonogram :D"}</h2>
+        <p>{"Den: "}{day}</p>
         </>
     }
 }
