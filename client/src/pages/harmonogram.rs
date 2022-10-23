@@ -15,7 +15,7 @@ pub struct Props {
 #[function_component(Harmonogram)]
 pub fn harmonogram(props: &Props) -> Html {
 	let current_timestamp_seconds = chrono::offset::Local::now().timestamp();
-	let day = if let Some(day) = &props.day {
+	let day_from_url = if let Some(day) = &props.day {
 		let day_lowercase = day.to_ascii_lowercase();
 		if !VALID_DAYS.contains(&day_lowercase.as_str()) {
 			String::from("all")
@@ -26,7 +26,7 @@ pub fn harmonogram(props: &Props) -> Html {
 		String::from("all")
 	};
 	let mut days = vec![];
-	let cache = get_harmonogram_cache(&day);
+	let cache = get_harmonogram_cache(&day_from_url);
 	for day_cache_all in &cache {
 		let day = &day_cache_all.day;
 		let day_cache = day_cache_all.cache.as_ref();
@@ -74,15 +74,27 @@ pub fn harmonogram(props: &Props) -> Html {
 	}
 	html! {
 		<>
-		<h1>{"Nazdárek!"}</h1>
-		<h2>{"Zde je harmonogram :D"}</h2>
+		<header>
+			<h1><a href="/">{"MOSTY"}</a></h1>
+			<div class="hlavicka_most_nad">
+				<div class="opakujici_most"></div>
+				<h2>{"harmonogram"}</h2>
+			</div>
+			if day_from_url != *"all" {
+				<b class="day">{utils::raw_harmonogram_day_to_display_day(&day_from_url).to_uppercase()}</b>
+			}
+		</header>
+		<main>
+		<div class="opakujici_most"></div>
 		{
 			days.iter().map(|(day, day_data)| {
 				let utc_date = chrono::Utc.timestamp(day_data.last_updated, 0);
 				let update_date_local: chrono::DateTime<chrono::Local> = chrono::DateTime::from(utc_date);
 				html!{
 					<>
-					{utils::raw_harmonogram_day_to_display_day(day)}
+					if day_from_url == *"all" {
+						{utils::raw_harmonogram_day_to_display_day(day)}
+					}
 					<table style="width:100%">
 					{
 						day_data.harmonogram.iter().map(|row| {
@@ -117,6 +129,8 @@ pub fn harmonogram(props: &Props) -> Html {
 				}
 			}).collect::<Html>()
 		}
+		<div class="opakujici_most_naopak"></div>
+		</main>
 		</>
 	}
 }
