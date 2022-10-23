@@ -33,30 +33,8 @@ pub fn harmonogram(props: &Props) -> Html {
 		if day_cache.is_some() && day_cache.as_ref().unwrap().timestamp >= current_timestamp_seconds - CACHE_LIFETIME {
 			days.push((day, day_cache.unwrap().to_owned().data));
 		} else {
-			let response_raw = r#"{
-                "data": {
-                    "harmonogram": [
-                        [
-                            { "lecturer": "", "title": "", "for_younger": false },
-                            { "lecturer": "", "title": "USV", "for_younger": false },
-                            { "lecturer": "", "title": "P2.3", "for_younger": false },
-                            { "lecturer": "", "title": "Tělocvična", "for_younger": false }
-                        ],
-                        [
-                            { "lecturer": "", "title": "8:00 - 9:00", "for_younger": false },
-                            { "lecturer": "Person 1", "title": "Lecture 1", "for_younger": false },
-                            { "lecturer": "Person 2", "title": "Lecture 2", "for_younger": true },
-                            { "row_span": 2, "lecturer": "Person 3", "title": "Lecture 3", "for_younger": false }
-                        ],
-                        [
-                            { "lecturer": "", "title": "9:00-10:30", "for_younger": false },
-                            { "col_span": 2, "lecturer": "Person 4", "title": "Lecture 4", "for_younger": true }
-                        ]
-                    ],
-                    "last_updated": 1666531231
-                },
-                "error": null
-            }
+			let response_raw = r#"
+            {"data":{"harmonogram":[[null,{"lecturer":"","title":"Jídelna","for_younger":false},{"lecturer":"","title":"LCH","for_younger":false},{"lecturer":"","title":"Sklep GJK","for_younger":false},{"lecturer":"","title":"Strecha GJK","for_younger":false}],[{"lecturer":"","title":"9:05 - 11:05","for_younger":false},null,{"lecturer":"<script>alert('cheche!');</script>","title":"<script>alert('hehe!');</script>","for_younger":false,"row_span":2},null,null],[{"lecturer":"","title":"11:05 - 11:55","for_younger":false},null,{"lecturer":"prednasejici #1","title":"vysoce narocne tema tykajici se mostu","for_younger":false},null],[{"lecturer":"","title":"11:55 - 12:01","for_younger":false},null,null,null,null],[{"lecturer":"","title":"12:01 - 13:02","for_younger":false},null,{"lecturer":"prednasejici #3","title":"odpalování mostů","for_younger":false},{"lecturer":"pan prednasejici #1","title":"symposion web stranky jako most mezi organizatory a ucastniky","for_younger":false,"row_span":2},{"lecturer":"pani prednasejici #1","title":"rezonance mostu ve vetru","for_younger":false,"row_span":2}],[{"lecturer":"","title":"13:02 - 23:42","for_younger":false},null,null],[{"lecturer":"","title":"23:42 - 23:59","for_younger":false},{"lecturer":"","title":"VEČEŘE","for_younger":true,"col_span":4}],[{"lecturer":"","title":"23:59 - 24:00","for_younger":false},null,null,null,{"lecturer":"prednasejici #2","title":"pozorování hvězd na téma most","for_younger":false}]],"last_updated":1666554343},"error":null}
             "#; // TODO: Make this an actual API call once the API is set up
 			let response = serde_json::from_str::<HarmonogramDayResponse>(response_raw);
 			if let Ok(schedule) = response {
@@ -101,24 +79,30 @@ pub fn harmonogram(props: &Props) -> Html {
 							html!{
 								<tr>
 								{
-									row.iter().map(|cell| {
-										let col_span = if let Some(span) = cell.col_span {
-											span
+									row.iter().map(|cell_option| {
+										if let Some(cell) = cell_option {
+											let col_span = if let Some(span) = cell.col_span {
+												span
+											} else {
+												1
+											};
+											let row_span = if let Some(span) = cell.row_span {
+												span
+											} else {
+												1
+											};
+											html!{
+												<td colspan={format!("{col_span}")} rowspan={format!("{row_span}")}>
+													<b>{&cell.lecturer}</b><br />{&cell.title}
+													if cell.for_younger {
+														<br /><i>{"Vhodné i pro mladší diváky"}</i>
+													}
+												</td>
+											}
 										} else {
-											1
-										};
-										let row_span = if let Some(span) = cell.row_span {
-											span
-										} else {
-											1
-										};
-										html!{
-											<td colspan={format!("{col_span}")} rowspan={format!("{row_span}")}>
-												<b>{&cell.lecturer}</b><br />{&cell.title}
-												if cell.for_younger {
-													<br /><i>{"Vhodné i pro mladší diváky"}</i>
-												}
-											</td>
+											html!{
+												<td />
+											}
 										}
 									}).collect::<Html>()
 								}
@@ -159,7 +143,7 @@ struct HarmonogramDayCache {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 struct HarmonogramData {
-	harmonogram: Vec<Vec<HarmonogramField>>,
+	harmonogram: Vec<Vec<Option<HarmonogramField>>>,
 	last_updated: i64,
 }
 
