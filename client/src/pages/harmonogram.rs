@@ -82,7 +82,7 @@ pub fn harmonogram(props: &Props) -> Html {
 				let update_date_local: chrono::DateTime<chrono::Local> = chrono::DateTime::from(utc_date);
 				html!{
 					<>
-					{day}
+					{utils::raw_harmonogram_day_to_display_day(day)}
 					<table style="width:100%">
 					{
 						day_data.harmonogram.iter().map(|row| {
