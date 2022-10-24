@@ -1,4 +1,4 @@
-use crate::pages::{harmonogram::Harmonogram, home::Home, not_found::NotFound};
+use crate::pages::{harmonogram::Harmonogram, home::Home, not_found::NotFound, o_akci::OAkci};
 
 use yew::prelude::*;
 use yew_router::prelude::*;
@@ -14,6 +14,8 @@ pub enum Route {
 	#[not_found]
 	#[at("/404")]
 	NotFound,
+	#[at("/o_akci")]
+	OAkci,
 }
 
 pub fn switch(route: &Route) -> Html {
@@ -22,5 +24,6 @@ pub fn switch(route: &Route) -> Html {
 		Route::Harmonogram { day } => html! { <Harmonogram day={Some(day.to_owned())} />},
 		Route::HarmonogramAll => html! { <Harmonogram />},
 		Route::NotFound => html! { <NotFound /> },
+		Route::OAkci => html! { <OAkci /> },
 	}
 }
