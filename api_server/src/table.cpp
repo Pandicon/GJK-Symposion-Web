@@ -53,7 +53,10 @@ namespace api_server {
 		}
 	}
 	std::string json_str(std::string s) {
-		for (auto it = s.find_first_of("\\\""); it != std::string::npos; it = s.find_first_of("\\\"", it + 2)) {
+		for (auto it = s.find_first_of("\\\"\n"); it != std::string::npos; it = s.find_first_of("\\\"\n", it + 2)) {
+			if (s[it] == '\n') {
+				s[it] = 'n';
+			}
 			s.insert(it, 1, '\\');
 		}
 		return "\""+s+"\"";
