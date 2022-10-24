@@ -156,6 +156,19 @@ td.clickable {
 	}
 }
 
+@media only screen and (max-width:360px) {
+
+	/* nevypadá ani pěkně. Předpokládám, že takhle úzké zařízení nebude */
+	header h1 {
+		opacity: 0;
+		width: 1rem;
+	}
+
+	.day {
+		left: 3rem;
+	}
+}
+
 @media only screen and (min-width:600px) {
 	header {
 		min-height: 6.5rem;
