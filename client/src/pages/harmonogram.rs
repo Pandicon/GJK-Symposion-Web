@@ -34,6 +34,8 @@ pub fn harmonogram(props: &Props) -> Html {
 			days.push((day.to_owned(), day_cache.unwrap().to_owned().data));
 		} else {
 			gloo::console::debug!("Fetching the API");
+			{ // https://randomuser.me/api/
+			};
 			let response_raw = r#"
 			{"data":{"harmonogram":[[null,{"lecturer":"","title":"LCH","for_younger":false,"id":null},{"lecturer":"","title":"Sklep GJK","for_younger":false,"id":"0-2"},{"lecturer":"","title":"Strecha GJK","for_younger":false,"id":"0-3"}],[{"lecturer":"","title":"9:05 - 11:05","for_younger":false,"id":null},{"lecturer":"<script>alert('cheche!');</script>","title":"<script>alert('hehe!');</script>","for_younger":false,"id":null,"row_span":2},null,null],[{"lecturer":"","title":"11:05 - 11:55","for_younger":false,"id":null},{"lecturer":"prednasejici #1","title":"vysoce narocne tema tykajici se mostu","for_younger":false,"id":"2-2"},null],[{"lecturer":"","title":"12:01 - 13:02","for_younger":false,"id":null},{"lecturer":"prednasejici #3","title":"odpalování mostů","for_younger":false,"id":"3-1"},{"lecturer":"pan prednasejici #1","title":"symposion web stranky jako most mezi organizatory a ucastniky","for_younger":true,"id":"3-2","row_span":2},{"lecturer":"pani prednasejici #1","title":"rezonance mostu ve vetru","for_younger":true,"id":"3-3","row_span":2}],[{"lecturer":"","title":"13:02 - 23:42","for_younger":false,"id":null},null],[{"lecturer":"","title":"23:42 - 23:57","for_younger":false,"id":null},{"lecturer":"","title":"VEČEŘE","for_younger":true,"id":"5-1","col_span":3}],[{"lecturer":"","title":"23:59 - 24:00","for_younger":false,"id":null},null,null,{"lecturer":"prednasejici #2","title":"pozorování hvězd na téma most","for_younger":false,"id":"6-3"}]],"last_updated":1666606780},"error":null}
 			"#; // TODO: Make this an actual API call once the API is set up
@@ -97,6 +99,28 @@ pub fn harmonogram(props: &Props) -> Html {
 											let (class_name, on_click) = if let Some(cell_id) = cell.id.clone() {
 												("clickable", Callback::from(move |_| {
 													gloo::console::log!(format!("Hello! Cell id: {}, Day: {}", cell_id, cell_day));
+													// TODO Make this an API call to our API
+													wasm_bindgen_futures::spawn_local(async move {
+														match gloo::net::http::Request::get("https://randomuser.me/api/").send().await {
+															Ok(response) => {
+																if !response.ok() {
+																	gloo::console::error!(format!("The reponse was not 200 OK: {:?}", response.status_text()));
+																} else {
+																	match response.text().await {
+																		Ok(text) => {
+																			gloo::console::log!(format!("{:?}", text));
+																		},
+																		Err(error) => {
+																			gloo::console::error!(format!("Couldn't get the response text: {:?}", error));
+																		}
+																	}
+																}
+															},
+															Err(error) => {
+																gloo::console::error!(format!("Something went wrong when fetching the API: {:?}", error));
+															}
+														}
+													})
 												}))
 											} else {
 												("", Callback::from(|_| {}))

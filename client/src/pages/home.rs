@@ -11,10 +11,8 @@ pub fn home() -> Html {
 		if utils::set_local_storage_key(&local_storage, "test", &format!("Current timestamp is {}", chrono::offset::Local::now())).is_err() {
 			console::log!("Something went wrong when putting the value into the local storage");
 		}
-	} else {
-		if utils::remove_local_storage_key(&local_storage, "test").is_err() {
-			console::log!("Something went wrong when removing the value from the local storage");
-		}
+	} else if let Err(error) = utils::remove_local_storage_key(&local_storage, "test") {
+		console::log!("Something went wrong when removing the value from the local storage: ", error);
 	}
 	html! {
 		<>
