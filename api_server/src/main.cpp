@@ -118,7 +118,11 @@ int main(int, char**) {
 	api_server::sheet_fetcher fetcher(io_service);
 	fetch_tasks.push(fetch_task_t::SCHEDULE);
 	while (true) {
-		io_service.poll();
+		try {
+			io_service.poll();
+		} catch (const std::exception &e) {
+			std::cerr << "[exception]: " << e.what() << std::endl;
+		}
 		if (fetcher.is_done()) {
 			switch (current_fetch_task) {
 			case fetch_task_t::NONE: break;
