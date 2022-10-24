@@ -126,6 +126,7 @@ pub fn harmonogram(props: &Props) -> Html {
 				}
 			}).collect::<Html>()
 		}
+		<div class="overlay-body">{"Ahoj"}</div>
 		<div class="opakujici_most_naopak"></div>
 		</main>
 		<footer></footer>

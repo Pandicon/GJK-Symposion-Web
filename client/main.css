@@ -1,3 +1,16 @@
+/* Převzato z loňského webu, klidně to změňte, je to jen placeholder */
+.overlay-body {
+    width: 90vw;
+    height: 90vh;
+    z-index: 1000;
+    position: relative;
+    overflow-y: scroll;
+    margin-top: 5vh;
+    margin-left: 5vw;
+    overscroll-behavior: contain;
+    background: rgb(17, 50, 73);
+}
+
 .unsupported_browser {
 	color: black;
 }
