@@ -33,3 +33,16 @@ pub struct HarmonogramField {
 	pub lecturer: String,
 	pub title: String,
 }
+
+#[derive(Default)]
+pub struct AdditionalCellInfo {
+	pub data: Option<String>,
+	pub warning: Option<String>,
+	pub error: Option<String>,
+}
+
+impl AdditionalCellInfo {
+	pub fn new(data: Option<String>, warning: Option<String>, error: Option<String>) -> Self {
+		Self { data, warning, error }
+	}
+}

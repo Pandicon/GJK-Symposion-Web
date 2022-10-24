@@ -1,4 +1,4 @@
-use crate::types::{HarmonogramData, HarmonogramDayCache, HarmonogramDayData, HarmonogramDayResponse};
+use crate::types::{AdditionalCellInfo, HarmonogramData, HarmonogramDayCache, HarmonogramDayData, HarmonogramDayResponse};
 use crate::utils;
 
 use chrono::TimeZone;
@@ -15,7 +15,7 @@ pub struct Props {
 #[function_component(Harmonogram)]
 pub fn harmonogram(props: &Props) -> Html {
 	yew_hooks::use_title("Harmonogram | Mosty - Symposion 2022 | Gymnázium Jana Keplera".to_string());
-	let additional_cell_info_state: UseStateHandle<[Option<String>; 3]> = use_state(|| [None, None, None]); // [data, warning, error]
+	let additional_cell_info_state: UseStateHandle<AdditionalCellInfo> = use_state(|| AdditionalCellInfo::default());
 	let current_timestamp_seconds = chrono::offset::Local::now().timestamp();
 	let day_from_url = if let Some(day) = &props.day {
 		let day_lowercase = day.to_ascii_lowercase();
@@ -109,23 +109,23 @@ pub fn harmonogram(props: &Props) -> Html {
 															Ok(response) => {
 																if !response.ok() {
 																	gloo::console::error!(format!("The reponse was not 200 OK: {:?}", response.status_text()));
-																	cloned_additional_info_state.set([None, None, Some(format!("Nastala chyba, server odpověděl se statusem {}: {}", response.status(), response.status_text()))]);
+																	cloned_additional_info_state.set(AdditionalCellInfo::new(None, None, Some(format!("Nastala chyba, server odpověděl se statusem {}: {}", response.status(), response.status_text()))));
 																} else {
 																	match response.text().await {
 																		Ok(text) => {
 																			gloo::console::log!(format!("{:?}", text));
-																			cloned_additional_info_state.set([Some(text), None, None]);
+																			cloned_additional_info_state.set(AdditionalCellInfo::new(Some(text), None, None));
 																		}
 																		Err(error) => {
 																			gloo::console::error!(format!("Couldn't get the response text: {:?}", error));
-																			cloned_additional_info_state.set([None, None, Some(format!("Nastala chyba, nepodařilo se získat text odpovědi serveru: {:?}", error))]);
+																			cloned_additional_info_state.set(AdditionalCellInfo::new(None, None, Some(format!("Nastala chyba, nepodařilo se získat text odpovědi serveru: {:?}", error))));
 																		}
 																	}
 																}
 															}
 															Err(error) => {
 																gloo::console::error!(format!("Something went wrong when fetching the API: {:?}", error));
-																cloned_additional_info_state.set([None, None, Some(format!("Nastala chyba, nepodařilo se získat odpověď serveru: {:?}", error))]);
+																cloned_additional_info_state.set(AdditionalCellInfo::new(None, None, Some(format!("Nastala chyba, nepodařilo se získat odpověď serveru: {:?}", error))));
 															}
 														}
 													})
@@ -158,7 +158,7 @@ pub fn harmonogram(props: &Props) -> Html {
 				}
 			}).collect::<Html>()
 		}
-		<div class="overlay-body">{format!("{:?} {:?} {:?}", additional_cell_info_state[0], additional_cell_info_state[1], additional_cell_info_state[2])}</div>
+		<div class="overlay-body">{format!("{:?} {:?} {:?}", additional_cell_info_state.data, additional_cell_info_state.warning, additional_cell_info_state.error)}</div>
 		<div class="opakujici_most_naopak"></div>
 		</main>
 		<footer></footer>
