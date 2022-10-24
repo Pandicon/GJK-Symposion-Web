@@ -3,13 +3,15 @@
 
 #include <stdint.h>
 #include <chrono>
+#include <string>
+#include <vector>
 
 namespace api_server {
 	template<typename T>
 	class cache {
 	public:
 		inline void update(const T &src) { last_update = std::chrono::system_clock::now(); cached = src; }
-		inline T get() { return cached; }
+		inline const T &get() { return cached; }
 		inline std::chrono::system_clock::time_point get_last_update() { return last_update; }
 		inline uint64_t get_last_update_time_since_epoch() { return static_cast<uint64_t>(std::chrono::duration_cast<std::chrono::seconds>(last_update.time_since_epoch()).count()); }
 		template<typename _Rep, typename _Period>
@@ -17,14 +19,24 @@ namespace api_server {
 	protected:
 		std::chrono::system_clock::time_point last_update;
 		T cached;
-	};
+	};/*
 	template<typename T>
 	class json_cache : public cache<T> {
 	public:
 		inline void update(const T &src, const std::string &json) { this->last_update = std::chrono::system_clock::now(); this->cached = src; cached_json = json; }
 		inline std::string json() { return cached_json; }
-	private:
+	protected:
 		std::string cached_json;
+	};*/
+
+	class schedule {
+	public:
+		schedule() = default;
+		schedule(const std::vector<std::vector<std::string>> &sheet);
+
+		std::vector<std::string> day_jsons;
+		std::vector<std::string> annotations;
+		std::vector<std::vector<std::vector<size_t>>> annotation_indices;
 	};
 }
 
