@@ -51,7 +51,7 @@ void annotation_response(const std::string &url, api_server::http_response &res,
 			goto res_404;
 		}
 		res.code = 200;
-		res.content = "{\"data\":{\"anotace\":" + schedule_cache.get().annotations[indices[r][c]] + ","
+		res.content = "{\"data\":{\"info\":" + schedule_cache.get().annotations[indices[r][c]] + ","
 			"\"last_updated\":" + std::to_string(schedule_cache.get_last_update_time_since_epoch()) + "},\"error\":null}";
 	}
 	if (schedule_cache.should_update(std::chrono::minutes(30))) {

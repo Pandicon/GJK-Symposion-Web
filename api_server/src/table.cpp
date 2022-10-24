@@ -96,7 +96,8 @@ namespace api_server {
 			string_tolower_no_whitespace(for_younger_str);
 			lecture.for_younger = std::set<std::string>{"ano", "jo", "a"}.contains(for_younger_str);
 			lecture.annotation_id = annotations.size();
-			annotations.push_back(annotation.empty() && about_lecturer.empty() ? "null" : json_str(annotation + "\n\n" + about_lecturer));
+			annotations.push_back(annotation.empty() && about_lecturer.empty() ? std::string("null") :
+				"{\"annotation\":" + json_str(annotation) + ",\"about_lecturer\":" + json_str(about_lecturer) + "}");
 			// parse "when"
 			string_tolower_no_whitespace(when);
 			unsigned int day, starth, startm, endh, endm;
