@@ -11,7 +11,7 @@ namespace api_server {
 	class cache {
 	public:
 		inline void update(const T &src) { last_update = std::chrono::system_clock::now(); cached = src; }
-		inline T get() { return cached; }
+		inline const T &get() { return cached; }
 		inline std::chrono::system_clock::time_point get_last_update() { return last_update; }
 		inline uint64_t get_last_update_time_since_epoch() { return static_cast<uint64_t>(std::chrono::duration_cast<std::chrono::seconds>(last_update.time_since_epoch()).count()); }
 		template<typename _Rep, typename _Period>
@@ -36,7 +36,7 @@ namespace api_server {
 
 		std::vector<std::string> day_jsons;
 		std::vector<std::string> annotations;
-		std::vector<std::vector<size_t>> annotation_indices;
+		std::vector<std::vector<std::vector<size_t>>> annotation_indices;
 	};
 }
 

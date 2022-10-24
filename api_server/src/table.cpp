@@ -72,6 +72,7 @@ namespace api_server {
 		std::set<std::string> places;
 		using time_frame_t = std::unordered_map<std::string, lecture_t>;
 		std::vector<std::map<unsigned int, time_frame_t>> lecture_tables{{},{},{}};
+		annotations.push_back("null");
 		auto i = sheet.begin();
 		for (i++ /* skip table header */; i != sheet.end(); i++) {
 			if (i->size() < 7) {
@@ -92,9 +93,7 @@ namespace api_server {
 			string_tolower_no_whitespace(for_younger_str);
 			lecture.for_younger = std::set<std::string>{"ano", "jo", "a"}.contains(for_younger_str);
 			lecture.annotation_id = annotations.size();
-			// put the annotation in json string format
-			std::string annot = annotation + "\n\n" + about_lecturer;
-			annotations.push_back(annot.empty() ? "null" : json_str(annot));
+			annotations.push_back(annotation.empty() && about_lecturer.empty() ? "null" : json_str(annotation + "\n\n" + about_lecturer));
 			// parse "when"
 			string_tolower_no_whitespace(when);
 			unsigned int day, starth, startm, endh, endm;
@@ -103,6 +102,15 @@ namespace api_server {
 			// write to table
 			lecture_tables[day][lecture.time.first].emplace(where, lecture);
 		}
+		// load place annotations
+		std::unordered_map<std::string, size_t> place_annotations;
+		for (i = sheet.begin(); i != sheet.end() && i->size() > 9; i++) {
+			if (!(*i)[8].empty() && !(*i)[9].empty()) {
+				place_annotations.emplace((*i)[8], annotations.size());
+				annotations.push_back((*i)[9]);
+			}
+		}
+		// generate
 		day_jsons = std::vector<std::string>(3, std::string());
 		for (unsigned int day = 0; day < 3; day++) {
 			const auto &d = lecture_tables[day];
@@ -162,12 +170,16 @@ namespace api_server {
 				}
 			}
 			// prepare annotation_indices
-			annotation_indices = std::vector<std::vector<size_t>>(table.size(), std::vector<size_t>(places.size(), static_cast<size_t>(-1)));
+			annotation_indices.emplace_back(table.size() + 1, std::vector<size_t>(places.size() + 1, 0));
 			// generate the json and save annotation_indices
 			std::ostringstream oss;
 			oss << "[[null";
+			annotation_indices[day][0][0] = 0;
+			unsigned int k = 1;
 			for (const auto &place : places) {
 				oss << ",{\"lecturer\":\"\",\"title\":" << json_str(place) << ",\"for_younger\":false}";
+				auto pai = place_annotations.find(place);
+				annotation_indices[day][0][k++] = pai == place_annotations.end() ? 0 : pai->second;
 			}
 			oss << "]";
 			std::unordered_set<const lecture_t *> written;
@@ -175,10 +187,12 @@ namespace api_server {
 				oss << ",[";
 				const auto &time = times[j];
 				oss << "{\"lecturer\":\"\",\"title\":" << json_str(time) << ",\"for_younger\":false}";
-				for (unsigned int k = 0; k < table[j].size(); k++) {
+				annotation_indices[day][j][0] = 0;
+				for (k = 0; k < table[j].size(); k++) {
 					const lecture_t *l = table[j][k];
 					if (l == nullptr) {
 						oss << ",null";
+						annotation_indices[day][j+1][k+1] = 0;
 					} else if (!written.contains(l)) {
 						oss << ",{\"lecturer\":" << (l->lecturer == "!" ? "\"\"" : json_str(l->lecturer)) << ",\"title\":" << json_str(l->title) <<
 							",\"for_younger\":" << (l->for_younger ? "true" : "false");
@@ -191,6 +205,8 @@ namespace api_server {
 						oss << "}";
 						written.insert(l);
 					}
+					if (l != nullptr)
+						annotation_indices[day][j+1][k+1] = l->annotation_id;
 				}
 				oss << "]";
 			}
