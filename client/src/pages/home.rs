@@ -1,26 +1,33 @@
-use crate::utils;
-
-use gloo::console;
 use yew::prelude::*;
 
 #[function_component(Home)]
 pub fn home() -> Html {
-	let local_storage = utils::get_local_storage();
-	let value = utils::get_local_storage_key(&local_storage, "test");
-	if value.is_none() {
-		if utils::set_local_storage_key(&local_storage, "test", &format!("Current timestamp is {}", chrono::offset::Local::now())).is_err() {
-			console::log!("Something went wrong when putting the value into the local storage");
-		}
-	} else if let Err(error) = utils::remove_local_storage_key(&local_storage, "test") {
-		console::log!("Something went wrong when removing the value from the local storage: ", error);
-	}
 	html! {
 		<>
-		<h1>{"Nazdárek!"}</h1>
-		<h2>{"Zde je hlavní stránka :D"}</h2>
-		if let Some(val) = value {
-			<p>{val}</p>
-		}
+		<header>
+			<div class="title">
+				<div class="first_line">
+					<h1><a href="/">{"MOSTY"}</a></h1>
+					<div class="opakujici_most"></div>
+				</div>
+				<h2>{"SYMPOSION GYMNÁZIA JANA KEPLERA"}</h2>
+			</div>
+			<div class={"date"}>
+				<h2>{"16. - 18. listopadu 2022"}</h2>
+				<div class="opakujici_most"></div>
+			</div>
+		</header>
+		<main>
+			<div class="opakujici_most"></div>
+			<nav>
+				<b><a href="/kontakty">{"KONTAKTY"}</a></b>
+				<b><a href="/harmonogram">{"HARMONOGRAM"}</a></b>
+				<b><a href="/o_akci">{"O AKCI"}</a></b>
+			</nav>
+			<div class="opakujici_most_naopak"></div>
+		</main>
+		<footer>
+		</footer>
 		</>
 	}
 }
