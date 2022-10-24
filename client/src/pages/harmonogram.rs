@@ -14,6 +14,7 @@ pub struct Props {
 
 #[function_component(Harmonogram)]
 pub fn harmonogram(props: &Props) -> Html {
+	let additional_cell_info_state: UseStateHandle<[Option<String>; 3]> = use_state(|| [None, None, None]); // [data, warning, error]
 	let current_timestamp_seconds = chrono::offset::Local::now().timestamp();
 	let day_from_url = if let Some(day) = &props.day {
 		let day_lowercase = day.to_ascii_lowercase();
@@ -97,27 +98,33 @@ pub fn harmonogram(props: &Props) -> Html {
 											};
 											let cell_day = day.clone();
 											let (class_name, on_click) = if let Some(cell_id) = cell.id.clone() {
+												let cloned_additional_info_state = additional_cell_info_state.clone();
 												("clickable", Callback::from(move |_| {
+													let cloned_additional_info_state = cloned_additional_info_state.clone();
 													gloo::console::log!(format!("Hello! Cell id: {}, Day: {}", cell_id, cell_day));
-													// TODO Make this an API call to our API
+													// TODO: Make this an API call to our API
 													wasm_bindgen_futures::spawn_local(async move {
 														match gloo::net::http::Request::get("https://randomuser.me/api/").send().await {
 															Ok(response) => {
 																if !response.ok() {
 																	gloo::console::error!(format!("The reponse was not 200 OK: {:?}", response.status_text()));
+																	cloned_additional_info_state.set([None, None, Some(format!("Nastala chyba, server odpověděl se statusem {}: {}", response.status(), response.status_text()))]);
 																} else {
 																	match response.text().await {
 																		Ok(text) => {
 																			gloo::console::log!(format!("{:?}", text));
-																		},
+																			cloned_additional_info_state.set([Some(text), None, None]);
+																		}
 																		Err(error) => {
 																			gloo::console::error!(format!("Couldn't get the response text: {:?}", error));
+																			cloned_additional_info_state.set([None, None, Some(format!("Nastala chyba, nepodařilo se získat text odpovědi serveru: {:?}", error))]);
 																		}
 																	}
 																}
-															},
+															}
 															Err(error) => {
 																gloo::console::error!(format!("Something went wrong when fetching the API: {:?}", error));
+																cloned_additional_info_state.set([None, None, Some(format!("Nastala chyba, nepodařilo se získat odpověď serveru: {:?}", error))]);
 															}
 														}
 													})
@@ -150,7 +157,7 @@ pub fn harmonogram(props: &Props) -> Html {
 				}
 			}).collect::<Html>()
 		}
-		<div class="overlay-body">{"Ahoj"}</div>
+		<div class="overlay-body">{format!("{:?} {:?} {:?}", additional_cell_info_state[0], additional_cell_info_state[1], additional_cell_info_state[2])}</div>
 		<div class="opakujici_most_naopak"></div>
 		</main>
 		<footer></footer>
