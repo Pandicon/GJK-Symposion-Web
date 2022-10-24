@@ -31,15 +31,17 @@ pub fn harmonogram(props: &Props) -> Html {
 		let day = &day_cache_all.day;
 		let day_cache = day_cache_all.cache.as_ref();
 		if day_cache.is_some() && day_cache.as_ref().unwrap().timestamp >= current_timestamp_seconds - CACHE_LIFETIME {
-			days.push((day, day_cache.unwrap().to_owned().data));
+			days.push((day.to_owned(), day_cache.unwrap().to_owned().data));
 		} else {
+			gloo::console::debug!("Fetching the API");
 			let response_raw = r#"
             {"data":{"harmonogram":[[null,{"lecturer":"","title":"LCH","for_younger":false,"id":null},{"lecturer":"","title":"Sklep GJK","for_younger":false,"id":"0-2"},{"lecturer":"","title":"Strecha GJK","for_younger":false,"id":"0-3"}],[{"lecturer":"","title":"9:05 - 11:05","for_younger":false,"id":null},{"lecturer":"<script>alert('cheche!');</script>","title":"<script>alert('hehe!');</script>","for_younger":false,"id":null,"row_span":2},null,null],[{"lecturer":"","title":"11:05 - 11:55","for_younger":false,"id":null},{"lecturer":"prednasejici #1","title":"vysoce narocne tema tykajici se mostu","for_younger":false,"id":"2-2"},null],[{"lecturer":"","title":"12:01 - 13:02","for_younger":false,"id":null},{"lecturer":"prednasejici #3","title":"odpalování mostů","for_younger":false,"id":"3-1"},{"lecturer":"pan prednasejici #1","title":"symposion web stranky jako most mezi organizatory a ucastniky","for_younger":true,"id":"3-2","row_span":2},{"lecturer":"pani prednasejici #1","title":"rezonance mostu ve vetru","for_younger":true,"id":"3-3","row_span":2}],[{"lecturer":"","title":"13:02 - 23:42","for_younger":false,"id":null},null],[{"lecturer":"","title":"23:42 - 23:57","for_younger":false,"id":null},{"lecturer":"","title":"VEČEŘE","for_younger":true,"id":"5-1","col_span":3}],[{"lecturer":"","title":"23:59 - 24:00","for_younger":false,"id":null},null,null,{"lecturer":"prednasejici #2","title":"pozorování hvězd na téma most","for_younger":false,"id":"6-3"}]],"last_updated":1666606780},"error":null}
             "#; // TODO: Make this an actual API call once the API is set up
 			let response = serde_json::from_str::<HarmonogramDayResponse>(response_raw);
 			if let Ok(schedule) = response {
 				if let Some(data) = schedule.data {
-					days.push((day, data));
+					set_harmonogram_cache(day, current_timestamp_seconds, data.clone());
+					days.push((day.to_owned(), data));
 				} else if let Some(error) = schedule.error {
 					gloo::console::error!("Received an error: ", format!("{}", error));
 				} else {
@@ -91,9 +93,10 @@ pub fn harmonogram(props: &Props) -> Html {
 											} else {
 												1
 											};
+											let cell_day = day.clone();
 											let (class_name, on_click) = if let Some(cell_id) = cell.id.clone() {
 												("clickable", Callback::from(move |_| {
-													gloo::console::log!(format!("Hello! Cell id: {}", cell_id));
+													gloo::console::log!(format!("Hello! Cell id: {}, Day: {}", cell_id, cell_day));
 												}))
 											} else {
 												("", Callback::from(|_| {}))
@@ -184,4 +187,17 @@ fn get_harmonogram_cache(day: &str) -> Vec<HarmonogramDayData> {
 		}
 	}
 	res
+}
+
+fn set_harmonogram_cache(day: &str, timestamp: i64, data: HarmonogramData) {
+	let cache = HarmonogramDayCache { data, timestamp };
+	let local_storage = utils::get_local_storage();
+	match serde_json::to_string(&cache) {
+		Ok(data) => {
+			if let Err(error) = utils::set_local_storage_key(&local_storage, &format!("harmonogram-{day}"), &data) {
+				gloo::console::error!(format!("Failed to save cache to local storage: {}", error));
+			}
+		}
+		Err(error) => gloo::console::error!(format!("Failed to parse cache to string: {}", error)),
+	};
 }

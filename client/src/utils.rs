@@ -21,21 +21,23 @@ pub fn get_local_storage_key(local_storage: &Option<Storage>, key: &str) -> Opti
 	res
 }
 
-pub fn set_local_storage_key(local_storage: &Option<Storage>, key: &str, value: &str) -> Result<(), ()> {
-	let mut res = Err(());
+pub fn set_local_storage_key(local_storage: &Option<Storage>, key: &str, value: &str) -> Result<(), String> {
+	let mut res = Err(String::from("No local storage provided"));
 	if let Some(storage) = local_storage {
-		if storage.set_item(key, value).is_ok() {
-			res = Ok(());
+		match storage.set_item(key, value) {
+			Ok(_) => res = Ok(()),
+			Err(error) => res = Err(format!("{:?}", error)),
 		};
 	}
 	res
 }
 
-pub fn remove_local_storage_key(local_storage: &Option<Storage>, key: &str) -> Result<(), ()> {
-	let mut res = Err(());
+pub fn remove_local_storage_key(local_storage: &Option<Storage>, key: &str) -> Result<(), String> {
+	let mut res = Err(String::from("No local storage provided"));
 	if let Some(storage) = local_storage {
-		if storage.remove_item(key).is_ok() {
-			res = Ok(());
+		match storage.remove_item(key) {
+			Ok(_) => res = Ok(()),
+			Err(error) => res = Err(format!("{:?}", error)),
 		};
 	}
 	res
