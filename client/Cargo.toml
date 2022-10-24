@@ -12,10 +12,11 @@ serde = "1.0.146"
 serde_json = "1.0.87"
 serde_derive = "1.0.146"
 yew = "0.19"
+yew-hooks = "0.1.56"
 yew-router = "0.16"
 wasm-bindgen-futures = "0.4.33"
 web-sys = "0.3.60"
 
 [profile.release]
-# lto = true
-opt-level = 0 # 's'
+lto = true
+opt-level = 's'

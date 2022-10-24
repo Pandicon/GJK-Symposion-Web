@@ -2,6 +2,7 @@ use yew::prelude::*;
 
 #[function_component(Kontakty)]
 pub fn home() -> Html {
+	yew_hooks::use_title("Kontakty | Mosty - Symposion 2022 | Gymnázium Jana Keplera".to_string());
 	html! {
 		<>
 		<header>

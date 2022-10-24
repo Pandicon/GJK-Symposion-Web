@@ -14,6 +14,7 @@ pub struct Props {
 
 #[function_component(Harmonogram)]
 pub fn harmonogram(props: &Props) -> Html {
+	yew_hooks::use_title("Harmonogram | Mosty - Symposion 2022 | Gymnázium Jana Keplera".to_string());
 	let additional_cell_info_state: UseStateHandle<[Option<String>; 3]> = use_state(|| [None, None, None]); // [data, warning, error]
 	let current_timestamp_seconds = chrono::offset::Local::now().timestamp();
 	let day_from_url = if let Some(day) = &props.day {
@@ -61,7 +62,7 @@ pub fn harmonogram(props: &Props) -> Html {
 			<h1><a href="/">{"MO$TY"}</a></h1>
 			<div class="hlavicka_most_nad">
 				<div class="opakujici_most"></div>
-				<h2>{"harmonogram"}</h2>
+				<h2>{"Harmonogram"}</h2>
 			</div>
 			if day_from_url != *"all" {
 				<b class="day">{utils::raw_harmonogram_day_to_display_day(&day_from_url).to_uppercase()}</b>
