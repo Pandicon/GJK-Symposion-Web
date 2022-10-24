@@ -1,7 +1,7 @@
+use crate::types::{HarmonogramData, HarmonogramDayCache, HarmonogramDayData, HarmonogramDayResponse};
 use crate::utils;
 
 use chrono::TimeZone;
-use serde_derive::{Deserialize, Serialize};
 use yew::prelude::*;
 
 const VALID_DAYS: [&str; 3] = ["streda", "ctvrtek", "patek"];
@@ -164,40 +164,6 @@ pub fn harmonogram(props: &Props) -> Html {
 		<footer></footer>
 		</>
 	}
-}
-
-#[derive(Debug, Deserialize, Serialize)]
-struct HarmonogramDayData {
-	day: String,
-	cache: Option<HarmonogramDayCache>,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-struct HarmonogramDayResponse {
-	data: Option<HarmonogramData>,
-	error: Option<String>,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-struct HarmonogramDayCache {
-	data: HarmonogramData,
-	timestamp: i64,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-struct HarmonogramData {
-	harmonogram: Vec<Vec<Option<HarmonogramField>>>,
-	last_updated: i64,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-struct HarmonogramField {
-	col_span: Option<u8>,
-	row_span: Option<u8>,
-	for_younger: bool,
-	id: Option<String>,
-	lecturer: String,
-	title: String,
 }
 
 fn get_harmonogram_cache(day: &str) -> Vec<HarmonogramDayData> {

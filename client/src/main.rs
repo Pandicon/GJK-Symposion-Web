@@ -1,5 +1,6 @@
 mod pages;
 mod router;
+pub mod types;
 pub mod utils;
 
 use crate::router::{switch, Route};
