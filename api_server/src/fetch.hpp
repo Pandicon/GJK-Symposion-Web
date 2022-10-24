@@ -9,7 +9,7 @@
 #include "http.hpp"
 
 namespace api_server {
-	constexpr unsigned int fetcher_buffer_size = 2048;
+	constexpr unsigned int fetcher_buffer_size = 4096;
 	using sheet_t = std::vector<std::vector<std::string>>;
 	using ssl_socket_t = asio::ssl::stream<asio::ip::tcp::socket>;
 
