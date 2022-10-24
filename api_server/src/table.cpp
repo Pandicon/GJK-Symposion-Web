@@ -180,8 +180,13 @@ namespace api_server {
 			annotation_indices[day][0][0] = 0;
 			unsigned int k = 1;
 			for (const auto &place : places) {
-				oss << ",{\"lecturer\":\"\",\"title\":" << json_str(place) << ",\"for_younger\":false,\"id\":\"0-" << k << "\"}";
 				auto pai = place_annotations.find(place);
+				oss << ",{\"lecturer\":\"\",\"title\":" << json_str(place) << ",\"for_younger\":false,\"id\":";
+				if (pai == place_annotations.end()) {
+					oss << "null}";
+				} else {
+					oss << "\"0-" << k << "\"}";
+				}
 				annotation_indices[day][0][k++] = pai == place_annotations.end() ? 0 : pai->second;
 			}
 			oss << "]";
@@ -189,7 +194,7 @@ namespace api_server {
 			for (unsigned int j = 0; j < table.size(); j++) {
 				oss << ",[";
 				const auto &time = times[j];
-				oss << "{\"lecturer\":\"\",\"title\":" << json_str(time) << ",\"for_younger\":false,\"id\":\"" << (j+1) << "-0\"}";
+				oss << "{\"lecturer\":\"\",\"title\":" << json_str(time) << ",\"for_younger\":false,\"id\":null}";
 				annotation_indices[day][j][0] = 0;
 				for (k = 0; k < table[j].size(); k++) {
 					const lecture_t *l = table[j][k];
@@ -198,7 +203,12 @@ namespace api_server {
 						annotation_indices[day][j+1][k+1] = 0;
 					} else if (!written.contains(l)) {
 						oss << ",{\"lecturer\":" << (l->lecturer == "!" ? "\"\"" : json_str(l->lecturer)) << ",\"title\":" << json_str(l->title) <<
-							",\"for_younger\":" << (l->for_younger ? "true" : "false") << ",\"id\":\"" << (j+1) << "-" << (k+1) << "\"";
+							",\"for_younger\":" << (l->for_younger ? "true" : "false") << ",\"id\":";
+						if (annotations[l->annotation_id] == "null") {
+							oss << "null";
+						} else {
+							oss << "\"" << (j+1) << "-" << (k+1) << "\"";
+						}
 						size_t span = 0;
 						for (unsigned int m = j; m < table.size() && table[m][k] == l; m++) { span++; }
 						if (span > 1) { oss << ",\"row_span\":" << span; }
