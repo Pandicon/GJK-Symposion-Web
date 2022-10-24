@@ -29,11 +29,20 @@ body {
 	flex-direction: column;
 }
 
+@font-face {
+	font-family: 'ArialBlackS';
+	src: url('Arial-Black_S.ttf');
+}
 
 header {
 	min-height: 8rem;
 	display: flex;
 	flex-direction: row;
+	font-family: 'ArialBlackS';
+}
+
+header * {
+	font-family: 'ArialBlackS';
 }
 
 header h1 {
@@ -123,6 +132,7 @@ main {
 	flex-grow: 1;
 	background-color: #828696;
 	position: relative;
+	padding-bottom: 23px;
 }
 
 @keyframes posun_most {
