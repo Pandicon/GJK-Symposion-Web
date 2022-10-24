@@ -137,7 +137,7 @@ td.clickable {
 }
 
 
-@media only screen and (max-width:600px) {
+@media only screen and (max-width:599px) {
 
 	/* strašný zlý nepěkná věc, přepsat! (ale asi bude třeba hrábnout do html) */
 	header {
