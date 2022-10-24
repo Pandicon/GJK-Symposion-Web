@@ -138,6 +138,10 @@ td {
 	border-collapse: collapse;
 }
 
+td.clickable {
+	cursor: pointer;
+}
+
 footer {
 	height: 3rem;
 }

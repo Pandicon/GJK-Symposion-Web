@@ -34,7 +34,7 @@ pub fn harmonogram(props: &Props) -> Html {
 			days.push((day, day_cache.unwrap().to_owned().data));
 		} else {
 			let response_raw = r#"
-            {"data":{"harmonogram":[[null,{"lecturer":"","title":"Jídelna","for_younger":false},{"lecturer":"","title":"LCH","for_younger":false},{"lecturer":"","title":"Sklep GJK","for_younger":false},{"lecturer":"","title":"Strecha GJK","for_younger":false}],[{"lecturer":"","title":"9:05 - 11:05","for_younger":false},null,{"lecturer":"<script>alert('cheche!');</script>","title":"<script>alert('hehe!');</script>","for_younger":false,"row_span":2},null,null],[{"lecturer":"","title":"11:05 - 11:55","for_younger":false},null,{"lecturer":"prednasejici #1","title":"vysoce narocne tema tykajici se mostu","for_younger":false},null],[{"lecturer":"","title":"11:55 - 12:01","for_younger":false},null,null,null,null],[{"lecturer":"","title":"12:01 - 13:02","for_younger":false},null,{"lecturer":"prednasejici #3","title":"odpalování mostů","for_younger":false},{"lecturer":"pan prednasejici #1","title":"symposion web stranky jako most mezi organizatory a ucastniky","for_younger":false,"row_span":2},{"lecturer":"pani prednasejici #1","title":"rezonance mostu ve vetru","for_younger":false,"row_span":2}],[{"lecturer":"","title":"13:02 - 23:42","for_younger":false},null,null],[{"lecturer":"","title":"23:42 - 23:59","for_younger":false},{"lecturer":"","title":"VEČEŘE","for_younger":true,"col_span":4}],[{"lecturer":"","title":"23:59 - 24:00","for_younger":false},null,null,null,{"lecturer":"prednasejici #2","title":"pozorování hvězd na téma most","for_younger":false}]],"last_updated":1666554343},"error":null}
+            {"data":{"harmonogram":[[null,{"lecturer":"","title":"LCH","for_younger":false,"id":"0-1"},{"lecturer":"","title":"Sklep GJK","for_younger":false,"id":"0-2"},{"lecturer":"","title":"Strecha GJK","for_younger":false,"id":"0-3"}],[{"lecturer":"","title":"9:05 - 11:05","for_younger":false,"id":"1-0"},{"lecturer":"<script>alert('cheche!');</script>","title":"<script>alert('hehe!');</script>","for_younger":false,"id":"1-1","row_span":2},null,null],[{"lecturer":"","title":"11:05 - 11:55","for_younger":false,"id":"2-0"},{"lecturer":"prednasejici #1","title":"vysoce narocne tema tykajici se mostu","for_younger":false,"id":"2-2"},null],[{"lecturer":"","title":"12:01 - 13:02","for_younger":false,"id":"3-0"},{"lecturer":"prednasejici #3","title":"odpalování mostů","for_younger":false,"id":"3-1"},{"lecturer":"pan prednasejici #1","title":"symposion web stranky jako most mezi organizatory a ucastniky","for_younger":true,"id":"3-2","row_span":2},{"lecturer":"pani prednasejici #1","title":"rezonance mostu ve vetru","for_younger":true,"id":"3-3","row_span":2}],[{"lecturer":"","title":"13:02 - 23:42","for_younger":false,"id":"4-0"},null],[{"lecturer":"","title":"23:42 - 23:57","for_younger":false,"id":"5-0"},{"lecturer":"","title":"VEČEŘE","for_younger":true,"id":"5-1","col_span":3}],[{"lecturer":"","title":"23:59 - 24:00","for_younger":false,"id":"6-0"},null,null,{"lecturer":"prednasejici #2","title":"pozorování hvězd na téma most","for_younger":false,"id":"6-3"}]],"last_updated":1666602581},"error":null}
             "#; // TODO: Make this an actual API call once the API is set up
 			let response = serde_json::from_str::<HarmonogramDayResponse>(response_raw);
 			if let Ok(schedule) = response {
@@ -50,6 +50,9 @@ pub fn harmonogram(props: &Props) -> Html {
 			}
 		}
 	}
+	/*let on_td_click = Callback::from(|_| {
+		gloo::console::log!("Hello!");
+	});*/
 	html! {
 		<>
 		<header>
@@ -91,8 +94,15 @@ pub fn harmonogram(props: &Props) -> Html {
 											} else {
 												1
 											};
+											let (class_name, on_click) = if let Some(cell_id) = cell.id.clone() {
+												("clickable", Callback::from(move |_| {
+													gloo::console::log!(format!("Hello! Cell id: {}", cell_id));
+												}))
+											} else {
+												("", Callback::from(|_| {}))
+											};
 											html!{
-												<td colspan={format!("{col_span}")} rowspan={format!("{row_span}")}>
+												<td class={class_name} colspan={format!("{col_span}")} rowspan={format!("{row_span}")} onclick={on_click}>
 													<b>{&cell.lecturer}</b><br />{&cell.title}
 													if cell.for_younger {
 														<br /><i>{"Vhodné i pro mladší diváky"}</i>
@@ -152,6 +162,7 @@ struct HarmonogramField {
 	col_span: Option<u8>,
 	row_span: Option<u8>,
 	for_younger: bool,
+	id: Option<String>,
 	lecturer: String,
 	title: String,
 }
