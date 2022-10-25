@@ -44,6 +44,7 @@ namespace api_server {
 	class wserver {
 	public:
 		wserver(asio::io_service &io_service, unsigned short port, request_callback_fun cb);
+		void filter_sessions();
 	private:
 		std::vector<std::unique_ptr<wsession>> active_sessions;
 		asio::io_service &io_service;
@@ -53,7 +54,6 @@ namespace api_server {
 #endif
 		request_callback_fun req_cb;
 
-		void filter_sessions();
 		void accept(const asio::error_code &ec, wsession *session);
 	};
 }

@@ -158,6 +158,7 @@ int main(int, char**) {
 		skip_fetch_task_assign:;
 		}
 		std::this_thread::sleep_for(std::chrono::milliseconds(50));
+		server.filter_sessions();
 	}
 	return 0;
 }

@@ -41,7 +41,6 @@ namespace api_server {
 								"content [" << response.content << "]" << std::endl;
 							response.close = true;
 							reply(response);
-							socket.close();
 						} else {
 							std::cout << "[read]: invalid request - " << socket.lowest_layer().remote_endpoint().address() << std::endl;
 							socket.close();
@@ -142,9 +141,12 @@ namespace api_server {
 			if (ec) {
 				std::cerr << "[asio::error]: async write in reply - " << ec.value() << " " << ec.message() << std::endl;
 				closed = true;
+				socket.close();
 			} else {
-				//if (r.close)
+				//if (r.close) {
 					closed = true;
+					socket.close();
+				//}
 			}
 		});
 	}
@@ -193,7 +195,12 @@ namespace api_server {
 		}
 	}
 	void wserver::filter_sessions() {
-		active_sessions.erase(std::remove_if(active_sessions.begin(), active_sessions.end(),
-			[](const std::unique_ptr<api_server::wsession> &session) { return session->closed; }));
+		auto rit = active_sessions.begin();
+		for (auto i = active_sessions.begin(); i != active_sessions.end(); i++) {
+			if (!(*i)->closed) {
+				*(rit++) = std::move(*i);
+			}
+		}
+		active_sessions.erase(rit, active_sessions.end());
 	}
 }
