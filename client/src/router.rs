@@ -32,7 +32,6 @@ pub fn switch(route: &Route) -> Html {
 			let error_message = format!("Failed to parse the config file, can not continue: {}", error);
 			gloo::console::error!(&error_message);
 			return html! { <Chyba error = {error_message} /> };
-			// TODO Add an error message parameter
 		}
 	};
 	match route {

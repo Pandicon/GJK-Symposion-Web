@@ -94,9 +94,7 @@ pub fn harmonogram(props: &Props) -> Html {
 												let cloned_api_base = api_base.clone();
 												let cloned_cell = cell.clone();
 												("clickable", Callback::from(move |_| {
-													gloo::console::log!(format!("Hello! Cell id: {}, Day: {}", cell_id, cell_day));
 													cloned_additional_cell_info_enabled_state.set(true);
-													// TODO: Make this an API call to our API
 													set_additional_info_state(cloned_additional_info_state.clone(), &cloned_api_base, current_timestamp_seconds, cell_day.clone(), cell_id.clone(), cloned_cell.lecturer.clone(), cloned_cell.title.clone(), cloned_cell.for_younger);
 												}))
 											} else {
