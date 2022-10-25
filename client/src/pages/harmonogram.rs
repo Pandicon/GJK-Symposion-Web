@@ -1,6 +1,10 @@
 use crate::types::{AdditionalCellInfo, AdditionalCellInfoData, AdditionalCellInfoResponse, HarmonogramData, HarmonogramDayCache, HarmonogramDayData, HarmonogramDayResponse, HarmonogramState};
 use crate::utils;
 
+#[path = "./components/mod.rs"]
+mod components;
+use components::additional_lecture_info::AdditionalLectureInfo;
+
 use chrono::TimeZone;
 use yew::prelude::*;
 
@@ -124,13 +128,7 @@ pub fn harmonogram(props: &Props) -> Html {
 				}
 			}).collect::<Html>()
 		}
-		<div class="overlay-body" style={
-			if *additional_cell_info_enabled_state {
-				"display: block;"
-			} else {
-				"display: none;"
-			}
-		}><div>{format!("{:?} {:?} {:?}", additional_cell_info_state.data, additional_cell_info_state.warning, additional_cell_info_state.error)}</div><br /><br /><div onclick={let cloned_additional_cell_info_enabled_state = additional_cell_info_enabled_state.clone(); Callback::from(move |_| {cloned_additional_cell_info_enabled_state.set(false)})}>{"Zpět"}</div></div>
+		<AdditionalLectureInfo enabled_state={additional_cell_info_enabled_state.clone()} data_state={additional_cell_info_state.clone()}/>
 		<div class="opakujici_most_naopak"></div>
 		</main>
 		<footer></footer>

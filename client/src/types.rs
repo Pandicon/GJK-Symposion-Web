@@ -39,7 +39,7 @@ pub struct HarmonogramField {
 	pub title: String,
 }
 
-#[derive(Default, Debug)]
+#[derive(Default, Debug, PartialEq)]
 pub struct AdditionalCellInfo {
 	pub data: Option<AdditionalCellInfoData>,
 	pub warning: Option<String>,
@@ -52,7 +52,7 @@ impl AdditionalCellInfo {
 	}
 }
 
-#[derive(Default, Debug, Deserialize, Serialize)]
+#[derive(Default, Debug, Deserialize, Serialize, PartialEq)]
 pub struct AdditionalCellInfoData {
 	pub lecturer: String,
 	pub title: String,
