@@ -171,33 +171,34 @@ fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base
 									set_harmonogram_additional_data_cache(&day, &id, current_timestamp_seconds, cell_info_data.clone(), data.last_updated);
 									let state_data = AdditionalCellInfo::new(Some(cell_info_data), None, None, data.last_updated);
 									state.set(state_data);
+									return;
 								}
 								_ => {
-                                    data_to_set.error = data.error;
-                                    data_to_set.last_updated = current_timestamp_seconds;
+									data_to_set.error = data.error;
+									data_to_set.last_updated = current_timestamp_seconds;
 								}
 							},
 							Err(error) => {
 								gloo::console::error!(format!("Failed to deserialize the response: {:?}", error));
-                                data_to_set.error = Some(format!("Nastala chyba, nepodařilo se převést odpověď serveru do správného formátu: {:?}", error));
-                                data_to_set.last_updated = current_timestamp_seconds;
+								data_to_set.error = Some(format!("Nastala chyba, nepodařilo se převést odpověď serveru do správného formátu: {:?}", error));
+								data_to_set.last_updated = current_timestamp_seconds;
 							}
 						},
 						Err(error) => {
 							gloo::console::error!(format!("Couldn't get the response text: {:?}", error));
-                            data_to_set.error = Some(format!("Nastala chyba, nepodařilo se získat text odpovědi serveru: {:?}", error));
-                            data_to_set.last_updated = current_timestamp_seconds;
+							data_to_set.error = Some(format!("Nastala chyba, nepodařilo se získat text odpovědi serveru: {:?}", error));
+							data_to_set.last_updated = current_timestamp_seconds;
 						}
 					}
 				}
 			}
 			Err(error) => {
 				gloo::console::error!(format!("Something went wrong when fetching the API: {:?}", error));
-                data_to_set.error = Some(format!("Nastala chyba, nepodařilo se získat odpověď serveru: {:?}", error));
-                data_to_set.last_updated = current_timestamp_seconds;
+				data_to_set.error = Some(format!("Nastala chyba, nepodařilo se získat odpověď serveru: {:?}", error));
+				data_to_set.last_updated = current_timestamp_seconds;
 			}
 		}
-        state.set(data_to_set);
+		state.set(data_to_set);
 	})
 }
 
