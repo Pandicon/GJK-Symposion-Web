@@ -10,11 +10,16 @@ const CACHE_LIFETIME: i64 = 5 * 60; // 5 minutes represented in seconds
 #[derive(PartialEq, Properties, Debug)]
 pub struct Props {
 	pub day: Option<String>,
+	pub config: crate::types::Config,
 }
 
 #[function_component(Harmonogram)]
 pub fn harmonogram(props: &Props) -> Html {
 	yew_hooks::use_title("Harmonogram | Mosty - Symposion 2022 | Gymnázium Jana Keplera".to_string());
+
+	let api_base = &props.config.api;
+	gloo::console::log!("API base: ", api_base);
+
 	let additional_cell_info_state: UseStateHandle<AdditionalCellInfo> = use_state(|| AdditionalCellInfo::default());
 	let schedule_state: UseStateHandle<AdditionalCellInfo> = use_state(|| AdditionalCellInfo::default());
 	let current_timestamp_seconds = chrono::offset::Local::now().timestamp();

@@ -1,5 +1,10 @@
 use serde_derive::{Deserialize, Serialize};
 
+#[derive(Debug, Deserialize, Serialize, PartialEq, yew::Properties)]
+pub struct Config {
+	pub api: String,
+}
+
 #[derive(Debug, Deserialize, Serialize)]
 pub struct HarmonogramDayData {
 	pub day: String,
