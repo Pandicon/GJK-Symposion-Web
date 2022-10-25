@@ -24,7 +24,7 @@ pub fn harmonogram(props: &Props) -> Html {
 	let api_base = &props.config.api;
 	gloo::console::log!("API base: ", api_base);
 
-	let additional_cell_info_state: UseStateHandle<AdditionalCellInfo> = use_state(|| AdditionalCellInfo::default());
+	let additional_cell_info_state: UseStateHandle<AdditionalCellInfo> = use_state(AdditionalCellInfo::default);
 	let additional_cell_info_enabled_state = use_state(|| false);
 	let current_timestamp_seconds = chrono::offset::Local::now().timestamp();
 	let day_from_url = if let Some(day) = &props.day {
@@ -252,7 +252,7 @@ fn set_harmonogram_state(state: UseStateHandle<HarmonogramState>, api_base: &str
 									match serde_json::from_str::<HarmonogramDayResponse>(&text) {
 										Ok(data) => match data.data {
 											Some(data) => {
-												set_harmonogram_cache(&day, current_timestamp_seconds, data.clone());
+												set_harmonogram_cache(day, current_timestamp_seconds, data.clone());
 												days.push((day.to_owned(), data))
 											}
 											_ => {}
