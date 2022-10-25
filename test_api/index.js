@@ -158,6 +158,7 @@ app.get('/patek', (req, res) => {
 
 const anotace = {
 	streda: {
+		'2-0': { data: { info: null, last_updated: 1666695096 }, error: null },
 		'2-2': {
 			data: null,
 			error: null
@@ -176,6 +177,9 @@ const anotace = {
 			data: null,
 			error: 'O této přednášce nejsou žádná data'
 		}
+	},
+	ctvrtek: {
+		'2-0': { data: null, error: 'Not found - invalid lecture id.' }
 	}
 };
 

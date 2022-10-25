@@ -9,7 +9,8 @@
 	margin-top: 5vh;
 	margin-left: 5vw;
 	overscroll-behavior: contain;
-	background: rgb(17, 50, 73);
+	background: black;
+	color: white;
 }
 
 .unsupported_browser {

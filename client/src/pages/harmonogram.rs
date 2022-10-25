@@ -1,4 +1,4 @@
-use crate::types::{AdditionalCellInfo, HarmonogramData, HarmonogramDayCache, HarmonogramDayData, HarmonogramDayResponse, HarmonogramState};
+use crate::types::{AdditionalCellInfo, AdditionalCellInfoData, AdditionalCellInfoResponse, HarmonogramData, HarmonogramDayCache, HarmonogramDayData, HarmonogramDayResponse, HarmonogramState};
 use crate::utils;
 
 use chrono::TimeZone;
@@ -88,36 +88,13 @@ pub fn harmonogram(props: &Props) -> Html {
 											let (class_name, on_click) = if let Some(cell_id) = cell.id.clone() {
 												let cloned_additional_info_state = additional_cell_info_state.clone();
 												let cloned_additional_cell_info_enabled_state = additional_cell_info_enabled_state.clone();
+												let cloned_api_base = api_base.clone();
+												let cloned_cell = cell.clone();
 												("clickable", Callback::from(move |_| {
-													let cloned_additional_info_state = cloned_additional_info_state.clone();
 													gloo::console::log!(format!("Hello! Cell id: {}, Day: {}", cell_id, cell_day));
 													cloned_additional_cell_info_enabled_state.set(true);
 													// TODO: Make this an API call to our API
-													wasm_bindgen_futures::spawn_local(async move {
-														match gloo::net::http::Request::get("https://randomuser.me/api/").send().await {
-															Ok(response) => {
-																if !response.ok() {
-																	gloo::console::error!(format!("The reponse was not 200 OK: {:?}", response.status_text()));
-																	cloned_additional_info_state.set(AdditionalCellInfo::new(None, None, Some(format!("Nastala chyba, server odpověděl se statusem {}: {}", response.status(), response.status_text()))));
-																} else {
-																	match response.text().await {
-																		Ok(text) => {
-																			gloo::console::log!(format!("{:?}", text));
-																			cloned_additional_info_state.set(AdditionalCellInfo::new(Some(text), None, None));
-																		}
-																		Err(error) => {
-																			gloo::console::error!(format!("Couldn't get the response text: {:?}", error));
-																			cloned_additional_info_state.set(AdditionalCellInfo::new(None, None, Some(format!("Nastala chyba, nepodařilo se získat text odpovědi serveru: {:?}", error))));
-																		}
-																	}
-																}
-															}
-															Err(error) => {
-																gloo::console::error!(format!("Something went wrong when fetching the API: {:?}", error));
-																cloned_additional_info_state.set(AdditionalCellInfo::new(None, None, Some(format!("Nastala chyba, nepodařilo se získat odpověď serveru: {:?}", error))));
-															}
-														}
-													})
+													set_additional_info_state(cloned_additional_info_state.clone(), &cloned_api_base, current_timestamp_seconds, cell_day.clone(), cell_id.clone(), cloned_cell.lecturer.clone(), cloned_cell.title.clone(), cloned_cell.for_younger);
 												}))
 											} else {
 												("", Callback::from(|_| {}))
@@ -159,6 +136,84 @@ pub fn harmonogram(props: &Props) -> Html {
 		<footer></footer>
 		</>
 	}
+}
+
+fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base: &str, current_timestamp_seconds: i64, day: String, id: String, lecturer: String, title: String, for_younger: bool) {
+	let api_base = api_base.to_owned();
+	wasm_bindgen_futures::spawn_local(async move {
+		match gloo::net::http::Request::get(&format!("{}/anotace/{}/{}", api_base, day, id)).send().await {
+			Ok(response) => {
+				if !response.ok() {
+					gloo::console::error!(format!("The reponse was not 200 OK: {:?}", response.status_text()));
+					state.set(AdditionalCellInfo::new(
+						None,
+						None,
+						Some(format!("Nastala chyba, server odpověděl se statusem {}: {}", response.status(), response.status_text())),
+					));
+				} else {
+					match response.text().await {
+						Ok(text) => {
+							gloo::console::log!(format!("{:?}", text));
+							match serde_json::from_str::<AdditionalCellInfoResponse>(&text) {
+								Ok(data) => {
+									gloo::console::log!(format!("Data raw: {:?}", data));
+									match data.data {
+										Some(data) => {
+											gloo::console::log!(format!("Data: {:?}", data));
+											state.set(AdditionalCellInfo::new(
+												Some(AdditionalCellInfoData {
+													lecturer,
+													title,
+													for_younger,
+													annotation: data.info.annotation,
+													lecturer_info: data.info.lecturer_info,
+												}),
+												None,
+												None,
+											));
+										}
+										_ => {
+											state.set(AdditionalCellInfo::new(
+												Some(AdditionalCellInfoData {
+													lecturer,
+													title,
+													for_younger,
+													annotation: None,
+													lecturer_info: None,
+												}),
+												None,
+												data.error,
+											));
+										}
+									}
+								}
+								Err(error) => {
+									gloo::console::error!(format!("Failed to deserialize the response: {:?}", error));
+									state.set(AdditionalCellInfo::new(
+										None,
+										None,
+										Some(format!("Nastala chyba, nepodařilo se převést odpověď serveru do správného formátu: {:?}", error)),
+									));
+								}
+							}
+						}
+						Err(error) => {
+							gloo::console::error!(format!("Couldn't get the response text: {:?}", error));
+							state.set(AdditionalCellInfo::new(
+								None,
+								None,
+								Some(format!("Nastala chyba, nepodařilo se získat text odpovědi serveru: {:?}", error)),
+							));
+						}
+					}
+				}
+			}
+			Err(error) => {
+				gloo::console::error!(format!("Something went wrong when fetching the API: {:?}", error));
+				state.set(AdditionalCellInfo::new(None, None, Some(format!("Nastala chyba, nepodařilo se získat odpověď serveru: {:?}", error))));
+			}
+		}
+	})
 }
 
 fn set_harmonogram_state(state: UseStateHandle<HarmonogramState>, api_base: &str, current_timestamp_seconds: i64, day: &str) {

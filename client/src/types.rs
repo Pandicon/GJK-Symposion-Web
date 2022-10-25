@@ -39,17 +39,44 @@ pub struct HarmonogramField {
 	pub title: String,
 }
 
-#[derive(Default)]
+#[derive(Default, Debug)]
 pub struct AdditionalCellInfo {
-	pub data: Option<String>,
+	pub data: Option<AdditionalCellInfoData>,
 	pub warning: Option<String>,
 	pub error: Option<String>,
 }
 
 impl AdditionalCellInfo {
-	pub fn new(data: Option<String>, warning: Option<String>, error: Option<String>) -> Self {
+	pub fn new(data: Option<AdditionalCellInfoData>, warning: Option<String>, error: Option<String>) -> Self {
 		Self { data, warning, error }
 	}
+}
+
+#[derive(Default, Debug, Deserialize, Serialize)]
+pub struct AdditionalCellInfoData {
+	pub lecturer: String,
+	pub title: String,
+	pub for_younger: bool,
+	pub annotation: Option<String>,
+	pub lecturer_info: Option<String>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct AdditionalCellInfoResponse {
+	pub data: Option<AdditionalCellInfoResponseData>,
+	pub error: Option<String>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct AdditionalCellInfoResponseData {
+	pub info: AdditionalCellInfoResponseInfo,
+	pub last_updated: i64,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct AdditionalCellInfoResponseInfo {
+	pub annotation: Option<String>,
+	pub lecturer_info: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, Serialize)]
