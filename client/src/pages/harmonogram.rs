@@ -134,7 +134,21 @@ pub fn harmonogram(props: &Props) -> Html {
 }
 
 fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base: &str, current_timestamp_seconds: i64, day: String, id: String, lecturer: String, title: String, for_younger: bool) {
-	let mut data_to_set = AdditionalCellInfo::default();
+	let mut data_to_set = AdditionalCellInfo::new(
+		Some(AdditionalCellInfoData {
+			lecturer: lecturer.clone(),
+			title: title.clone(),
+			for_younger,
+			annotation: None,
+			lecturer_info: None,
+		}),
+		None,
+		None,
+		current_timestamp_seconds,
+	);
+	let utc_date = chrono::Utc.timestamp(current_timestamp_seconds, 0);
+	let current_date_local: chrono::DateTime<chrono::Local> = chrono::DateTime::from(utc_date);
+	let current_date_formatted = current_date_local.format("%d.%m.%Y %H:%M:%S").to_string();
 	if let Some(cache) = get_harmonogram_additional_data_cache(&day, &id) {
 		data_to_set = AdditionalCellInfo {
 			data: Some(cache.data),
@@ -154,8 +168,12 @@ fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base
 			Ok(response) => {
 				if !response.ok() {
 					gloo::console::error!(format!("The response was not 200 OK: {:?}", response.status_text()));
-					data_to_set.error = Some(format!("Nastala chyba, server odpověděl se statusem {}: {}", response.status(), response.status_text()));
-					data_to_set.last_updated = current_timestamp_seconds;
+					data_to_set.error = Some(format!(
+						"(Chyba z {}) Server odpověděl se statusem {}: {}",
+						current_date_formatted,
+						response.status(),
+						response.status_text()
+					));
 				} else {
 					match response.text().await {
 						Ok(text) => match serde_json::from_str::<AdditionalCellInfoResponse>(&text) {
@@ -174,28 +192,26 @@ fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base
 									return;
 								}
 								_ => {
-									data_to_set.error = data.error;
-									data_to_set.last_updated = current_timestamp_seconds;
+									if let Some(error) = data.error {
+										data_to_set.error = Some(format!("(Chyba z {}) {:?}", current_date_formatted, error))
+									}
 								}
 							},
 							Err(error) => {
 								gloo::console::error!(format!("Failed to deserialize the response: {:?}", error));
-								data_to_set.error = Some(format!("Nastala chyba, nepodařilo se převést odpověď serveru do správného formátu: {:?}", error));
-								data_to_set.last_updated = current_timestamp_seconds;
+								data_to_set.error = Some(format!("(Chyba z {}) Nepodařilo se převést odpověď serveru do správného formátu: {:?}", current_date_formatted, error));
 							}
 						},
 						Err(error) => {
 							gloo::console::error!(format!("Couldn't get the response text: {:?}", error));
-							data_to_set.error = Some(format!("Nastala chyba, nepodařilo se získat text odpovědi serveru: {:?}", error));
-							data_to_set.last_updated = current_timestamp_seconds;
+							data_to_set.error = Some(format!("(Chyba z {}) Nepodařilo se získat text odpovědi serveru: {:?}", current_date_formatted, error));
 						}
 					}
 				}
 			}
 			Err(error) => {
 				gloo::console::error!(format!("Something went wrong when fetching the API: {:?}", error));
-				data_to_set.error = Some(format!("Nastala chyba, nepodařilo se získat odpověď serveru: {:?}", error));
-				data_to_set.last_updated = current_timestamp_seconds;
+				data_to_set.error = Some(format!("(Chyba z {}) Nepodařilo se získat odpověď serveru: {:?}", current_date_formatted, error));
 			}
 		}
 		state.set(data_to_set);
