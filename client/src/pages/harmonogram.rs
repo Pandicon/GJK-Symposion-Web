@@ -21,6 +21,7 @@ pub fn harmonogram(props: &Props) -> Html {
 	gloo::console::log!("API base: ", api_base);
 
 	let additional_cell_info_state: UseStateHandle<AdditionalCellInfo> = use_state(|| AdditionalCellInfo::default());
+	let additional_cell_info_enabled_state = use_state(|| false);
 	let current_timestamp_seconds = chrono::offset::Local::now().timestamp();
 	let day_from_url = if let Some(day) = &props.day {
 		let day_lowercase = day.to_ascii_lowercase();
@@ -86,9 +87,11 @@ pub fn harmonogram(props: &Props) -> Html {
 											let cell_day = day.clone();
 											let (class_name, on_click) = if let Some(cell_id) = cell.id.clone() {
 												let cloned_additional_info_state = additional_cell_info_state.clone();
+												let cloned_additional_cell_info_enabled_state = additional_cell_info_enabled_state.clone();
 												("clickable", Callback::from(move |_| {
 													let cloned_additional_info_state = cloned_additional_info_state.clone();
 													gloo::console::log!(format!("Hello! Cell id: {}, Day: {}", cell_id, cell_day));
+													cloned_additional_cell_info_enabled_state.set(true);
 													// TODO: Make this an API call to our API
 													wasm_bindgen_futures::spawn_local(async move {
 														match gloo::net::http::Request::get("https://randomuser.me/api/").send().await {
@@ -144,7 +147,13 @@ pub fn harmonogram(props: &Props) -> Html {
 				}
 			}).collect::<Html>()
 		}
-		<div class="overlay-body"><div>{format!("{:?} {:?} {:?}", additional_cell_info_state.data, additional_cell_info_state.warning, additional_cell_info_state.error)}</div><br /><br /></div>
+		<div class="overlay-body" style={
+			if *additional_cell_info_enabled_state {
+				"display: block;"
+			} else {
+				"display: none;"
+			}
+		}><div>{format!("{:?} {:?} {:?}", additional_cell_info_state.data, additional_cell_info_state.warning, additional_cell_info_state.error)}</div><br /><br /><div onclick={let cloned_additional_cell_info_enabled_state = additional_cell_info_enabled_state.clone(); Callback::from(move |_| {cloned_additional_cell_info_enabled_state.set(false)})}>{"Zpět"}</div></div>
 		<div class="opakujici_most_naopak"></div>
 		</main>
 		<footer></footer>
