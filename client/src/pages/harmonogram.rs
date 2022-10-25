@@ -22,7 +22,6 @@ pub fn harmonogram(props: &Props) -> Html {
 	yew_hooks::use_title("Harmonogram | Mosty - Symposion 2022 | Gymnázium Jana Keplera".to_string());
 
 	let api_base = &props.config.api;
-	gloo::console::log!("API base: ", api_base);
 
 	let additional_cell_info_state: UseStateHandle<AdditionalCellInfo> = use_state(AdditionalCellInfo::default);
 	let additional_cell_info_enabled_state = use_state(|| false);
@@ -154,40 +153,36 @@ fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base
 						Ok(text) => {
 							gloo::console::log!(format!("{:?}", text));
 							match serde_json::from_str::<AdditionalCellInfoResponse>(&text) {
-								Ok(data) => {
-									gloo::console::log!(format!("Data raw: {:?}", data));
-									match data.data {
-										Some(data) => {
-											gloo::console::log!(format!("Data: {:?}", data));
-											state.set(AdditionalCellInfo::new(
-												Some(AdditionalCellInfoData {
-													lecturer,
-													title,
-													for_younger,
-													annotation: data.info.annotation,
-													lecturer_info: data.info.lecturer_info,
-												}),
-												None,
-												None,
-												data.last_updated,
-											));
-										}
-										_ => {
-											state.set(AdditionalCellInfo::new(
-												Some(AdditionalCellInfoData {
-													lecturer,
-													title,
-													for_younger,
-													annotation: None,
-													lecturer_info: None,
-												}),
-												None,
-												data.error,
-												current_timestamp_seconds,
-											));
-										}
+								Ok(data) => match data.data {
+									Some(data) => {
+										state.set(AdditionalCellInfo::new(
+											Some(AdditionalCellInfoData {
+												lecturer,
+												title,
+												for_younger,
+												annotation: data.info.annotation,
+												lecturer_info: data.info.lecturer_info,
+											}),
+											None,
+											None,
+											data.last_updated,
+										));
 									}
-								}
+									_ => {
+										state.set(AdditionalCellInfo::new(
+											Some(AdditionalCellInfoData {
+												lecturer,
+												title,
+												for_younger,
+												annotation: None,
+												lecturer_info: None,
+											}),
+											None,
+											data.error,
+											current_timestamp_seconds,
+										));
+									}
+								},
 								Err(error) => {
 									gloo::console::error!(format!("Failed to deserialize the response: {:?}", error));
 									state.set(AdditionalCellInfo::new(
@@ -226,66 +221,48 @@ fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base
 
 fn set_harmonogram_state(state: UseStateHandle<HarmonogramState>, api_base: &str, current_timestamp_seconds: i64, day: &str) {
 	let cache = get_harmonogram_cache(day);
-	let mut fetch_data = false;
-	for day_cache_all in &cache {
-		let day_cache = day_cache_all.cache.as_ref();
-		if day_cache.is_none() || day_cache.as_ref().unwrap().timestamp < current_timestamp_seconds - CACHE_LIFETIME {
-			fetch_data = true;
-			break;
-		}
-	}
-	if !fetch_data {
+	let api_base = api_base.to_owned();
+	wasm_bindgen_futures::spawn_local(async move {
 		let mut days = vec![];
 		for day_cache_all in &cache {
 			let day = &day_cache_all.day;
 			let day_cache = day_cache_all.cache.as_ref();
 			if day_cache.is_some() && day_cache.as_ref().unwrap().timestamp >= current_timestamp_seconds - CACHE_LIFETIME {
 				days.push((day.to_owned(), day_cache.unwrap().to_owned().data));
+				continue;
 			}
-		}
-		state.set(HarmonogramState::new(Some(days), None));
-	} else {
-		gloo::console::debug!("Fetching the schedule from API");
-		let api_base = api_base.to_owned();
-		wasm_bindgen_futures::spawn_local(async move {
-			let mut days = vec![];
-			for day_cache_all in &cache {
-				let day = &day_cache_all.day;
-				match gloo::net::http::Request::get(&format!("{}/{}", api_base, day)).send().await {
-					Ok(response) => {
-						if !response.ok() {
-							gloo::console::error!(format!("The reponse was not 200 OK: {:?}", response.status_text()));
-						} else {
-							match response.text().await {
-								Ok(text) => {
-									gloo::console::log!(format!("{:?}", text));
-									match serde_json::from_str::<HarmonogramDayResponse>(&text) {
-										Ok(data) => match data.data {
-											Some(data) => {
-												set_harmonogram_cache(day, current_timestamp_seconds, data.clone());
-												days.push((day.to_owned(), data))
-											}
-											_ => {}
-										},
-										Err(error) => {
-											gloo::console::error!(format!("Failed to deserialize the response: {:?}", error));
-										}
+			gloo::console::debug!(format!("Fetching the schedule from the API for day {}", &day));
+			match gloo::net::http::Request::get(&format!("{}/{}", api_base, day)).send().await {
+				Ok(response) => {
+					if !response.ok() {
+						gloo::console::error!(format!("The reponse was not 200 OK: {:?}", response.status_text()));
+					} else {
+						match response.text().await {
+							Ok(text) => match serde_json::from_str::<HarmonogramDayResponse>(&text) {
+								Ok(data) => match data.data {
+									Some(data) => {
+										set_harmonogram_cache(day, current_timestamp_seconds, data.clone());
+										days.push((day.to_owned(), data))
 									}
-								}
+									_ => {}
+								},
 								Err(error) => {
-									gloo::console::error!(format!("Couldn't get the response text: {:?}", error));
+									gloo::console::error!(format!("Failed to deserialize the response: {:?}", error));
 								}
+							},
+							Err(error) => {
+								gloo::console::error!(format!("Couldn't get the response text: {:?}", error));
 							}
 						}
 					}
-					Err(error) => {
-						gloo::console::error!(format!("Something went wrong when fetching the API: {:?}", error));
-					}
+				}
+				Err(error) => {
+					gloo::console::error!(format!("Something went wrong when fetching the API: {:?}", error));
 				}
 			}
-			state.set(HarmonogramState::new(Some(days), None));
-		});
-	}
+		}
+		state.set(HarmonogramState::new(Some(days), None));
+	});
 }
 
 fn get_harmonogram_cache(day: &str) -> Vec<HarmonogramDayData> {
