@@ -9,7 +9,7 @@ namespace api_server {
 	struct http_request {
 	public:
 		enum method_t {
-			GET, HEAD, POST, PUT, DELETE, CONNECT, OPTIONS, TRACE, PATCH
+			GET, HEAD, POST, PUT, DELETE_M, CONNECT, OPTIONS, TRACE, PATCH
 		};
 
 		method_t method;

@@ -6,18 +6,30 @@
 #include "config.hpp"
 
 namespace api_server {
-	wsession::wsession(asio::io_service &io_service, asio::ssl::context &ssl_ctx, request_callback_fun cb) : closed(false), socket(io_service, ssl_ctx), req_cb(cb) { }
+	wsession::wsession(asio::io_service &io_service,
+#ifdef USE_SSL
+		asio::ssl::context &ssl_ctx,
+#endif
+		request_callback_fun cb) : closed(false), socket(io_service
+#ifdef USE_SSL
+		,ssl_ctx
+#endif
+		), req_cb(cb) { }
 	void wsession::start() {
+#ifdef USE_SSL
 		socket.async_handshake(asio::ssl::stream_base::server, [this](const asio::error_code &ec) {
 			if (ec) {
 				std::cerr << "[asio::error]: async handshake - " << ec.value() << " " << ec.message() << std::endl;
 				closed = true;
+				socket.close();
 			} else {
 				std::cout << "[handshake]: handshake successful - " << socket.lowest_layer().remote_endpoint().address() << std::endl;
+#endif
 				socket.async_read_some(asio::buffer(buff, buffer_size), [this](const asio::error_code &ec, size_t transferred_len) {
 					if (ec) {
 						std::cerr << "[asio::error]: async read some in async hanshake - " << ec.value() << " " << ec.message() << std::endl;
 						closed = true;
+						socket.close();
 					} else {
 						std::cout << "[read]: received a request - " << socket.lowest_layer().remote_endpoint().address() << std::endl;
 						auto request = parse_http_request(transferred_len);
@@ -30,12 +42,15 @@ namespace api_server {
 							response.close = true;
 							reply(response);
 						} else {
-							//std::cout << "[read]: invalid request - " << socket.lowest_layer().remote_endpoint().address() << std::endl;
+							std::cout << "[read]: invalid request - " << socket.lowest_layer().remote_endpoint().address() << std::endl;
+							socket.close();
 						}
 					}
 				});
+#ifdef USE_SSL
 			}
 		});
+#endif
 	}
 	std::optional<http_request> wsession::parse_http_request(size_t transferred) {
 #define error_(msg, repl) do {\
@@ -91,7 +106,7 @@ namespace api_server {
 			else { error_("invalid request method.", "Invalid request method."); }
 			break;
 		case 'D':
-			if (header.starts_with("DELETE")) { out.method = http_request::DELETE; header = header.substr(6); }
+			if (header.starts_with("DELETE")) { out.method = http_request::DELETE_M; header = header.substr(6); }
 			else { error_("invalid request method.", "Invalid request method."); }
 			break;
 		case 'C':
@@ -126,31 +141,48 @@ namespace api_server {
 			if (ec) {
 				std::cerr << "[asio::error]: async write in reply - " << ec.value() << " " << ec.message() << std::endl;
 				closed = true;
+				socket.close();
 			} else {
-				//if (r.close)
+				//if (r.close) {
 					closed = true;
+					socket.close();
+				//}
 			}
 		});
 	}
 	wserver::wserver(asio::io_service &io_service, unsigned short port, request_callback_fun cb) :
-		io_service(io_service), ssl_ctx(asio::ssl::context::tls), req_cb(cb) {
+		io_service(io_service),
+#ifdef USE_SSL
+		ssl_ctx(asio::ssl::context::tls),
+#endif
+		req_cb(cb) {
+#ifdef USE_SSL
 		ssl_ctx.set_options(
 			asio::ssl::context::default_workarounds |
 			asio::ssl::context::no_sslv2 |
 			asio::ssl::context::no_sslv3);
 		ssl_ctx.use_certificate_chain_file(get_config_or("cert_chain_file", "cert.pem"));
 		ssl_ctx.use_private_key_file(get_config_or("private_key_file", "private.pem"), asio::ssl::context::pem);
+#endif
 		bool ipv6 = get_config_or("use_ipv6", "") == "true";
 		std::cout << "[info]: starting server on port " << port << ", IPv" << (ipv6 ? '6' : '4') << std::endl;
 		acceptor = std::make_unique<asio::ip::tcp::acceptor>(io_service, asio::ip::tcp::endpoint(ipv6 ? asio::ip::tcp::v6() : asio::ip::tcp::v4(), port));
-		wsession *next = new wsession(io_service, ssl_ctx, req_cb);
+		wsession *next = new wsession(io_service, 
+#ifdef USE_SSL
+			ssl_ctx,
+#endif
+			req_cb);
 		active_sessions.emplace_back(next);
 		acceptor->async_accept(next->socket.lowest_layer(), [this, next](const asio::error_code &ec) {
 			accept(ec, next);
 		});
 	}
 	void wserver::accept(const asio::error_code &ec, wsession *session) {
-		wsession *next = new wsession(io_service, ssl_ctx, req_cb);
+		wsession *next = new wsession(io_service,
+#ifdef USE_SSL
+			ssl_ctx,
+#endif
+			req_cb);
 		active_sessions.push_back(std::unique_ptr<wsession>(next));
 		acceptor->async_accept(next->socket.lowest_layer(), [this, next](const asio::error_code &ec) {
 			accept(ec, next);
@@ -163,7 +195,12 @@ namespace api_server {
 		}
 	}
 	void wserver::filter_sessions() {
-		active_sessions.erase(std::remove_if(active_sessions.begin(), active_sessions.end(),
-			[](const std::unique_ptr<api_server::wsession> &session) { return session->closed; }));
+		auto rit = active_sessions.begin();
+		for (auto i = active_sessions.begin(); i != active_sessions.end(); i++) {
+			if (!(*i)->closed) {
+				*(rit++) = std::move(*i);
+			}
+		}
+		active_sessions.erase(rit, active_sessions.end());
 	}
 }
