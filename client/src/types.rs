@@ -6,6 +6,19 @@ pub struct Config {
 }
 
 #[derive(Debug, Deserialize, Serialize)]
+pub struct AdditionalCellInfoCacheData {
+	pub id: String,
+	pub cache: Option<AdditionalCellInfoCache>,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct AdditionalCellInfoCache {
+	pub data: AdditionalCellInfoData,
+	pub last_updated: i64,
+	pub timestamp: i64,
+}
+
+#[derive(Debug, Deserialize, Serialize)]
 pub struct HarmonogramDayData {
 	pub day: String,
 	pub cache: Option<HarmonogramDayCache>,
@@ -53,7 +66,7 @@ impl AdditionalCellInfo {
 	}
 }
 
-#[derive(Default, Debug, Deserialize, Serialize, PartialEq)]
+#[derive(Clone, Default, Debug, Deserialize, Serialize, PartialEq)]
 pub struct AdditionalCellInfoData {
 	pub lecturer: String,
 	pub title: String,

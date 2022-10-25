@@ -1,4 +1,6 @@
-use crate::types::{AdditionalCellInfo, AdditionalCellInfoData, AdditionalCellInfoResponse, HarmonogramData, HarmonogramDayCache, HarmonogramDayData, HarmonogramDayResponse, HarmonogramState};
+use crate::types::{
+	AdditionalCellInfo, AdditionalCellInfoCache, AdditionalCellInfoData, AdditionalCellInfoResponse, HarmonogramData, HarmonogramDayCache, HarmonogramDayData, HarmonogramDayResponse, HarmonogramState,
+};
 use crate::utils;
 
 use super::components::additional_lecture_info::AdditionalLectureInfo;
@@ -134,12 +136,25 @@ pub fn harmonogram(props: &Props) -> Html {
 }
 
 fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base: &str, current_timestamp_seconds: i64, day: String, id: String, lecturer: String, title: String, for_younger: bool) {
+	if let Some(cache) = get_harmonogram_additional_data_cache(&day, &id) {
+		if cache.timestamp >= current_timestamp_seconds - CACHE_LIFETIME {
+			let data = AdditionalCellInfo {
+				data: Some(cache.data),
+				warning: None,
+				error: None,
+				last_updated: cache.last_updated,
+			};
+			state.set(data);
+			return;
+		}
+	}
 	let api_base = api_base.to_owned();
 	wasm_bindgen_futures::spawn_local(async move {
+		gloo::console::debug!(format!("Fetching additional cell data for cell {id} and day {day} from the API"));
 		match gloo::net::http::Request::get(&format!("{}/anotace/{}/{}", api_base, day, id)).send().await {
 			Ok(response) => {
 				if !response.ok() {
-					gloo::console::error!(format!("The reponse was not 200 OK: {:?}", response.status_text()));
+					gloo::console::error!(format!("The response was not 200 OK: {:?}", response.status_text()));
 					state.set(AdditionalCellInfo::new(
 						None,
 						None,
@@ -148,50 +163,45 @@ fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base
 					));
 				} else {
 					match response.text().await {
-						Ok(text) => {
-							gloo::console::log!(format!("{:?}", text));
-							match serde_json::from_str::<AdditionalCellInfoResponse>(&text) {
-								Ok(data) => match data.data {
-									Some(data) => {
-										state.set(AdditionalCellInfo::new(
-											Some(AdditionalCellInfoData {
-												lecturer,
-												title,
-												for_younger,
-												annotation: data.info.annotation,
-												lecturer_info: data.info.lecturer_info,
-											}),
-											None,
-											None,
-											data.last_updated,
-										));
-									}
-									_ => {
-										state.set(AdditionalCellInfo::new(
-											Some(AdditionalCellInfoData {
-												lecturer,
-												title,
-												for_younger,
-												annotation: None,
-												lecturer_info: None,
-											}),
-											None,
-											data.error,
-											current_timestamp_seconds,
-										));
-									}
-								},
-								Err(error) => {
-									gloo::console::error!(format!("Failed to deserialize the response: {:?}", error));
+						Ok(text) => match serde_json::from_str::<AdditionalCellInfoResponse>(&text) {
+							Ok(data) => match data.data {
+								Some(data) => {
+									let cell_info_data = AdditionalCellInfoData {
+										lecturer,
+										title,
+										for_younger,
+										annotation: data.info.annotation,
+										lecturer_info: data.info.lecturer_info,
+									};
+									set_harmonogram_additional_data_cache(&day, &id, current_timestamp_seconds, cell_info_data.clone(), data.last_updated);
+									let state_data = AdditionalCellInfo::new(Some(cell_info_data), None, None, data.last_updated);
+									state.set(state_data);
+								}
+								_ => {
 									state.set(AdditionalCellInfo::new(
+										Some(AdditionalCellInfoData {
+											lecturer,
+											title,
+											for_younger,
+											annotation: None,
+											lecturer_info: None,
+										}),
 										None,
-										None,
-										Some(format!("Nastala chyba, nepodařilo se převést odpověď serveru do správného formátu: {:?}", error)),
+										data.error,
 										current_timestamp_seconds,
 									));
 								}
+							},
+							Err(error) => {
+								gloo::console::error!(format!("Failed to deserialize the response: {:?}", error));
+								state.set(AdditionalCellInfo::new(
+									None,
+									None,
+									Some(format!("Nastala chyba, nepodařilo se převést odpověď serveru do správného formátu: {:?}", error)),
+									current_timestamp_seconds,
+								));
 							}
-						}
+						},
 						Err(error) => {
 							gloo::console::error!(format!("Couldn't get the response text: {:?}", error));
 							state.set(AdditionalCellInfo::new(
@@ -291,6 +301,30 @@ fn set_harmonogram_cache(day: &str, timestamp: i64, data: HarmonogramData) {
 	match serde_json::to_string(&cache) {
 		Ok(data) => {
 			if let Err(error) = utils::set_local_storage_key(&local_storage, &format!("harmonogram-{day}"), &data) {
+				gloo::console::error!(format!("Failed to save cache to local storage: {}", error));
+			}
+		}
+		Err(error) => gloo::console::error!(format!("Failed to parse cache to string: {}", error)),
+	};
+}
+
+fn get_harmonogram_additional_data_cache(day: &str, id: &str) -> Option<AdditionalCellInfoCache> {
+	let local_storage = utils::get_local_storage();
+	let cache = utils::get_local_storage_key(&local_storage, &format!("anotace-{day}--{id}"));
+	if let Some(data) = cache {
+		if let Ok(parsed_data) = serde_json::from_str(&data) {
+			return Some(parsed_data);
+		}
+	}
+	None
+}
+
+fn set_harmonogram_additional_data_cache(day: &str, id: &str, timestamp: i64, data: AdditionalCellInfoData, last_updated: i64) {
+	let cache = AdditionalCellInfoCache { data, timestamp, last_updated };
+	let local_storage = utils::get_local_storage();
+	match serde_json::to_string(&cache) {
+		Ok(data) => {
+			if let Err(error) = utils::set_local_storage_key(&local_storage, &format!("anotace-{day}--{id}"), &data) {
 				gloo::console::error!(format!("Failed to save cache to local storage: {}", error));
 			}
 		}
