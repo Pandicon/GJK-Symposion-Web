@@ -51,3 +51,14 @@ impl AdditionalCellInfo {
 		Self { data, warning, error }
 	}
 }
+
+#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+pub struct HarmonogramState {
+	pub data: Option<Vec<(String, HarmonogramData)>>,
+	pub error: Option<String>,
+}
+impl HarmonogramState {
+	pub fn new(data: Option<Vec<(String, HarmonogramData)>>, error: Option<String>) -> Self {
+		Self { data, error }
+	}
+}

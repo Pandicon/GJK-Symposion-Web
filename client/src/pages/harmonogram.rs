@@ -1,4 +1,4 @@
-use crate::types::{AdditionalCellInfo, HarmonogramData, HarmonogramDayCache, HarmonogramDayData, HarmonogramDayResponse};
+use crate::types::{AdditionalCellInfo, HarmonogramData, HarmonogramDayCache, HarmonogramDayData, HarmonogramDayResponse, HarmonogramState};
 use crate::utils;
 
 use chrono::TimeZone;
@@ -33,35 +33,17 @@ pub fn harmonogram(props: &Props) -> Html {
 	} else {
 		String::from("all")
 	};
-	let mut days = vec![];
-	let cache = get_harmonogram_cache(&day_from_url);
-	for day_cache_all in &cache {
-		let day = &day_cache_all.day;
-		let day_cache = day_cache_all.cache.as_ref();
-		if day_cache.is_some() && day_cache.as_ref().unwrap().timestamp >= current_timestamp_seconds - CACHE_LIFETIME {
-			days.push((day.to_owned(), day_cache.unwrap().to_owned().data));
-		} else {
-			gloo::console::debug!("Fetching the API");
-			{ // https://randomuser.me/api/
-			};
-			let response_raw = r#"
-			{"data":{"harmonogram":[[null,{"lecturer":"","title":"LCH","for_younger":false,"id":null},{"lecturer":"","title":"Sklep GJK","for_younger":false,"id":"0-2"},{"lecturer":"","title":"Strecha GJK","for_younger":false,"id":"0-3"}],[{"lecturer":"","title":"9:05 - 11:05","for_younger":false,"id":null},{"lecturer":"<script>alert('cheche!');</script>","title":"<script>alert('hehe!');</script>","for_younger":false,"id":null,"row_span":2},null,null],[{"lecturer":"","title":"11:05 - 11:55","for_younger":false,"id":null},{"lecturer":"prednasejici #1","title":"vysoce narocne tema tykajici se mostu","for_younger":false,"id":"2-2"},null],[{"lecturer":"","title":"12:01 - 13:02","for_younger":false,"id":null},{"lecturer":"prednasejici #3","title":"odpalování mostů","for_younger":false,"id":"3-1"},{"lecturer":"pan prednasejici #1","title":"symposion web stranky jako most mezi organizatory a ucastniky","for_younger":true,"id":"3-2","row_span":2},{"lecturer":"pani prednasejici #1","title":"rezonance mostu ve vetru","for_younger":true,"id":"3-3","row_span":2}],[{"lecturer":"","title":"13:02 - 23:42","for_younger":false,"id":null},null],[{"lecturer":"","title":"23:42 - 23:57","for_younger":false,"id":null},{"lecturer":"","title":"VEČEŘE","for_younger":true,"id":"5-1","col_span":3}],[{"lecturer":"","title":"23:59 - 24:00","for_younger":false,"id":null},null,null,{"lecturer":"prednasejici #2","title":"pozorování hvězd na téma most","for_younger":false,"id":"6-3"}]],"last_updated":1666606780},"error":null}
-			"#; // TODO: Make this an actual API call once the API is set up
-			let response = serde_json::from_str::<HarmonogramDayResponse>(response_raw);
-			if let Ok(schedule) = response {
-				if let Some(data) = schedule.data {
-					set_harmonogram_cache(day, current_timestamp_seconds, data.clone());
-					days.push((day.to_owned(), data));
-				} else if let Some(error) = schedule.error {
-					gloo::console::error!("Received an error: ", format!("{}", error));
-				} else {
-					gloo::console::error!("Didn't receive neither data nor an error");
-				}
-			} else {
-				gloo::console::error!("Failed to parse my data: ", format!("{}", response.err().unwrap()));
-			}
-		}
+
+	let harmonogram_state: UseStateHandle<HarmonogramState> = use_state(|| HarmonogramState::default());
+	if harmonogram_state.data.is_none() && harmonogram_state.error.is_none() {
+		set_harmonogram_state(harmonogram_state.clone(), api_base, current_timestamp_seconds, &day_from_url);
 	}
+
+	let days = match harmonogram_state.data.clone() {
+		Some(data) => data,
+		None => vec![],
+	};
+
 	if schedule_state.data.is_none() && schedule_state.warning.is_none() && schedule_state.error.is_none() {
 		let schedule_state_clone = schedule_state.clone();
 		wasm_bindgen_futures::spawn_local(async move {
@@ -205,6 +187,70 @@ pub fn harmonogram(props: &Props) -> Html {
 		</main>
 		<footer></footer>
 		</>
+	}
+}
+
+fn set_harmonogram_state(state: UseStateHandle<HarmonogramState>, api_base: &str, current_timestamp_seconds: i64, day: &str) {
+	let cache = get_harmonogram_cache(day);
+	let mut fetch_data = false;
+	for day_cache_all in &cache {
+		let day_cache = day_cache_all.cache.as_ref();
+		if day_cache.is_none() || day_cache.as_ref().unwrap().timestamp < current_timestamp_seconds - CACHE_LIFETIME {
+			fetch_data = true;
+			break;
+		}
+	}
+	if !fetch_data {
+		let mut days = vec![];
+		for day_cache_all in &cache {
+			let day = &day_cache_all.day;
+			let day_cache = day_cache_all.cache.as_ref();
+			if day_cache.is_some() && day_cache.as_ref().unwrap().timestamp >= current_timestamp_seconds - CACHE_LIFETIME {
+				days.push((day.to_owned(), day_cache.unwrap().to_owned().data));
+			}
+		}
+		state.set(HarmonogramState::new(Some(days), None));
+	} else {
+		gloo::console::debug!("Fetching the schedule from API");
+		let api_base = api_base.to_owned();
+		wasm_bindgen_futures::spawn_local(async move {
+			let mut days = vec![];
+			for day_cache_all in &cache {
+				let day = &day_cache_all.day;
+				match gloo::net::http::Request::get(&format!("{}/{}", api_base, day)).send().await {
+					Ok(response) => {
+						if !response.ok() {
+							gloo::console::error!(format!("The reponse was not 200 OK: {:?}", response.status_text()));
+						} else {
+							match response.text().await {
+								Ok(text) => {
+									gloo::console::log!(format!("{:?}", text));
+									match serde_json::from_str::<HarmonogramDayResponse>(&text) {
+										Ok(data) => match data.data {
+											Some(data) => {
+												set_harmonogram_cache(&day, current_timestamp_seconds, data.clone());
+												days.push((day.to_owned(), data))
+											}
+											_ => {}
+										},
+										Err(error) => {
+											gloo::console::error!(format!("Failed to deserialize the response: {:?}", error));
+										}
+									}
+								}
+								Err(error) => {
+									gloo::console::error!(format!("Couldn't get the response text: {:?}", error));
+								}
+							}
+						}
+					}
+					Err(error) => {
+						gloo::console::error!(format!("Something went wrong when fetching the API: {:?}", error));
+					}
+				}
+			}
+			state.set(HarmonogramState::new(Some(days), None));
+		});
 	}
 }
 
