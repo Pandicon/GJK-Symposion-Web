@@ -194,6 +194,8 @@ fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base
 								_ => {
 									if let Some(error) = data.error {
 										data_to_set.error = Some(format!("(Chyba z {}) {:?}", current_date_formatted, error))
+									} else if let Some(data_to_cache) = data_to_set.data.clone() {
+										set_harmonogram_additional_data_cache(&day, &id, current_timestamp_seconds, data_to_cache, current_timestamp_seconds);
 									}
 								}
 							},
