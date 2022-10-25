@@ -37,7 +37,7 @@ pub fn harmonogram(props: &Props) -> Html {
 		String::from("all")
 	};
 
-	let harmonogram_state: UseStateHandle<HarmonogramState> = use_state(|| HarmonogramState::default());
+	let harmonogram_state: UseStateHandle<HarmonogramState> = use_state(HarmonogramState::default);
 	if harmonogram_state.data.is_none() && harmonogram_state.error.is_none() {
 		set_harmonogram_state(harmonogram_state.clone(), api_base, current_timestamp_seconds, &day_from_url);
 	}
@@ -240,13 +240,12 @@ fn set_harmonogram_state(state: UseStateHandle<HarmonogramState>, api_base: &str
 					} else {
 						match response.text().await {
 							Ok(text) => match serde_json::from_str::<HarmonogramDayResponse>(&text) {
-								Ok(data) => match data.data {
-									Some(data) => {
+								Ok(data) => {
+									if let Some(data) = data.data {
 										set_harmonogram_cache(day, current_timestamp_seconds, data.clone());
 										days[i] = (day.to_owned(), data);
 									}
-									_ => {}
-								},
+								}
 								Err(error) => {
 									gloo::console::error!(format!("Failed to deserialize the response: {:?}", error));
 								}
