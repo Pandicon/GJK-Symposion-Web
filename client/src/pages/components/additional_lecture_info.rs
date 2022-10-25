@@ -36,6 +36,14 @@ pub fn home(props: &Props) -> Html {
 					<i>{"Vhodné i pro mladší diváky"}</i>
 				}
 			}
+			if let Some(warning) = &props.data_state.warning {
+				<br />
+				<div class="overlay-error">{warning}</div>
+			}
+			if let Some(error) = &props.data_state.error {
+				<br />
+				<div class="overlay-error">{error}</div>
+			}
 			<div class="overlay-back" onclick={
 				let cloned_additional_cell_info_enabled_state = props.enabled_state.clone();
 				let cloned_data_state = props.data_state.clone();
