@@ -21,7 +21,6 @@ pub fn harmonogram(props: &Props) -> Html {
 	gloo::console::log!("API base: ", api_base);
 
 	let additional_cell_info_state: UseStateHandle<AdditionalCellInfo> = use_state(|| AdditionalCellInfo::default());
-	let schedule_state: UseStateHandle<AdditionalCellInfo> = use_state(|| AdditionalCellInfo::default());
 	let current_timestamp_seconds = chrono::offset::Local::now().timestamp();
 	let day_from_url = if let Some(day) = &props.day {
 		let day_lowercase = day.to_ascii_lowercase();
@@ -43,43 +42,6 @@ pub fn harmonogram(props: &Props) -> Html {
 		Some(data) => data,
 		None => vec![],
 	};
-
-	if schedule_state.data.is_none() && schedule_state.warning.is_none() && schedule_state.error.is_none() {
-		let schedule_state_clone = schedule_state.clone();
-		wasm_bindgen_futures::spawn_local(async move {
-			match gloo::net::http::Request::get("https://randomuser.me/api/").send().await {
-				Ok(response) => {
-					if !response.ok() {
-						gloo::console::error!(format!("The reponse was not 200 OK: {:?}", response.status_text()));
-						schedule_state_clone.set(AdditionalCellInfo::new(
-							None,
-							None,
-							Some(format!("Nastala chyba, server odpověděl se statusem {}: {}", response.status(), response.status_text())),
-						));
-					} else {
-						match response.text().await {
-							Ok(text) => {
-								gloo::console::log!(format!("{:?}", text));
-								schedule_state_clone.set(AdditionalCellInfo::new(Some(text), None, None));
-							}
-							Err(error) => {
-								gloo::console::error!(format!("Couldn't get the response text: {:?}", error));
-								schedule_state_clone.set(AdditionalCellInfo::new(
-									None,
-									None,
-									Some(format!("Nastala chyba, nepodařilo se získat text odpovědi serveru: {:?}", error)),
-								));
-							}
-						}
-					}
-				}
-				Err(error) => {
-					gloo::console::error!(format!("Something went wrong when fetching the API: {:?}", error));
-					schedule_state_clone.set(AdditionalCellInfo::new(None, None, Some(format!("Nastala chyba, nepodařilo se získat odpověď serveru: {:?}", error))));
-				}
-			}
-		});
-	}
 	html! {
 		<>
 		<header>
@@ -182,7 +144,7 @@ pub fn harmonogram(props: &Props) -> Html {
 				}
 			}).collect::<Html>()
 		}
-		<div class="overlay-body"><div>{format!("{:?} {:?} {:?}", additional_cell_info_state.data, additional_cell_info_state.warning, additional_cell_info_state.error)}</div><br /><br /><div>{format!("{:?} {:?} {:?}", schedule_state.data, schedule_state.warning, schedule_state.error)}</div></div>
+		<div class="overlay-body"><div>{format!("{:?} {:?} {:?}", additional_cell_info_state.data, additional_cell_info_state.warning, additional_cell_info_state.error)}</div><br /><br /></div>
 		<div class="opakujici_most_naopak"></div>
 		</main>
 		<footer></footer>
