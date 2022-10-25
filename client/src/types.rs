@@ -44,11 +44,12 @@ pub struct AdditionalCellInfo {
 	pub data: Option<AdditionalCellInfoData>,
 	pub warning: Option<String>,
 	pub error: Option<String>,
+	pub last_updated: i64,
 }
 
 impl AdditionalCellInfo {
-	pub fn new(data: Option<AdditionalCellInfoData>, warning: Option<String>, error: Option<String>) -> Self {
-		Self { data, warning, error }
+	pub fn new(data: Option<AdditionalCellInfoData>, warning: Option<String>, error: Option<String>, last_updated: i64) -> Self {
+		Self { data, warning, error, last_updated }
 	}
 }
 

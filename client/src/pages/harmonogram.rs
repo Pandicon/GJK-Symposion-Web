@@ -147,6 +147,7 @@ fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base
 						None,
 						None,
 						Some(format!("Nastala chyba, server odpověděl se statusem {}: {}", response.status(), response.status_text())),
+						current_timestamp_seconds,
 					));
 				} else {
 					match response.text().await {
@@ -168,6 +169,7 @@ fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base
 												}),
 												None,
 												None,
+												data.last_updated,
 											));
 										}
 										_ => {
@@ -181,6 +183,7 @@ fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base
 												}),
 												None,
 												data.error,
+												current_timestamp_seconds,
 											));
 										}
 									}
@@ -191,6 +194,7 @@ fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base
 										None,
 										None,
 										Some(format!("Nastala chyba, nepodařilo se převést odpověď serveru do správného formátu: {:?}", error)),
+										current_timestamp_seconds,
 									));
 								}
 							}
@@ -201,6 +205,7 @@ fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base
 								None,
 								None,
 								Some(format!("Nastala chyba, nepodařilo se získat text odpovědi serveru: {:?}", error)),
+								current_timestamp_seconds,
 							));
 						}
 					}
@@ -208,7 +213,12 @@ fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base
 			}
 			Err(error) => {
 				gloo::console::error!(format!("Something went wrong when fetching the API: {:?}", error));
-				state.set(AdditionalCellInfo::new(None, None, Some(format!("Nastala chyba, nepodařilo se získat odpověď serveru: {:?}", error))));
+				state.set(AdditionalCellInfo::new(
+					None,
+					None,
+					Some(format!("Nastala chyba, nepodařilo se získat odpověď serveru: {:?}", error)),
+					current_timestamp_seconds,
+				));
 			}
 		}
 	})

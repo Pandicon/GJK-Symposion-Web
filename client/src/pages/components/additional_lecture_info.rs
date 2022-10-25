@@ -2,6 +2,8 @@ use yew::prelude::*;
 
 use crate::types::AdditionalCellInfo;
 
+use chrono::TimeZone;
+
 #[derive(PartialEq, Properties, Debug)]
 pub struct Props {
 	pub enabled_state: UseStateHandle<bool>,
@@ -10,6 +12,8 @@ pub struct Props {
 
 #[function_component(AdditionalLectureInfo)]
 pub fn home(props: &Props) -> Html {
+	let utc_date = chrono::Utc.timestamp(props.data_state.last_updated, 0);
+	let update_date_local: chrono::DateTime<chrono::Local> = chrono::DateTime::from(utc_date);
 	html! {
 		<>
 		<div class="overlay-body" style={
@@ -44,6 +48,7 @@ pub fn home(props: &Props) -> Html {
 				<br />
 				<div class="overlay-error">{error}</div>
 			}
+			<p>{update_date_local.format("Data z %d.%m.%Y %H:%M:%S").to_string()}</p>
 			<div class="overlay-back" onclick={
 				let cloned_additional_cell_info_enabled_state = props.enabled_state.clone();
 				let cloned_data_state = props.data_state.clone();
