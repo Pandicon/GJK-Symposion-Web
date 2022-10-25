@@ -1,3 +1,4 @@
+pub mod chyba;
 pub mod harmonogram;
 pub mod home;
 pub mod kontakty;
