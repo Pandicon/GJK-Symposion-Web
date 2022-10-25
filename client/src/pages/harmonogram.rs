@@ -134,15 +134,16 @@ pub fn harmonogram(props: &Props) -> Html {
 }
 
 fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base: &str, current_timestamp_seconds: i64, day: String, id: String, lecturer: String, title: String, for_younger: bool) {
+	let mut data_to_set = AdditionalCellInfo::default();
 	if let Some(cache) = get_harmonogram_additional_data_cache(&day, &id) {
+		data_to_set = AdditionalCellInfo {
+			data: Some(cache.data),
+			warning: None,
+			error: None,
+			last_updated: cache.last_updated,
+		};
 		if cache.timestamp >= current_timestamp_seconds - CACHE_LIFETIME {
-			let data = AdditionalCellInfo {
-				data: Some(cache.data),
-				warning: None,
-				error: None,
-				last_updated: cache.last_updated,
-			};
-			state.set(data);
+			state.set(data_to_set);
 			return;
 		}
 	}
@@ -153,12 +154,8 @@ fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base
 			Ok(response) => {
 				if !response.ok() {
 					gloo::console::error!(format!("The response was not 200 OK: {:?}", response.status_text()));
-					state.set(AdditionalCellInfo::new(
-						None,
-						None,
-						Some(format!("Nastala chyba, server odpověděl se statusem {}: {}", response.status(), response.status_text())),
-						current_timestamp_seconds,
-					));
+					data_to_set.error = Some(format!("Nastala chyba, server odpověděl se statusem {}: {}", response.status(), response.status_text()));
+					data_to_set.last_updated = current_timestamp_seconds;
 				} else {
 					match response.text().await {
 						Ok(text) => match serde_json::from_str::<AdditionalCellInfoResponse>(&text) {
@@ -176,52 +173,31 @@ fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base
 									state.set(state_data);
 								}
 								_ => {
-									state.set(AdditionalCellInfo::new(
-										Some(AdditionalCellInfoData {
-											lecturer,
-											title,
-											for_younger,
-											annotation: None,
-											lecturer_info: None,
-										}),
-										None,
-										data.error,
-										current_timestamp_seconds,
-									));
+                                    data_to_set.error = data.error;
+                                    data_to_set.last_updated = current_timestamp_seconds;
 								}
 							},
 							Err(error) => {
 								gloo::console::error!(format!("Failed to deserialize the response: {:?}", error));
-								state.set(AdditionalCellInfo::new(
-									None,
-									None,
-									Some(format!("Nastala chyba, nepodařilo se převést odpověď serveru do správného formátu: {:?}", error)),
-									current_timestamp_seconds,
-								));
+                                data_to_set.error = Some(format!("Nastala chyba, nepodařilo se převést odpověď serveru do správného formátu: {:?}", error));
+                                data_to_set.last_updated = current_timestamp_seconds;
 							}
 						},
 						Err(error) => {
 							gloo::console::error!(format!("Couldn't get the response text: {:?}", error));
-							state.set(AdditionalCellInfo::new(
-								None,
-								None,
-								Some(format!("Nastala chyba, nepodařilo se získat text odpovědi serveru: {:?}", error)),
-								current_timestamp_seconds,
-							));
+                            data_to_set.error = Some(format!("Nastala chyba, nepodařilo se získat text odpovědi serveru: {:?}", error));
+                            data_to_set.last_updated = current_timestamp_seconds;
 						}
 					}
 				}
 			}
 			Err(error) => {
 				gloo::console::error!(format!("Something went wrong when fetching the API: {:?}", error));
-				state.set(AdditionalCellInfo::new(
-					None,
-					None,
-					Some(format!("Nastala chyba, nepodařilo se získat odpověď serveru: {:?}", error)),
-					current_timestamp_seconds,
-				));
+                data_to_set.error = Some(format!("Nastala chyba, nepodařilo se získat odpověď serveru: {:?}", error));
+                data_to_set.last_updated = current_timestamp_seconds;
 			}
 		}
+        state.set(data_to_set);
 	})
 }
 
@@ -230,11 +206,11 @@ fn set_harmonogram_state(state: UseStateHandle<HarmonogramState>, api_base: &str
 	let api_base = api_base.to_owned();
 	wasm_bindgen_futures::spawn_local(async move {
 		let mut days = vec![];
-		for day_cache_all in &cache {
+		for (i, day_cache_all) in cache.iter().enumerate() {
 			let day = &day_cache_all.day;
 			let day_cache = day_cache_all.cache.as_ref();
+			days.push((day.to_owned(), day_cache.unwrap().to_owned().data));
 			if day_cache.is_some() && day_cache.as_ref().unwrap().timestamp >= current_timestamp_seconds - CACHE_LIFETIME {
-				days.push((day.to_owned(), day_cache.unwrap().to_owned().data));
 				continue;
 			}
 			gloo::console::debug!(format!("Fetching the schedule from the API for day {}", &day));
@@ -248,7 +224,7 @@ fn set_harmonogram_state(state: UseStateHandle<HarmonogramState>, api_base: &str
 								Ok(data) => match data.data {
 									Some(data) => {
 										set_harmonogram_cache(day, current_timestamp_seconds, data.clone());
-										days.push((day.to_owned(), data))
+										days[i] = (day.to_owned(), data);
 									}
 									_ => {}
 								},
