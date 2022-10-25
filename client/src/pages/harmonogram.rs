@@ -1,9 +1,7 @@
 use crate::types::{AdditionalCellInfo, AdditionalCellInfoData, AdditionalCellInfoResponse, HarmonogramData, HarmonogramDayCache, HarmonogramDayData, HarmonogramDayResponse, HarmonogramState};
 use crate::utils;
 
-#[path = "./components/mod.rs"]
-mod components;
-use components::additional_lecture_info::AdditionalLectureInfo;
+use super::components::additional_lecture_info::AdditionalLectureInfo;
 
 use chrono::TimeZone;
 use yew::prelude::*;

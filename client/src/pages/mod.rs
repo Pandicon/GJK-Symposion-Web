@@ -1,4 +1,5 @@
 pub mod chyba;
+pub mod components;
 pub mod harmonogram;
 pub mod home;
 pub mod kontakty;
