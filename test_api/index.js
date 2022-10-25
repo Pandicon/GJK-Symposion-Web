@@ -1,5 +1,9 @@
 const app = require('express')();
 const PORT = 8079;
+const cors = require('cors');
+
+// use it before all route definitions
+app.use(cors({ origin: ['http://localhost:8080', 'http://127.0.0.1:8080'] }));
 
 app.listen(PORT, () => console.log(`API runs on localhost:${PORT}`));
 
