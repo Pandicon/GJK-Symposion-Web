@@ -55,7 +55,7 @@ pub fn harmonogram(props: &Props) -> Html {
 				<h2><span class="most">{"Harmonogram"}</span></h2>
 			</div>
 			if day_from_url != *"all" {
-				<b class="day"><span class="most">{utils::raw_harmonogram_day_to_display_day_header(&day_from_url).to_uppercase()}</span></b>
+				<b class="day"><span class="most">{utils::raw_harmonogram_day_to_display_day(&day_from_url).to_uppercase()}</span></b>
 			}
 		</header>
 		<main>

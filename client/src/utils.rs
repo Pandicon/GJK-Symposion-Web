@@ -51,12 +51,3 @@ pub fn raw_harmonogram_day_to_display_day(day: &str) -> &str {
 		_ => "Neznámý den",
 	}
 }
-
-pub fn raw_harmonogram_day_to_display_day_header(day: &str) -> String {
-	raw_harmonogram_day_to_display_day(day)
-		.chars()
-		.map(|c| match c {
-			_ => c,
-		})
-		.collect::<String>()
-}
