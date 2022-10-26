@@ -23,7 +23,7 @@ pub fn home() -> Html {
 			<nav>
 				<b><a href="/kontakty"><span class="most">{"KONTAKTY"}</span></a></b>
 				<b><a href="/harmonogram"><span class="most">{"HARMONOGRAM"}</span></a></b>
-				<b><a href="/o_akci"><span class="most">{"O AKCI"}</span></a></b>
+				<b><a href="/o_akci"><nobr><span class="most">{"O AKCI"}</span></nobr></a></b>
 			</nav>
 			<div class="opakujici_most_naopak"></div>
 		</main>

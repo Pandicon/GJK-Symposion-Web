@@ -272,6 +272,18 @@ footer {
 
 
 /* ------------------------------------------ domovská stránka */
+@media only screen and (max-width:550px) {
+	nav a {
+		font-size: 4.8vw !important;
+		padding: 0 1vw !important;
+	}
+}
+
+@media only screen and (max-width:760px) and (min-width: 550px) {
+	nav a {
+		padding: 0 1rem !important;
+	}
+}
 
 nav {
 	display: flex;
@@ -282,12 +294,11 @@ nav {
 nav a {
 	text-decoration: none;
 	font-size: 1.5rem;
-	/* mozna jde nejak delat automaticky (100% nefunguje) */
 	line-height: 3rem;
 	color: inherit;
 	display: block;
 	height: 100%;
-	padding: 0 1rem;
+	padding: 0 3rem;
 }
 
 nav b {
