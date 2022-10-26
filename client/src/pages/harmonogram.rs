@@ -229,9 +229,10 @@ fn set_harmonogram_state(state: UseStateHandle<HarmonogramState>, api_base: &str
 			let day = &day_cache_all.day;
 			let day_cache = day_cache_all.cache.as_ref();
 			days.push((day.to_owned(), None));
-			if day_cache.is_some() {
-				days[i] = (day.to_owned(), Some(day_cache.unwrap().to_owned().data));
-				if day_cache.as_ref().unwrap().timestamp >= current_timestamp_seconds - CACHE_LIFETIME {
+			if let Some(day_cache_res) = day_cache {
+                let timestamp = day_cache_res.timestamp;
+				days[i] = (day.to_owned(), Some(day_cache_res.to_owned().data));
+				if timestamp >= current_timestamp_seconds - CACHE_LIFETIME {
 					continue;
 				}
 			}
