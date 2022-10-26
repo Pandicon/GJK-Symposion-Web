@@ -140,29 +140,24 @@ footer {
 	background-size: cover;
 }
 
-.first_line {
-	display: flex;
-	flex-direction: row;
-}
-
-.first_line .opakujici_most {
-	flex-grow: 1;
-}
-
-.date .opakujici_most {
-	width: 100%;
-}
-
-@media only screen and (max-width:340px) {
-
-	/* nevypadá ani pěkně. Předpokládám, že takhle úzké zařízení nebude */
+@media only screen and (max-width:360px) {
 	.harmonogram_header h1 {
-		opacity: 0;
 		width: 1rem;
+		font-size: 1.5rem !important;
 	}
 
 	.day {
-		left: 3rem !important;
+		left: 8.5rem !important;
+	}
+
+	.hlavicka_most_nad {
+		margin-left: 6rem;
+		font-size: 0.8rem;
+		line-height: 0.8rem;
+	}
+
+	.hlavicka_most_nad .opakujici_most {
+		background-size: 10rem;
 	}
 }
 
@@ -246,6 +241,19 @@ nav b {
 	display: block;
 	height: 100%;
 	text-align: center;
+}
+
+.first_line {
+	display: flex;
+	flex-direction: row;
+}
+
+.first_line .opakujici_most {
+	flex-grow: 1;
+}
+
+.date .opakujici_most {
+	width: 100%;
 }
 
 @media only screen and (min-width:860px) {
