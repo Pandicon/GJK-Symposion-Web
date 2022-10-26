@@ -228,9 +228,12 @@ fn set_harmonogram_state(state: UseStateHandle<HarmonogramState>, api_base: &str
 		for (i, day_cache_all) in cache.iter().enumerate() {
 			let day = &day_cache_all.day;
 			let day_cache = day_cache_all.cache.as_ref();
-			days.push((day.to_owned(), day_cache.unwrap().to_owned().data));
-			if day_cache.is_some() && day_cache.as_ref().unwrap().timestamp >= current_timestamp_seconds - CACHE_LIFETIME {
-				continue;
+			days.push((day.to_owned(), None));
+			if day_cache.is_some() {
+				days[i] = (day.to_owned(), Some(day_cache.unwrap().to_owned().data));
+				if day_cache.as_ref().unwrap().timestamp >= current_timestamp_seconds - CACHE_LIFETIME {
+					continue;
+				}
 			}
 			gloo::console::debug!(format!("Fetching the schedule from the API for day {}", &day));
 			match gloo::net::http::Request::get(&format!("{}/{}", api_base, day)).send().await {
@@ -243,7 +246,7 @@ fn set_harmonogram_state(state: UseStateHandle<HarmonogramState>, api_base: &str
 								Ok(data) => {
 									if let Some(data) = data.data {
 										set_harmonogram_cache(day, current_timestamp_seconds, data.clone());
-										days[i] = (day.to_owned(), data);
+										days[i] = (day.to_owned(), Some(data));
 									}
 								}
 								Err(error) => {
@@ -261,7 +264,8 @@ fn set_harmonogram_state(state: UseStateHandle<HarmonogramState>, api_base: &str
 				}
 			}
 		}
-		state.set(HarmonogramState::new(Some(days), None));
+		let data_to_set = days.iter().filter(|day| day.1.is_some()).map(|day| (day.0.clone(), day.1.clone().unwrap())).collect();
+		state.set(HarmonogramState::new(Some(data_to_set), None));
 	});
 }
 
