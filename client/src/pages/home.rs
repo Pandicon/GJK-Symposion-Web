@@ -5,16 +5,16 @@ pub fn home() -> Html {
 	yew_hooks::use_title("Mosty - Symposion 2022 | Gymnázium Jana Keplera".to_string());
 	html! {
 		<>
-		<header>
+		<header class="uvod_header">
 			<div class="title">
 				<div class="first_line">
 					<h1><a href="/">{"MOSTY"}</a></h1>
 					<div class="opakujici_most"></div>
 				</div>
-				<h2>{"SYMPOSION GYMNÁZIA JANA KEPLERA"}</h2>
+				<p>{"SYMPOSION GYMNÁZIA JANA KEPLERA"}</p>
 			</div>
 			<div class={"date"}>
-				<h2>{"16. - 18. listopadu 2022"}</h2>
+				<p>{"16. - 18. listopadu 2022"}</p>
 				<div class="opakujici_most"></div>
 			</div>
 		</header>

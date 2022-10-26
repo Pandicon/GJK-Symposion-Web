@@ -48,7 +48,7 @@ pub fn harmonogram(props: &Props) -> Html {
 	};
 	html! {
 		<>
-		<header>
+		<header class="harmonogram_header">
 			<h1><a href="/">{"MO$TY"}</a></h1>
 			<div class="hlavicka_most_nad">
 				<div class="opakujici_most"></div>

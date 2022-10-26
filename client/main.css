@@ -41,47 +41,16 @@ header {
 	display: flex;
 	flex-direction: row;
 	font-family: 'ArialBlackS';
+	overflow-x: hidden;
 }
 
 header * {
 	font-family: 'ArialBlackS';
 }
 
-header h1 {
-	display: block;
-	width: auto;
-	height: 2rem;
-	flex-shrink: 0;
-	line-height: 2rem;
-	margin-left: 1rem;
-	margin-top: 3rem;
-	font-size: 2.5rem;
-	padding-right: 1rem;
-}
-
 header h1 a {
 	text-decoration: none;
 	color: inherit;
-}
-
-.hlavicka_most_nad {
-	height: 2.5rem;
-	margin-top: 3rem;
-	font-size: smaller;
-}
-
-.hlavicka_most_nad .opakujici_most {
-	height: 12px !important;
-	background-size: cover;
-}
-
-.first_line {
-	display: flex;
-	flex-direction: row;
-}
-
-.first_line .opakujici_most {
-	flex-grow: 1;
 }
 
 .opakujici_most {
@@ -93,11 +62,7 @@ header h1 a {
 .opakujici_most_naopak {
 	background-image: url("images/oblouky_naopak.png");
 	background-repeat: repeat-x;
-	min-height: 23px;
-}
-
-.date .opakujici_most {
-	width: 100%;
+	height: 23px;
 }
 
 main {
@@ -126,24 +91,91 @@ main .opakujici_most_naopak {
 	bottom: 0;
 }
 
-table,
-th,
-td {
-	border: 1px solid black;
-	border-collapse: collapse;
+
+footer {
+	height: 3rem;
 }
 
-td.clickable {
-	cursor: pointer;
+@media only screen and (max-width:599px) {
+	header {
+		min-height: 5.5rem;
+	}
 }
 
+@media only screen and (min-width:600px) {
+	header {
+		min-height: 6.5rem;
+	}
+}
+
+@media only screen and (min-width:850px) {
+	header {
+		min-height: 8rem;
+	}
+}
+
+
+/* ---------------------------------- harmonogram */
+
+.harmonogram_header h1 {
+	display: block;
+	width: auto;
+	height: 2rem;
+	flex-shrink: 0;
+	line-height: 2rem;
+	margin-left: 1rem;
+	margin-top: 3rem;
+	font-size: 2.5rem;
+	padding-right: 1rem;
+}
+
+.hlavicka_most_nad {
+	height: 2.5rem;
+	margin-top: 3rem;
+	font-size: smaller;
+}
+
+.hlavicka_most_nad .opakujici_most {
+	height: 12px !important;
+	background-size: cover;
+}
+
+.first_line {
+	display: flex;
+	flex-direction: row;
+}
+
+.first_line .opakujici_most {
+	flex-grow: 1;
+}
+
+.date .opakujici_most {
+	width: 100%;
+}
+
+@media only screen and (max-width:340px) {
+
+	/* nevypadá ani pěkně. Předpokládám, že takhle úzké zařízení nebude */
+	.harmonogram_header h1 {
+		opacity: 0;
+		width: 1rem;
+	}
+
+	.day {
+		left: 3rem !important;
+	}
+}
 
 @media only screen and (max-width:599px) {
 
 	/* strašný zlý nepěkná věc, přepsat! (ale asi bude třeba hrábnout do html) */
-	header {
+	.harmonogram_header {
 		position: relative;
-		min-height: 5.5rem;
+	}
+
+	.harmonogram_header h1 {
+		margin-left: 0.5rem;
+		font-size: 2.2rem;
 	}
 
 	.day {
@@ -157,24 +189,7 @@ td.clickable {
 	}
 }
 
-@media only screen and (max-width:360px) {
-
-	/* nevypadá ani pěkně. Předpokládám, že takhle úzké zařízení nebude */
-	header h1 {
-		opacity: 0;
-		width: 1rem;
-	}
-
-	.day {
-		left: 3rem;
-	}
-}
-
 @media only screen and (min-width:600px) {
-	header {
-		min-height: 6.5rem;
-	}
-
 	.day {
 		display: block;
 		width: auto;
@@ -186,11 +201,7 @@ td.clickable {
 }
 
 @media only screen and (min-width:850px) {
-	header {
-		min-height: 8rem;
-	}
-
-	header h1 {
+	.harmonogram_header h1 {
 		height: 4rem;
 		line-height: 3rem;
 		margin-left: 3rem;
@@ -210,32 +221,99 @@ td.clickable {
 		margin-top: 3rem;
 		margin-left: 8rem;
 	}
+}
 
-	nav {
-		display: flex;
-		flex-direction: row-reverse;
-		height: 3rem;
+/* ------------------------------------------ domovská stránka */
+
+nav {
+	display: flex;
+	flex-direction: row-reverse;
+	height: 3rem;
+}
+
+nav a {
+	text-decoration: none;
+	font-size: 1.5rem;
+	/* mozna jde nejak delat automaticky (100% nefunguje) */
+	line-height: 3rem;
+	color: inherit;
+	display: block;
+	height: 100%;
+	padding: 0 1rem;
+}
+
+nav b {
+	display: block;
+	height: 100%;
+	text-align: center;
+}
+
+@media only screen and (min-width:860px) {
+	.title {
+		margin-left: 3rem !important;
+	}
+}
+
+@media only screen and (min-width:850px) {
+	.title {
+		margin-top: 2rem !important;
+		margin-left: 2rem;
 	}
 
-	nav a {
-		text-decoration: none;
+	.uvod_header h1 {
+		font-size: 2.5rem;
+		line-height: 2.5rem;
+		padding-right: 1rem;
+	}
+
+	.date {
+		margin: 2.5rem 0 0 3rem !important;
+	}
+}
+
+@media only screen and (min-width:650px) {
+	.title {
+		margin: 1rem 0 0 1rem;
+	}
+
+	.uvod_header h1 {
+		font-size: 2.2rem;
+		line-height: 2.2rem;
+		padding-right: 0.8rem;
+	}
+
+	.first_line .opakujici_most {
+		margin-top: 0.3rem;
+		background-size: 13rem;
+	}
+
+	.uvod_header p {
+		font-size: 1.2rem;
+		line-height: 1.2rem;
+	}
+
+	.date {
+		margin: 1rem 0 0 1rem;
+	}
+
+	.date p {
 		font-size: 1.5rem;
-		/* mozna jde nejak delat automaticky (100% nefunguje) */
-		line-height: 3rem;
-		color: inherit;
-		display: block;
-		height: 100%;
-		width: 100%;
+		line-height: 1.5rem;
 	}
 
-	nav b {
-		padding: 0 1rem;
-		display: block;
-		height: 100%;
-		text-align: center;
+	.date .opakujici_most {
+		margin-top: 0.3rem;
+		background-size: 13rem;
 	}
+}
 
-	footer {
-		height: 3rem;
-	}
+table,
+th,
+td {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+td.clickable {
+	cursor: pointer;
 }
