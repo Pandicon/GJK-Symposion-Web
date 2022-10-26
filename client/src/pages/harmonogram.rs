@@ -55,7 +55,7 @@ pub fn harmonogram(props: &Props) -> Html {
 				<h2>{"Harmonogram"}</h2>
 			</div>
 			if day_from_url != *"all" {
-				<b class="day">{utils::raw_harmonogram_day_to_display_day(&day_from_url).to_uppercase()}</b>
+				<b class="day">{utils::raw_harmonogram_day_to_display_day_header(&day_from_url).to_uppercase()}</b>
 			}
 		</header>
 		<main>
@@ -230,7 +230,7 @@ fn set_harmonogram_state(state: UseStateHandle<HarmonogramState>, api_base: &str
 			let day_cache = day_cache_all.cache.as_ref();
 			days.push((day.to_owned(), None));
 			if let Some(day_cache_res) = day_cache {
-                let timestamp = day_cache_res.timestamp;
+				let timestamp = day_cache_res.timestamp;
 				days[i] = (day.to_owned(), Some(day_cache_res.to_owned().data));
 				if timestamp >= current_timestamp_seconds - CACHE_LIFETIME {
 					continue;
