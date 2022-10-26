@@ -45,7 +45,7 @@ pub fn remove_local_storage_key(local_storage: &Option<Storage>, key: &str) -> R
 
 pub fn raw_harmonogram_day_to_display_day(day: &str) -> &str {
 	match day {
-		"streda" => "Středa",
+		"streda" => "$tředa",
 		"ctvrtek" => "Čtvrtek",
 		"patek" => "Pátek",
 		_ => "Neznámý den",
