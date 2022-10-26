@@ -77,7 +77,7 @@ main {
 	}
 }
 
-main .opakujici_most:nth-child(1) {
+main .opakujici_most:first-child {
 	width: 100%;
 	animation: posun_most 30s linear infinite;
 }
@@ -469,7 +469,7 @@ nav b {
 		height: 5vw;
 	}
 
-	.harmonogram_day td:nth-child(1) {
+	.harmonogram_day td:first-child {
 		border: none;
 		width: 10rem !important;
 		text-align: right;
@@ -479,7 +479,7 @@ nav b {
 		font-family: 'ArialBlackS';
 	}
 
-	.harmonogram_day tr:nth-child(1) td {
+	.harmonogram_day tr:first-child td {
 		border: none;
 		font-family: 'ArialBlackS';
 		font-size: 1.5rem;
