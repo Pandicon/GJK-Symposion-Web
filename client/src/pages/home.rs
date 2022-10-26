@@ -8,7 +8,7 @@ pub fn home() -> Html {
 		<header class="uvod_header">
 			<div class="title">
 				<div class="first_line">
-					<h1><a href="/">{"MOSTY"}</a></h1>
+					<h1><a href="/">{"MO$TY"}</a></h1>
 					<div class="opakujici_most"></div>
 				</div>
 				<p>{"SYMPOSION GYMNÁZIA JANA KEPLERA"}</p>

@@ -5,7 +5,7 @@ pub fn home() -> Html {
 	yew_hooks::use_title("Kontakty | Mosty - Symposion 2022 | Gymnázium Jana Keplera".to_string());
 	html! {
 		<>
-		<header>
+		<header class="generic_header">
 			<h1><a href="/">{"MOSTY"}</a></h1>
 			<div class="hlavicka_most_nad">
 				<div class="opakujici_most"></div>
