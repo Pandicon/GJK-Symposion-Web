@@ -36,16 +36,15 @@ body {
 	src: url('Arial-Black_S.ttf');
 }
 
+.most {
+	font-family: 'ArialBlackS';
+}
+
 header {
 	min-height: 5rem;
 	display: flex;
 	flex-direction: row;
-	font-family: 'ArialBlackS';
 	overflow-x: hidden;
-}
-
-header * {
-	font-family: 'ArialBlackS';
 }
 
 header h1 a {

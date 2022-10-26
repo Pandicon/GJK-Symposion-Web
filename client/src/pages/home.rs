@@ -8,22 +8,22 @@ pub fn home() -> Html {
 		<header class="uvod_header">
 			<div class="title">
 				<div class="first_line">
-					<h1><a href="/">{"MO$TY"}</a></h1>
+					<h1><a href="/"><span class="most">{"MOSTY"}</span></a></h1>
 					<div class="opakujici_most"></div>
 				</div>
-				<p>{"SYMPOSION GYMNÁZIA JANA KEPLERA"}</p>
+				<p><span class="most">{"SYMPOSION GYMNÁZIA JANA KEPLERA"}</span></p>
 			</div>
 			<div class={"date"}>
-				<p>{"16. - 18. listopadu 2022"}</p>
+				<p><span class="most">{"16. - 18. listopadu 2022"}</span></p>
 				<div class="opakujici_most"></div>
 			</div>
 		</header>
 		<main>
 			<div class="opakujici_most"></div>
 			<nav>
-				<b><a href="/kontakty">{"KONTAKTY"}</a></b>
-				<b><a href="/harmonogram">{"HARMONOGRAM"}</a></b>
-				<b><a href="/o_akci">{"O AKCI"}</a></b>
+				<b><a href="/kontakty"><span class="most">{"KONTAKTY"}</span></a></b>
+				<b><a href="/harmonogram"><span class="most">{"HARMONOGRAM"}</span></a></b>
+				<b><a href="/o_akci"><span class="most">{"O AKCI"}</span></a></b>
 			</nav>
 			<div class="opakujici_most_naopak"></div>
 		</main>

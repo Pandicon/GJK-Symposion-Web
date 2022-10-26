@@ -49,13 +49,13 @@ pub fn harmonogram(props: &Props) -> Html {
 	html! {
 		<>
 		<header class="harmonogram_header">
-			<h1><a href="/">{"MO$TY"}</a></h1>
+			<h1><a href="/"><span class="most">{"MOSTY"}</span></a></h1>
 			<div class="hlavicka_most_nad">
 				<div class="opakujici_most"></div>
-				<h2>{"Harmonogram"}</h2>
+				<h2><span class="most">{"Harmonogram"}</span></h2>
 			</div>
 			if day_from_url != *"all" {
-				<b class="day">{utils::raw_harmonogram_day_to_display_day_header(&day_from_url).to_uppercase()}</b>
+				<b class="day"><span class="most">{utils::raw_harmonogram_day_to_display_day_header(&day_from_url).to_uppercase()}</span></b>
 			}
 		</header>
 		<main>

@@ -6,10 +6,10 @@ pub fn home() -> Html {
 	html! {
 		<>
 		<header class="generic_header">
-			<h1><a href="/">{"MOSTY"}</a></h1>
+			<h1><a href="/"><span class="most">{"MOSTY"}</span></a></h1>
 			<div class="hlavicka_most_nad">
 				<div class="opakujici_most"></div>
-				<h2>{"Kontakty"}</h2>
+				<h2><span class="most">{"Kontakty"}</span></h2>
 			</div>
 		</header>
 		<main>

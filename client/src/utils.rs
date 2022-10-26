@@ -56,7 +56,6 @@ pub fn raw_harmonogram_day_to_display_day_header(day: &str) -> String {
 	raw_harmonogram_day_to_display_day(day)
 		.chars()
 		.map(|c| match c {
-			's' | 'S' => '$',
 			_ => c,
 		})
 		.collect::<String>()
