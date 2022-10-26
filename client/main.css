@@ -41,13 +41,56 @@ header {
 	display: flex;
 	flex-direction: row;
 	font-family: 'ArialBlackS';
+	overflow-x: hidden;
 }
 
 header * {
 	font-family: 'ArialBlackS';
 }
 
-header h1 {
+header h1 a {
+	text-decoration: none;
+	color: inherit;
+}
+
+.opakujici_most {
+	background-image: url("images/oblouky.png");
+	background-repeat: repeat-x;
+	height: 23px;
+}
+
+.opakujici_most_naopak {
+	background-image: url("images/oblouky_naopak.png");
+	background-repeat: repeat-x;
+	height: 23px;
+}
+
+footer {
+	height: 3rem;
+}
+
+@media only screen and (max-width:599px) {
+	header {
+		min-height: 5.5rem;
+	}
+}
+
+@media only screen and (min-width:600px) {
+	header {
+		min-height: 6.5rem;
+	}
+}
+
+@media only screen and (min-width:850px) {
+	header {
+		min-height: 8rem;
+	}
+}
+
+
+/* ---------------------------------- harmonogram */
+
+.harmonogram_header h1 {
 	display: block;
 	width: auto;
 	height: 2rem;
@@ -57,11 +100,6 @@ header h1 {
 	margin-top: 3rem;
 	font-size: 2.5rem;
 	padding-right: 1rem;
-}
-
-header h1 a {
-	text-decoration: none;
-	color: inherit;
 }
 
 .hlavicka_most_nad {
@@ -84,20 +122,103 @@ header h1 a {
 	flex-grow: 1;
 }
 
-.opakujici_most {
-	background-image: url("images/oblouky.png");
-	background-repeat: repeat-x;
-	height: 23px;
-}
-
-.opakujici_most_naopak {
-	background-image: url("images/oblouky_naopak.png");
-	background-repeat: repeat-x;
-	min-height: 23px;
-}
-
 .date .opakujici_most {
 	width: 100%;
+}
+
+@media only screen and (max-width:340px) {
+
+	/* nevypadá ani pěkně. Předpokládám, že takhle úzké zařízení nebude */
+	.harmonogram_header h1 {
+		opacity: 0;
+		width: 1rem;
+	}
+
+	.day {
+		left: 3rem !important;
+	}
+}
+
+@media only screen and (max-width:599px) {
+
+	/* strašný zlý nepěkná věc, přepsat! (ale asi bude třeba hrábnout do html) */
+	.harmonogram_header {
+		position: relative;
+	}
+
+	.harmonogram_header h1 {
+		margin-left: 0.5rem;
+		font-size: 2.2rem;
+	}
+
+	.day {
+		display: block;
+		width: auto;
+		position: absolute;
+		left: 12.3rem;
+		top: 1.5rem;
+		font-size: 1.5rem;
+		line-height: 1.5rem;
+	}
+}
+
+@media only screen and (min-width:600px) {
+	.day {
+		display: block;
+		width: auto;
+		font-size: 2.5rem;
+		line-height: 2rem;
+		margin-top: 3rem;
+		margin-left: 1rem;
+	}
+}
+
+@media only screen and (min-width:850px) {
+	.harmonogram_header h1 {
+		height: 4rem;
+		line-height: 3rem;
+		margin-left: 3rem;
+		margin-top: 3rem;
+		font-size: 3rem;
+		padding-right: 1rem;
+	}
+
+
+	.hlavicka_most_nad {
+		height: 2.5rem;
+		margin-top: 3.5rem;
+	}
+
+	.day {
+		font-size: 3rem;
+		margin-top: 3rem;
+		margin-left: 8rem;
+	}
+}
+
+/* ------------------------------------------ domovská stránka */
+nav {
+	display: flex;
+	flex-direction: row-reverse;
+	height: 3rem;
+}
+
+nav a {
+	text-decoration: none;
+	font-size: 1.5rem;
+	/* mozna jde nejak delat automaticky (100% nefunguje) */
+	line-height: 3rem;
+	color: inherit;
+	display: block;
+	height: 100%;
+	width: 100%;
+}
+
+nav b {
+	padding: 0 1rem;
+	display: block;
+	height: 100%;
+	text-align: center;
 }
 
 main {
@@ -135,107 +256,4 @@ td {
 
 td.clickable {
 	cursor: pointer;
-}
-
-
-@media only screen and (max-width:599px) {
-
-	/* strašný zlý nepěkná věc, přepsat! (ale asi bude třeba hrábnout do html) */
-	header {
-		position: relative;
-		min-height: 5.5rem;
-	}
-
-	.day {
-		display: block;
-		width: auto;
-		position: absolute;
-		left: 12.3rem;
-		top: 1.5rem;
-		font-size: 1.5rem;
-		line-height: 1.5rem;
-	}
-}
-
-@media only screen and (max-width:360px) {
-
-	/* nevypadá ani pěkně. Předpokládám, že takhle úzké zařízení nebude */
-	header h1 {
-		opacity: 0;
-		width: 1rem;
-	}
-
-	.day {
-		left: 3rem;
-	}
-}
-
-@media only screen and (min-width:600px) {
-	header {
-		min-height: 6.5rem;
-	}
-
-	.day {
-		display: block;
-		width: auto;
-		font-size: 2.5rem;
-		line-height: 2rem;
-		margin-top: 3rem;
-		margin-left: 1rem;
-	}
-}
-
-@media only screen and (min-width:850px) {
-	header {
-		min-height: 8rem;
-	}
-
-	header h1 {
-		height: 4rem;
-		line-height: 3rem;
-		margin-left: 3rem;
-		margin-top: 3rem;
-		font-size: 3rem;
-		padding-right: 1rem;
-	}
-
-
-	.hlavicka_most_nad {
-		height: 2.5rem;
-		margin-top: 3.5rem;
-	}
-
-	.day {
-		font-size: 3rem;
-		margin-top: 3rem;
-		margin-left: 8rem;
-	}
-
-	nav {
-		display: flex;
-		flex-direction: row-reverse;
-		height: 3rem;
-	}
-
-	nav a {
-		text-decoration: none;
-		font-size: 1.5rem;
-		/* mozna jde nejak delat automaticky (100% nefunguje) */
-		line-height: 3rem;
-		color: inherit;
-		display: block;
-		height: 100%;
-		width: 100%;
-	}
-
-	nav b {
-		padding: 0 1rem;
-		display: block;
-		height: 100%;
-		text-align: center;
-	}
-
-	footer {
-		height: 3rem;
-	}
 }
