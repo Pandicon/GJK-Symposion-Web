@@ -77,7 +77,7 @@ main {
 	}
 }
 
-main .opakujici_most {
+main .opakujici_most:nth-child(1) {
 	width: 100%;
 	animation: posun_most 30s linear infinite;
 }
@@ -436,11 +436,56 @@ nav b {
 	}
 }
 
-table,
-th,
-td {
-	border: 1px solid black;
-	border-collapse: collapse;
+
+
+
+
+/* ---------------------------------------- harmonogram tabulka */
+@media only screen and (min-width:1000px) {
+	.harmonogram_day_title {
+		width: fit-content;
+		margin: 1rem auto 0 auto;
+	}
+
+	.harmonogram_day_title p {
+		font-size: 3rem;
+		line-height: 3rem;
+	}
+
+	.harmonogram_day_title .opakujici_most {
+		background-size: 13rem;
+	}
+
+	.harmonogram_day {
+		border-spacing: 0;
+		margin: 0 auto;
+		border-collapse: collapse;
+	}
+
+	.harmonogram_day td {
+		border: 5px solid black;
+		max-width: 30rem;
+		width: 20vw;
+		height: 5vw;
+	}
+
+	.harmonogram_day td:nth-child(1) {
+		border: none;
+		width: 10rem !important;
+		text-align: right;
+		padding-right: 0.5rem;
+		font-size: 1rem;
+		line-height: 5vw;
+		font-family: 'ArialBlackS';
+	}
+
+	.harmonogram_day tr:nth-child(1) td {
+		border: none;
+		font-family: 'ArialBlackS';
+		font-size: 1.5rem;
+		text-align: center;
+	}
+
 }
 
 td.clickable {

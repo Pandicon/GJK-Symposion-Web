@@ -66,10 +66,15 @@ pub fn harmonogram(props: &Props) -> Html {
 				let update_date_local: chrono::DateTime<chrono::Local> = chrono::DateTime::from(utc_date);
 				html!{
 					<>
-					if day_from_url == *"all" {
-						{utils::raw_harmonogram_day_to_display_day(day)}
-					}
-					<table style="width:100%">
+						<div class="harmonogram_day_title">
+						<p class="most">
+							if day_from_url == *"all" {
+								{utils::raw_harmonogram_day_to_display_day(day)}
+							}
+						</p>
+						<div class="opakujici_most"></div>
+					</div>
+					<table class="harmonogram_day">
 					{
 						day_data.harmonogram.iter().map(|row| {
 							html!{
@@ -102,9 +107,9 @@ pub fn harmonogram(props: &Props) -> Html {
 											};
 											html!{
 												<td class={class_name} colspan={format!("{col_span}")} rowspan={format!("{row_span}")} onclick={on_click}>
-													<b>{&cell.lecturer}</b><br />{&cell.title}
+													<b>{&cell.lecturer}</b>{&cell.title}
 													if cell.for_younger {
-														<br /><i>{"Vhodné i pro mladší diváky"}</i>
+														<i>{"Vhodné i pro mladší diváky"}</i>
 													}
 												</td>
 											}
