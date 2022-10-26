@@ -279,7 +279,7 @@ nav b {
 	}
 }
 
-@media only screen and (min-width:650px) {
+@media only screen and (min-width:545px) {
 	.title {
 		margin: 1rem 0 0 1rem;
 	}
@@ -312,6 +312,63 @@ nav b {
 	.date .opakujici_most {
 		margin-top: 0.3rem;
 		background-size: 13rem;
+	}
+}
+
+@media only screen and (max-width:545px) {
+	.uvod_header {
+		position: relative;
+	}
+
+	.first_line {
+		flex-direction: column;
+	}
+
+	.title {
+		margin: 1rem 0 0 0.3rem;
+	}
+
+	.first_line .opakujici_most {
+		width: 95vw;
+		height: 1rem;
+		background-size: 13rem;
+	}
+
+	.uvod_header h1 {
+		font-size: 2rem;
+		line-height: 2rem;
+	}
+
+	.title p {
+		font-size: 0.8rem;
+		line-height: 0.8rem;
+		width: 95vw;
+	}
+
+	.date p {
+		position: absolute;
+		top: 1.7rem;
+		right: calc(5vw - 0.3rem);
+	}
+
+	.date .opakujici_most {
+		display: none;
+	}
+}
+
+@media only screen and (max-width:374px) {
+	.uvod_header h1 {
+		font-size: 1.5rem;
+		line-height: 1.5rem;
+	}
+
+	.date p {
+		position: absolute;
+		text-align: right;
+		top: 0.2rem;
+		right: calc(5vw - 0.3rem);
+		max-width: 50vw;
+		line-height: 1rem;
 	}
 }
 
