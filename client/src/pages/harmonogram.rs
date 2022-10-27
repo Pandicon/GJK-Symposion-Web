@@ -64,6 +64,19 @@ pub fn harmonogram(props: &Props) -> Html {
 			days.iter().map(|(day, day_data)| {
 				let utc_date = chrono::Utc.timestamp(day_data.last_updated, 0);
 				let update_date_local: chrono::DateTime<chrono::Local> = chrono::DateTime::from(utc_date);
+				let times = day_data.harmonogram.iter().map(|row| {
+					match &row[0] {
+						Some(field) => {
+							let time_split = &field.title.split('-').map(|s| s.trim()).collect::<Vec<&str>>();
+							if time_split.len() < 2 {
+								None
+							} else {
+								Some([time_split[0], time_split[1]])
+							}
+						},
+						None => None
+					}
+				}).collect::<Vec<Option<[&str; 2]>>>();
 				html!{
 					<>
 						<div class="harmonogram_day_title">
@@ -76,11 +89,11 @@ pub fn harmonogram(props: &Props) -> Html {
 					</div>
 					<table class="harmonogram_day">
 					{
-						day_data.harmonogram.iter().map(|row| {
+						day_data.harmonogram.iter().enumerate().map(|(row_id, row)| {
 							html!{
 								<tr>
 								{
-									row.iter().map(|cell_option| {
+									row.iter().enumerate().map(|(column_id, cell_option)| {
 										if let Some(cell) = cell_option {
 											let col_span = if let Some(span) = cell.col_span {
 												span
@@ -105,12 +118,34 @@ pub fn harmonogram(props: &Props) -> Html {
 											} else {
 												("", Callback::from(|_| {}))
 											};
+											let start_time = if row_id < times.len() {
+												if let Some(time) = times[row_id] {
+													time[0]
+												} else {
+													"???"
+												}
+											} else {
+												"???"
+											};
+											let end_index = row_id + (row_span as usize) - 1;
+											let end_time = if end_index < times.len() {
+												if let Some(time) = times[end_index] {
+													time[1]
+												} else {
+													"???"
+												}
+											} else {
+												"???"
+											};
 											html!{
 												<td class={class_name} colspan={format!("{col_span}")} rowspan={format!("{row_span}")} onclick={on_click}>
 													<b>{&cell.lecturer}</b>
 													<span class="nazev_prednasky">{&cell.title}</span>
 													if cell.for_younger {
 														<div class="for_younger">{"*"}</div>
+													}
+													if column_id > 0 && row_id > 0 {
+														{"Start: "}{start_time}{" Konec: "}{end_time}
 													}
 												</td>
 											}
