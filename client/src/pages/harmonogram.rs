@@ -150,7 +150,7 @@ pub fn harmonogram(props: &Props) -> Html {
 											html!{
 												<td class={class_name} colspan={format!("{col_span}")} rowspan={format!("{row_span}")} onclick={on_click}>
 													<b>{&cell.lecturer}</b>
-													<span class="nazev_prednasky">{&cell.title}</span>
+													<span class="nazev_prednasky">{ if column_id == 0 { start_time } else { &cell.title } }</span>
 													if cell.for_younger {
 														<div class="for_younger">{"*"}</div>
 													}
