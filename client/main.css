@@ -45,6 +45,7 @@ header {
   display: flex;
   flex-direction: row;
   overflow-x: hidden;
+  overflow-y: hidden;
 }
 
 header h1 a {
