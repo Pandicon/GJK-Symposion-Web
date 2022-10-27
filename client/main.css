@@ -514,7 +514,6 @@ nav b {
 @media only screen and (min-width: 1000px) {
   .harmonogram_day td {
     border: 5px solid black;
-    max-width: 14vw;
     height: 6rem;
     min-height: fit-content;
   }
@@ -549,6 +548,7 @@ nav b {
     font-size: 1rem;
     line-height: 5vw;
     font-family: "ArialBlackS";
+    white-space: nowrap;
   }
 
   .harmonogram_day tr:first-child td,
