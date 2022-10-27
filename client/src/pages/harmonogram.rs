@@ -107,9 +107,10 @@ pub fn harmonogram(props: &Props) -> Html {
 											};
 											html!{
 												<td class={class_name} colspan={format!("{col_span}")} rowspan={format!("{row_span}")} onclick={on_click}>
-													<b>{&cell.lecturer}</b>{&cell.title}
+													<b>{&cell.lecturer}</b>
+													<span class="nazev_prednasky">{&cell.title}</span>
 													if cell.for_younger {
-														<i>{"Vhodné i pro mladší diváky"}</i>
+														<div class="for_younger">{"*"}</div>
 													}
 												</td>
 											}

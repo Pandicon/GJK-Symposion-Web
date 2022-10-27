@@ -441,37 +441,65 @@ nav b {
 
 
 /* ---------------------------------------- harmonogram tabulka */
+.harmonogram_day_title {
+	width: fit-content;
+	margin: 1rem auto 0 auto;
+}
+
+.harmonogram_day_title p {
+	font-size: 3rem;
+	line-height: 3rem;
+}
+
+.harmonogram_day_title .opakujici_most {
+	background-size: 13rem;
+}
+
 @media only screen and (min-width:1000px) {
-	.harmonogram_day_title {
-		width: fit-content;
-		margin: 1rem auto 0 auto;
-	}
-
-	.harmonogram_day_title p {
-		font-size: 3rem;
-		line-height: 3rem;
-	}
-
-	.harmonogram_day_title .opakujici_most {
-		background-size: 13rem;
-	}
-
 	.harmonogram_day {
 		border-spacing: 0;
 		margin: 0 auto;
 		border-collapse: collapse;
+		max-width: 95vw;
+	}
+
+	.for_younger {
+		width: 100%;
+		text-align: center;
+		font-size: 1.5rem;
+		line-height: 1rem;
+		margin-top: 0.5rem;
+	}
+
+	.harmonogram_day * {
+		min-width: fit-content;
 	}
 
 	.harmonogram_day td {
 		border: 5px solid black;
-		max-width: 30rem;
+		max-width: 14vw;
 		width: 20vw;
-		height: 5vw;
+		height: 6rem;
+		min-height: fit-content;
 	}
 
-	.harmonogram_day td:first-child {
+	.harmonogram_day td b,
+	.harmonogram_day td:not(first-child) .nazev_prednasky {
+		display: block;
+		text-align: center;
+		width: 90%;
+		margin: 0 auto;
+		padding: 0 0.5rem;
+	}
+
+	.harmonogram_day td b {
+		font-size: 1.2rem;
+	}
+
+	.harmonogram_day td:first-child,
+	.harmonogram_day td:first-child .nazev_prednasky {
 		border: none;
-		width: 10rem !important;
+		width: 7rem !important;
 		text-align: right;
 		padding-right: 0.5rem;
 		font-size: 1rem;
@@ -479,10 +507,12 @@ nav b {
 		font-family: 'ArialBlackS';
 	}
 
-	.harmonogram_day tr:first-child td {
+	.harmonogram_day tr:first-child td,
+	.harmonogram_day tr:first-child td .nazev_prednasky {
 		border: none;
 		font-family: 'ArialBlackS';
 		font-size: 1.5rem;
+		height: 2rem;
 		text-align: center;
 	}
 
