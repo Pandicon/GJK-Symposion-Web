@@ -24,7 +24,10 @@ pub fn home(props: &Props) -> Html {
 			}
 		}>
 			if let Some(data) = &props.data_state.data {
-				<div class="overlay-lecturer">{&data.title}</div>
+				<div class="overlay-lecture">{&data.title}</div>
+				if let (Some(start_time), Some(end_time)) = (&data.start_time, &data.end_time) {
+					<div class="overlay-time">{"Čas: "}{start_time}{" - "}{end_time}</div>
+				}
 				<br />
 				<div class="overlay-lecturer">{&data.lecturer}</div>
 				if let Some(annotation) = &data.annotation {

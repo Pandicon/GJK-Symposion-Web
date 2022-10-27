@@ -5,6 +5,14 @@ pub struct Config {
 	pub api: String,
 }
 
+pub struct AdditionalCellInfoBase {
+	pub lecturer: String,
+	pub title: String,
+	pub for_younger: bool,
+	pub start_time: Option<String>,
+	pub end_time: Option<String>,
+}
+
 #[derive(Debug, Deserialize, Serialize)]
 pub struct AdditionalCellInfoCacheData {
 	pub id: String,
@@ -71,6 +79,8 @@ pub struct AdditionalCellInfoData {
 	pub lecturer: String,
 	pub title: String,
 	pub for_younger: bool,
+	pub start_time: Option<String>,
+	pub end_time: Option<String>,
 	pub annotation: Option<String>,
 	pub lecturer_info: Option<String>,
 }

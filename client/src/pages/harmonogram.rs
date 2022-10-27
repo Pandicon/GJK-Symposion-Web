@@ -1,5 +1,6 @@
 use crate::types::{
-	AdditionalCellInfo, AdditionalCellInfoCache, AdditionalCellInfoData, AdditionalCellInfoResponse, HarmonogramData, HarmonogramDayCache, HarmonogramDayData, HarmonogramDayResponse, HarmonogramState,
+	AdditionalCellInfo, AdditionalCellInfoBase, AdditionalCellInfoCache, AdditionalCellInfoData, AdditionalCellInfoResponse, HarmonogramData, HarmonogramDayCache, HarmonogramDayData,
+	HarmonogramDayResponse, HarmonogramState,
 };
 use crate::utils;
 
@@ -105,19 +106,6 @@ pub fn harmonogram(props: &Props) -> Html {
 											} else {
 												1
 											};
-											let cell_day = day.clone();
-											let (class_name, on_click) = if let Some(cell_id) = cell.id.clone() {
-												let cloned_additional_info_state = additional_cell_info_state.clone();
-												let cloned_additional_cell_info_enabled_state = additional_cell_info_enabled_state.clone();
-												let cloned_api_base = api_base.clone();
-												let cloned_cell = cell.clone();
-												("clickable", Callback::from(move |_| {
-													cloned_additional_cell_info_enabled_state.set(true);
-													set_additional_info_state(cloned_additional_info_state.clone(), &cloned_api_base, current_timestamp_seconds, cell_day.clone(), cell_id.clone(), cloned_cell.lecturer.clone(), cloned_cell.title.clone(), cloned_cell.for_younger);
-												}))
-											} else {
-												("", Callback::from(|_| {}))
-											};
 											let start_time = if row_id < times.len() {
 												if let Some(time) = times[row_id] {
 													time[0]
@@ -136,6 +124,28 @@ pub fn harmonogram(props: &Props) -> Html {
 												}
 											} else {
 												"???"
+											};
+											let cell_day = day.clone();
+											let (class_name, on_click) = if let Some(cell_id) = cell.id.clone() {
+												let cloned_additional_info_state = additional_cell_info_state.clone();
+												let cloned_additional_cell_info_enabled_state = additional_cell_info_enabled_state.clone();
+												let cloned_api_base = api_base.clone();
+												let cloned_cell = cell.clone();
+												let cloned_start_time = start_time.to_string();
+												let cloned_end_time = end_time.to_string();
+												("clickable", Callback::from(move |_| {
+													cloned_additional_cell_info_enabled_state.set(true);
+													let base_info = AdditionalCellInfoBase {
+														lecturer: cloned_cell.lecturer.clone(),
+														title: cloned_cell.title.clone(),
+														for_younger: cloned_cell.for_younger,
+														start_time: if column_id > 0 && row_id > 0 { Some(cloned_start_time.clone()) } else { None },
+														end_time: if column_id > 0 && row_id > 0 { Some(cloned_end_time.clone()) } else { None }
+													};
+													set_additional_info_state(cloned_additional_info_state.clone(), &cloned_api_base, current_timestamp_seconds, cell_day.clone(), cell_id.clone(), base_info);
+												}))
+											} else {
+												("", Callback::from(|_| {}))
 											};
 											html!{
 												<td class={class_name} colspan={format!("{col_span}")} rowspan={format!("{row_span}")} onclick={on_click}>
@@ -174,11 +184,20 @@ pub fn harmonogram(props: &Props) -> Html {
 	}
 }
 
-fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base: &str, current_timestamp_seconds: i64, day: String, id: String, lecturer: String, title: String, for_younger: bool) {
+fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base: &str, current_timestamp_seconds: i64, day: String, id: String, base_info: AdditionalCellInfoBase) {
+	let AdditionalCellInfoBase {
+		lecturer,
+		title,
+		for_younger,
+		start_time,
+		end_time,
+	} = base_info;
 	let mut data_to_set = AdditionalCellInfo::new(
 		Some(AdditionalCellInfoData {
 			lecturer: lecturer.clone(),
 			title: title.clone(),
+			start_time: start_time.clone(),
+			end_time: end_time.clone(),
 			for_younger,
 			annotation: None,
 			lecturer_info: None,
@@ -224,6 +243,8 @@ fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base
 										lecturer,
 										title,
 										for_younger,
+										start_time,
+										end_time,
 										annotation: data.info.annotation,
 										lecturer_info: data.info.lecturer_info,
 									};
