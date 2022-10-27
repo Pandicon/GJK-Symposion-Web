@@ -126,7 +126,8 @@ pub fn harmonogram(props: &Props) -> Html {
 												"???"
 											};
 											let cell_day = day.clone();
-											let (class_name, on_click) = if let Some(cell_id) = cell.id.clone() {
+											let (class_name, on_click) = if let Some(cell_id) = &cell.id {
+												let cloned_cell_id = cell_id.clone();
 												let cloned_additional_info_state = additional_cell_info_state.clone();
 												let cloned_additional_cell_info_enabled_state = additional_cell_info_enabled_state.clone();
 												let cloned_api_base = api_base.clone();
@@ -142,7 +143,7 @@ pub fn harmonogram(props: &Props) -> Html {
 														start_time: if column_id > 0 && row_id > 0 { Some(cloned_start_time.clone()) } else { None },
 														end_time: if column_id > 0 && row_id > 0 { Some(cloned_end_time.clone()) } else { None }
 													};
-													set_additional_info_state(cloned_additional_info_state.clone(), &cloned_api_base, current_timestamp_seconds, cell_day.clone(), cell_id.clone(), base_info);
+													set_additional_info_state(cloned_additional_info_state.clone(), &cloned_api_base, current_timestamp_seconds, cell_day.clone(), cloned_cell_id.clone(), base_info);
 												}))
 											} else {
 												("", Callback::from(|_| {}))
