@@ -547,9 +547,9 @@ nav b {
     text-align: right;
     padding-right: 0.5rem;
     font-size: 1rem;
-    line-height: 5vw;
     font-family: "ArialBlackS";
     white-space: nowrap;
+    transform: translateY(-1.5rem);
   }
 
   .harmonogram_day tr:first-child td,
