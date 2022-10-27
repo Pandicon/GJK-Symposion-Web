@@ -1,583 +1,566 @@
 /* Převzato z loňského webu, klidně to změňte, je to jen placeholder */
 .overlay-body {
-	display: none;
-	width: 90vw;
-	height: 90vh;
-	z-index: 1000;
-	position: relative;
-	overflow-y: scroll;
-	margin-top: 5vh;
-	margin-left: 5vw;
-	overscroll-behavior: contain;
-	background: black;
-	color: white;
+  display: none;
+  width: 90vw;
+  height: 90vh;
+  z-index: 1000;
+  position: relative;
+  overflow-y: scroll;
+  margin-top: 5vh;
+  margin-left: 5vw;
+  overscroll-behavior: contain;
+  background: black;
+  color: white;
 }
 
 .unsupported_browser {
-	color: black;
+  color: black;
 }
 
 * {
-	/* vymenit za font s "S" */
-	font-family: Arial;
-	margin: 0;
-	padding: 0;
+  /* vymenit za font s "S" */
+  font-family: Arial;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-	height: 100vh;
-	/* rád bych se tomu vyhnul */
-	display: flex;
-	flex-direction: column;
+  height: 100vh;
+  /* rád bych se tomu vyhnul */
+  display: flex;
+  flex-direction: column;
 }
 
 @font-face {
-	font-family: 'ArialBlackS';
-	src: url('Arial-Black_S.ttf');
+  font-family: "ArialBlackS";
+  src: url("Arial-Black_S.ttf");
 }
 
 .most {
-	font-family: 'ArialBlackS';
+  font-family: "ArialBlackS";
 }
 
 header {
-	min-height: 5rem;
-	display: flex;
-	flex-direction: row;
-	overflow-x: hidden;
+  min-height: 5rem;
+  display: flex;
+  flex-direction: row;
+  overflow-x: hidden;
 }
 
 header h1 a {
-	text-decoration: none;
-	color: inherit;
+  text-decoration: none;
+  color: inherit;
 }
 
 .opakujici_most {
-	background-image: url("images/oblouky.png");
-	background-repeat: repeat-x;
-	height: 23px;
+  background-image: url("images/oblouky.png");
+  background-repeat: repeat-x;
+  height: 23px;
 }
 
 .opakujici_most_naopak {
-	background-image: url("images/oblouky_naopak.png");
-	background-repeat: repeat-x;
-	height: 23px;
+  background-image: url("images/oblouky_naopak.png");
+  background-repeat: repeat-x;
+  height: 23px;
 }
 
 main {
-	flex-grow: 1;
-	background-color: #828696;
-	position: relative;
-	padding-bottom: 23px;
+  flex-grow: 1;
+  background-color: #828696;
+  position: relative;
+  padding-bottom: 23px;
 }
 
 @keyframes posun_most {
-	100% {
-		background-position: 362px;
-	}
+  100% {
+    background-position: 362px;
+  }
 }
 
 main .opakujici_most:first-child {
-	width: 100%;
-	animation: posun_most 30s linear infinite;
+  width: 100%;
+  animation: posun_most 30s linear infinite;
 }
 
 main .opakujici_most_naopak {
-	width: 100%;
-	animation: posun_most 30s linear infinite;
-	animation-direction: reverse;
-	position: absolute;
-	bottom: 0;
+  width: 100%;
+  animation: posun_most 30s linear infinite;
+  animation-direction: reverse;
+  position: absolute;
+  bottom: 0;
 }
-
 
 footer {
-	height: 3rem;
+  height: 3rem;
 }
 
-@media only screen and (max-width:599px) {
-	header {
-		min-height: 5.5rem;
-	}
+@media only screen and (max-width: 599px) {
+  header {
+    min-height: 5.5rem;
+  }
 
-	.generic_header h1 {
-		margin-top: 3rem !important;
-		margin-left: 0.5rem !important;
-	}
+  .generic_header h1 {
+    margin-top: 3rem !important;
+    margin-left: 0.5rem !important;
+  }
 
-	.generic_header .hlavicka_most_nad {
-		height: 2.5rem !important;
-		margin-top: 3rem !important;
-	}
+  .generic_header .hlavicka_most_nad {
+    height: 2.5rem !important;
+    margin-top: 3rem !important;
+  }
 }
 
-@media only screen and (min-width:600px) {
-	header {
-		min-height: 6.5rem;
-	}
+@media only screen and (min-width: 600px) {
+  header {
+    min-height: 6.5rem;
+  }
 
-	.generic_header h1 {
-		font-size: 3rem !important;
-		line-height: 3rem !important;
-	}
+  .generic_header h1 {
+    font-size: 3rem !important;
+    line-height: 3rem !important;
+  }
 }
 
-@media only screen and (min-width:850px) {
-	header {
-		min-height: 8rem;
-	}
+@media only screen and (min-width: 850px) {
+  header {
+    min-height: 8rem;
+  }
 }
 
 .generic_header h1 {
-	display: block;
-	width: auto;
-	flex-shrink: 0;
-	line-height: 2.5rem;
-	margin-left: 3rem;
-	margin-top: 3rem;
-	font-size: 2.5rem;
-	padding-right: 1rem;
+  display: block;
+  width: auto;
+  flex-shrink: 0;
+  line-height: 2.5rem;
+  margin-left: 3rem;
+  margin-top: 3rem;
+  font-size: 2.5rem;
+  padding-right: 1rem;
 }
 
 .generic_header .hlavicka_most_nad {
-	height: 2.5rem;
-	margin-top: 3.5rem;
+  height: 2.5rem;
+  margin-top: 3.5rem;
 }
 
 .generic_header .hlavicka_most_nad .opakujici_most {
-	height: 12px !important;
-	background-size: cover;
+  height: 12px !important;
+  background-size: cover;
 }
 
-@media only screen and (max-width:350px) {
-	.generic_header h1 {
-		margin-left: 0.5rem !important;
-		margin-top: 0.3rem !important;
-	}
+@media only screen and (max-width: 350px) {
+  .generic_header h1 {
+    margin-left: 0.5rem !important;
+    margin-top: 0.3rem !important;
+  }
 
-	.generic_header .hlavicka_most_nad {
-		position: absolute;
-		left: 0.5rem
-	}
+  .generic_header .hlavicka_most_nad {
+    position: absolute;
+    left: 0.5rem;
+  }
 }
-
-
-
 
 /* ---------------------------------- harmonogram */
 
 .harmonogram_header h1 {
-	display: block;
-	width: auto;
-	height: 2rem;
-	flex-shrink: 0;
-	line-height: 2rem;
-	margin-left: 1rem;
-	margin-top: 3rem;
-	font-size: 2.5rem;
-	padding-right: 1rem;
+  display: block;
+  width: auto;
+  height: 2rem;
+  flex-shrink: 0;
+  line-height: 2rem;
+  margin-left: 1rem;
+  margin-top: 3rem;
+  font-size: 2.5rem;
+  padding-right: 1rem;
 }
 
 .hlavicka_most_nad {
-	height: 2.5rem;
-	margin-top: 3rem;
-	font-size: smaller;
+  height: 2.5rem;
+  margin-top: 3rem;
+  font-size: smaller;
 }
 
 .hlavicka_most_nad .opakujici_most {
-	height: 12px !important;
-	background-size: cover;
+  height: 12px !important;
+  background-size: cover;
 }
 
-@media only screen and (max-width:360px) {
-	.harmonogram_header h1 {
-		width: 1rem;
-		font-size: 1.5rem !important;
-	}
+@media only screen and (max-width: 360px) {
+  .harmonogram_header h1 {
+    width: 1rem;
+    font-size: 1.5rem !important;
+  }
 
-	.day {
-		left: 8.5rem !important;
-	}
+  .day {
+    left: 8.5rem !important;
+  }
 
-	.harmonogram_header .hlavicka_most_nad {
-		margin-left: 6rem;
-		font-size: 0.8rem;
-		line-height: 0.8rem;
-	}
+  .harmonogram_header .hlavicka_most_nad {
+    margin-left: 6rem;
+    font-size: 0.8rem;
+    line-height: 0.8rem;
+  }
 
-	.harmonogram_header .hlavicka_most_nad .opakujici_most {
-		background-size: 10rem;
-	}
+  .harmonogram_header .hlavicka_most_nad .opakujici_most {
+    background-size: 10rem;
+  }
 }
 
-@media only screen and (max-width:599px) {
+@media only screen and (max-width: 599px) {
 
-	/* strašný zlý nepěkná věc, přepsat! (ale asi bude třeba hrábnout do html) */
-	.harmonogram_header {
-		position: relative;
-	}
+  /* strašný zlý nepěkná věc, přepsat! (ale asi bude třeba hrábnout do html) */
+  .harmonogram_header {
+    position: relative;
+  }
 
-	.harmonogram_header h1 {
-		margin-left: 0.5rem;
-		font-size: 2.2rem;
-	}
+  .harmonogram_header h1 {
+    margin-left: 0.5rem;
+    font-size: 2.2rem;
+  }
 
-	.day {
-		display: block;
-		width: auto;
-		position: absolute;
-		left: 12.3rem;
-		top: 1.5rem;
-		font-size: 1.5rem;
-		line-height: 1.5rem;
-	}
+  .day {
+    display: block;
+    width: auto;
+    position: absolute;
+    left: 12.3rem;
+    top: 1.5rem;
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+  }
 }
 
-@media only screen and (min-width:600px) {
-	.day {
-		display: block;
-		width: auto;
-		font-size: 2.5rem;
-		line-height: 2rem;
-		margin-top: 3rem;
-		margin-left: 1rem;
-	}
+@media only screen and (min-width: 600px) {
+  .day {
+    display: block;
+    width: auto;
+    font-size: 2.5rem;
+    line-height: 2rem;
+    margin-top: 3rem;
+    margin-left: 1rem;
+  }
 }
 
-@media only screen and (min-width:850px) {
-	.harmonogram_header h1 {
-		height: 4rem;
-		line-height: 3rem;
-		margin-left: 3rem;
-		margin-top: 3rem;
-		font-size: 3rem;
-		padding-right: 1rem;
-	}
+@media only screen and (min-width: 850px) {
+  .harmonogram_header h1 {
+    height: 4rem;
+    line-height: 3rem;
+    margin-left: 3rem;
+    margin-top: 3rem;
+    font-size: 3rem;
+    padding-right: 1rem;
+  }
 
+  .harmonogram_header .hlavicka_most_nad {
+    height: 2.5rem;
+    margin-top: 3.5rem;
+  }
 
-	.harmonogram_header .hlavicka_most_nad {
-		height: 2.5rem;
-		margin-top: 3.5rem;
-	}
-
-	.day {
-		font-size: 3rem;
-		margin-top: 3rem;
-		margin-left: 8rem;
-	}
+  .day {
+    font-size: 3rem;
+    margin-top: 3rem;
+    margin-left: 8rem;
+  }
 }
-
-
-
-
 
 /* ------------------------------------------ domovská stránka */
-@media only screen and (max-width:550px) {
-	nav a {
-		font-size: 4.8vw !important;
-		padding: 0 1vw !important;
-	}
+@media only screen and (max-width: 550px) {
+  nav a {
+    font-size: 4.8vw !important;
+    padding: 0 1vw !important;
+  }
 }
 
-@media only screen and (max-width:760px) and (min-width: 550px) {
-	nav a {
-		padding: 0 1rem !important;
-	}
+@media only screen and (max-width: 760px) and (min-width: 550px) {
+  nav a {
+    padding: 0 1rem !important;
+  }
 }
 
 nav {
-	display: flex;
-	flex-direction: row-reverse;
-	height: 3rem;
+  display: flex;
+  flex-direction: row-reverse;
+  height: 3rem;
 }
 
 nav a {
-	text-decoration: none;
-	font-size: 1.5rem;
-	line-height: 3rem;
-	color: inherit;
-	display: block;
-	height: 100%;
-	padding: 0 3rem;
+  text-decoration: none;
+  font-size: 1.5rem;
+  line-height: 3rem;
+  color: inherit;
+  display: block;
+  height: 100%;
+  padding: 0 3rem;
 }
 
 nav b {
-	display: block;
-	height: 100%;
-	text-align: center;
+  display: block;
+  height: 100%;
+  text-align: center;
 }
 
 .first_line {
-	display: flex;
-	flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .first_line .opakujici_most {
-	flex-grow: 1;
+  flex-grow: 1;
 }
 
 .date .opakujici_most {
-	width: 100%;
+  width: 100%;
 }
 
-@media only screen and (min-width:860px) {
-	.title {
-		margin-left: 3rem !important;
-	}
+@media only screen and (min-width: 860px) {
+  .title {
+    margin-left: 3rem !important;
+  }
 }
 
-@media only screen and (min-width:850px) {
-	.title {
-		margin-top: 2rem !important;
-		margin-left: 2rem;
-	}
+@media only screen and (min-width: 850px) {
+  .title {
+    margin-top: 2rem !important;
+    margin-left: 2rem;
+  }
 
-	.uvod_header h1 {
-		font-size: 2.5rem;
-		line-height: 2.5rem;
-		padding-right: 1rem;
-	}
+  .uvod_header h1 {
+    font-size: 2.5rem;
+    line-height: 2.5rem;
+    padding-right: 1rem;
+  }
 
-	.date {
-		margin: 2.5rem 0 0 3rem !important;
-	}
+  .date {
+    margin: 2.5rem 0 0 3rem !important;
+  }
 }
 
-@media only screen and (min-width:545px) {
-	.title {
-		margin: 1rem 0 0 1rem;
-	}
+@media only screen and (min-width: 545px) {
+  .title {
+    margin: 1rem 0 0 1rem;
+  }
 
-	.uvod_header h1 {
-		font-size: 2.2rem;
-		line-height: 2.2rem;
-		padding-right: 0.8rem;
-	}
+  .uvod_header h1 {
+    font-size: 2.2rem;
+    line-height: 2.2rem;
+    padding-right: 0.8rem;
+  }
 
-	.first_line .opakujici_most {
-		margin-top: 0.3rem;
-		background-size: 13rem;
-	}
+  .first_line .opakujici_most {
+    margin-top: 0.3rem;
+    background-size: 13rem;
+  }
 
-	.uvod_header p {
-		font-size: 1.2rem;
-		line-height: 1.2rem;
-	}
+  .uvod_header p {
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+  }
 
-	.date {
-		margin: 1rem 0 0 1rem;
-	}
+  .date {
+    margin: 1rem 0 0 1rem;
+  }
 
-	.date p {
-		font-size: 1.5rem;
-		line-height: 1.5rem;
-	}
+  .date p {
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+  }
 
-	.date .opakujici_most {
-		margin-top: 0.3rem;
-		background-size: 13rem;
-	}
+  .date .opakujici_most {
+    margin-top: 0.3rem;
+    background-size: 13rem;
+  }
 }
 
-@media only screen and (max-width:545px) {
-	.uvod_header {
-		position: relative;
-	}
+@media only screen and (max-width: 545px) {
+  .uvod_header {
+    position: relative;
+  }
 
-	.first_line {
-		flex-direction: column;
-	}
+  .first_line {
+    flex-direction: column;
+  }
 
-	.title {
-		margin: 1rem 0 0 0.3rem;
-	}
+  .title {
+    margin: 1rem 0 0 0.3rem;
+  }
 
-	.first_line .opakujici_most {
-		width: 95vw;
-		height: 1rem;
-		background-size: 13rem;
-	}
+  .first_line .opakujici_most {
+    width: 95vw;
+    height: 1rem;
+    background-size: 13rem;
+  }
 
-	.uvod_header h1 {
-		font-size: 2rem;
-		line-height: 2rem;
-	}
+  .uvod_header h1 {
+    font-size: 2rem;
+    line-height: 2rem;
+  }
 
-	.title p {
-		font-size: 0.8rem;
-		line-height: 0.8rem;
-		width: 95vw;
-	}
+  .title p {
+    font-size: 0.8rem;
+    line-height: 0.8rem;
+    width: 95vw;
+  }
 
-	.date p {
-		position: absolute;
-		top: 1.7rem;
-		right: calc(5vw - 0.3rem);
-	}
+  .date p {
+    position: absolute;
+    top: 1.7rem;
+    right: calc(5vw - 0.3rem);
+  }
 
-	.date .opakujici_most {
-		display: none;
-	}
+  .date .opakujici_most {
+    display: none;
+  }
 }
 
-@media only screen and (max-width:374px) {
-	.uvod_header h1 {
-		font-size: 1.5rem;
-		line-height: 1.5rem;
-	}
+@media only screen and (max-width: 374px) {
+  .uvod_header h1 {
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+  }
 
-	.date p {
-		position: absolute;
-		text-align: right;
-		top: 0.2rem;
-		right: calc(5vw - 0.3rem);
-		max-width: 50vw;
-		line-height: 1rem;
-	}
+  .date p {
+    position: absolute;
+    text-align: right;
+    top: 0.2rem;
+    right: calc(5vw - 0.3rem);
+    max-width: 50vw;
+    line-height: 1rem;
+  }
 }
-
-
-
-
 
 /* ---------------------------------------- harmonogram tabulka */
 .harmonogram_day {
-	border-spacing: 0;
-	margin: 0 auto;
-	border-collapse: collapse;
-	max-width: 95vw;
+  border-spacing: 0;
+  margin: 0 auto;
+  border-collapse: collapse;
+  max-width: 95vw;
 }
 
 .harmonogram_day * {
-	min-width: fit-content;
+  min-width: fit-content !important;
 }
 
 .harmonogram_day_title {
-	width: fit-content;
-	margin: 1rem auto 0 auto;
+  width: fit-content;
+  margin: 1rem auto 0 auto;
 }
 
 .harmonogram_day_title p {
-	font-size: 3rem;
-	line-height: 3rem;
+  font-size: 3rem;
+  line-height: 3rem;
 }
 
 .harmonogram_day_title .opakujici_most {
-	background-size: 13rem;
+  background-size: 13rem;
 }
 
-@media only screen and (max-width:1000px) {
+@media only screen and (max-width: 999px) {
+  .harmonogram_day {
+    width: 90%;
+    max-width: 40rem;
+  }
 
-	.harmonogram_day {
-		width: 90%;
-		max-width: 40rem;
-	}
+  .harmonogram_day td {
+    border: 5px solid black;
+    width: 100%;
+    height: 6rem;
+    min-height: fit-content;
+  }
 
-	.harmonogram_day td {
-		border: 5px solid black;
-		width: 100%;
-		height: 6rem;
-		min-height: fit-content;
-	}
+  .harmonogram_day,
+  .harmonogram_day tr {
+    display: flex;
+    flex-direction: column;
+  }
 
-	.harmonogram_day,
-	.harmonogram_day tr {
-		display: flex;
-		flex-direction: column;
-	}
+  .harmonogram_day tr:first-child {
+    display: none;
+  }
 
-	.harmonogram_day tr:first-child {
-		display: none;
-	}
+  .harmonogram_day td:first-child {
+    /* Nefunguje na to border-colapse */
+    border: 5px solid transparent;
+    border-bottom: 5px solid black;
+    transform: translateY(5px);
+    height: 3rem;
+  }
 
-	.harmonogram_day td:first-child {
-		/* Nefunguje na to border-colapse */
-		border: 5px solid transparent;
-		border-bottom: 5px solid black;
-		transform: translateY(5px);
-		height: 3rem;
-	}
+  /* taky kvuli border-colapse */
+  .harmonogram_day td:not(:nth-child(2)) {
+    border-top: none;
+  }
 
-	/* taky kvuli border-colapse */
-	.harmonogram_day td:not(:nth-child(2)) {
-		border-top: none;
-	}
+  .harmonogram_day td:first-child .nazev_prednasky {
+    font-family: "ArialBlackS";
+    font-size: 1.5rem;
+    margin-top: 1rem;
+    height: 2rem;
+    text-align: center;
+  }
 
-	.harmonogram_day td:first-child .nazev_prednasky {
-		font-family: 'ArialBlackS';
-		font-size: 1.5rem;
-		margin-top: 1rem;
-		height: 2rem;
-		text-align: center;
-	}
+  .harmonogram_day td:empty {
+    display: none;
+  }
 
-	.harmonogram_day td:empty {
-		display: none;
-	}
-
-	.harmonogram_day td b,
-	.harmonogram_day td:not(first-child) .nazev_prednasky {
-		display: block;
-		text-align: center;
-		width: 90%;
-		margin: 0 auto;
-		padding: 0 0.5rem;
-	}
-
+  .harmonogram_day td b,
+  .harmonogram_day td:not(first-child) .nazev_prednasky {
+    display: block;
+    text-align: center;
+    width: 90%;
+    margin: 0 auto;
+    padding: 0 0.5rem;
+  }
 }
 
-@media only screen and (min-width:1000px) {
-	.harmonogram_day td {
-		border: 5px solid black;
-		max-width: 14vw;
-		width: 20vw;
-		height: 6rem;
-		min-height: fit-content;
-	}
+@media only screen and (min-width: 1000px) {
+  .harmonogram_day td {
+    border: 5px solid black;
+    max-width: 14vw;
+    height: 6rem;
+    min-height: fit-content;
+  }
 
-	.for_younger {
-		width: 100%;
-		text-align: center;
-		font-size: 1.5rem;
-		line-height: 1rem;
-		margin-top: 0.5rem;
-	}
+  .for_younger {
+    width: 100%;
+    text-align: center;
+    font-size: 1.5rem;
+    line-height: 1rem;
+    margin-top: 0.5rem;
+  }
 
-	.harmonogram_day td b,
-	.harmonogram_day td:not(first-child) .nazev_prednasky {
-		display: block;
-		text-align: center;
-		width: 90%;
-		margin: 0 auto;
-		padding: 0 0.5rem;
-	}
+  .harmonogram_day td b,
+  .harmonogram_day td:not(first-child) .nazev_prednasky {
+    display: block;
+    text-align: center;
+    width: 90%;
+    margin: 0 auto;
+    padding: 0 0.5rem;
+  }
 
-	.harmonogram_day td b {
-		font-size: 1.2rem;
-	}
+  .harmonogram_day td b {
+    font-size: 1.2rem;
+  }
 
-	.harmonogram_day td:first-child,
-	.harmonogram_day td:first-child .nazev_prednasky {
-		border: none;
-		width: 7rem !important;
-		text-align: right;
-		padding-right: 0.5rem;
-		font-size: 1rem;
-		line-height: 5vw;
-		font-family: 'ArialBlackS';
-	}
+  .harmonogram_day td:first-child,
+  .harmonogram_day td:first-child .nazev_prednasky {
+    border: none;
+    width: 7rem !important;
+    text-align: right;
+    padding-right: 0.5rem;
+    font-size: 1rem;
+    line-height: 5vw;
+    font-family: "ArialBlackS";
+  }
 
-	.harmonogram_day tr:first-child td,
-	.harmonogram_day tr:first-child td .nazev_prednasky {
-		border: none;
-		font-family: 'ArialBlackS';
-		font-size: 1.5rem;
-		height: 2rem;
-		text-align: center;
-	}
-
+  .harmonogram_day tr:first-child td,
+  .harmonogram_day tr:first-child td .nazev_prednasky {
+    border: none;
+    font-family: "ArialBlackS";
+    font-size: 1.5rem;
+    height: 2rem;
+    text-align: center;
+  }
 }
 
 td.clickable {
-	cursor: pointer;
+  cursor: pointer;
 }
