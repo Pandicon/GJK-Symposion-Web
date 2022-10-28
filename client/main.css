@@ -536,7 +536,7 @@ nav b {
   }
 }
 
-@media only screen and (min-width: 1000px) {
+@media only screen and (min-width: 999px) {
   .harmonogram_day td {
     border: 5px solid black;
     height: 6rem;
