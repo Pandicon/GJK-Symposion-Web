@@ -164,6 +164,7 @@ main .opakujici_most_naopak {
 
 footer {
   height: 3rem;
+  flex-shrink: 0;
 }
 
 .mosty_jako {
