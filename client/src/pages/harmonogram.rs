@@ -91,10 +91,39 @@ pub fn harmonogram(props: &Props) -> Html {
 					<table class="harmonogram_day">
 					{
 						day_data.harmonogram.iter().enumerate().map(|(row_id, row)| {
+							if row.is_empty() {
+								return html!{};
+							}
+							let start_time = if let Some(time) = times[row_id] {
+								time[0]
+							} else {
+								"???"
+							};
+							let prev_end_time = if row_id > 1 {
+								if let Some(time) = times[row_id - 1] {
+									time[1]
+								} else {
+									"???"
+								}
+							} else {
+								start_time
+							};
 							html!{
 								<tr>
-								{
-									row.iter().enumerate().map(|(column_id, cell_option)| {
+									<td>{
+										html!{
+											<>
+											if row_id > 0 {
+												if prev_end_time != start_time {
+													<div class="mobile_hidden nazev_prednasky">{ prev_end_time }<br /></div>
+												}
+												<span class="nazev_prednasky">{ start_time }</span>
+											}
+											</>
+										}
+									}</td>
+									{
+										row.iter().skip(1).map(|cell_option| {
 										if let Some(cell) = cell_option {
 											let col_span = if let Some(span) = cell.col_span {
 												span
@@ -140,8 +169,8 @@ pub fn harmonogram(props: &Props) -> Html {
 														lecturer: cloned_cell.lecturer.clone(),
 														title: cloned_cell.title.clone(),
 														for_younger: cloned_cell.for_younger,
-														start_time: if column_id > 0 && row_id > 0 { Some(cloned_start_time.clone()) } else { None },
-														end_time: if column_id > 0 && row_id > 0 { Some(cloned_end_time.clone()) } else { None }
+														start_time: if row_id > 0 { Some(cloned_start_time.clone()) } else { None },
+														end_time: if row_id > 0 { Some(cloned_end_time.clone()) } else { None }
 													};
 													set_additional_info_state(cloned_additional_info_state.clone(), &cloned_api_base, current_timestamp_seconds, cell_day.clone(), cloned_cell_id.clone(), base_info);
 												}))
@@ -151,11 +180,11 @@ pub fn harmonogram(props: &Props) -> Html {
 											html!{
 												<td class={class_name} colspan={format!("{col_span}")} rowspan={format!("{row_span}")} onclick={on_click}>
 													<b>{&cell.lecturer}</b>
-													<span class="nazev_prednasky">{ if column_id == 0 { start_time } else { &cell.title } }</span>
+													<span class="nazev_prednasky">{ &cell.title }</span>
 													if cell.for_younger {
 														<div class="for_younger">{"*"}</div>
 													}
-													if column_id > 0 && row_id > 0 {
+													if row_id > 0 {
 														{"Start: "}{start_time}{" Konec: "}{end_time}
 													}
 												</td>
@@ -170,6 +199,11 @@ pub fn harmonogram(props: &Props) -> Html {
 								</tr>
 							}
 						}).collect::<Html>()
+					}
+					if times.len() >= day_data.harmonogram.len() {
+						if let Some(end_time) = times[day_data.harmonogram.len() - 1] {
+							<tr><td><span class="nazev_prednasky">{end_time[1]}</span></td></tr>
+						}
 					}
 					</table>
 					<p>{update_date_local.format("Data z %d.%m.%Y %H:%M:%S").to_string()}</p>
