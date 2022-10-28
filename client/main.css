@@ -531,7 +531,7 @@ nav b {
   }
 
   .harmonogram_day td b,
-  .harmonogram_day td:not(first-child) .nazev_prednasky {
+  .harmonogram_day td:not(first-child) .nazev_prednasky:not(.mobile_hidden) {
     display: block;
     text-align: center;
     width: 90%;
