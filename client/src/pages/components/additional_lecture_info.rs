@@ -41,9 +41,9 @@ pub fn home(props: &Props) -> Html {
 					<span class="most">{&data.title}</span>
 				</div>
 				if let (Some(start_time), Some(end_time)) = (&data.start_time, &data.end_time) {
-					<div class="overlay-time">{"Čas: "}{start_time}{" - "}{end_time}</div>
+					<div class="overlay-time">{start_time}{" - "}{end_time}</div>
 				}
-				<div class="overlay-rooms">{"Místnost"}{if data.lecture_rooms.len() > 1 { "i" } else { "" }}{": "}{data.lecture_rooms.join(", ")}</div>
+				<div class="overlay-rooms">{data.lecture_rooms.join(", ")}</div>
 				if let Some(annotation) = &data.annotation {
 					<div class="overlay-annotation">{annotation}</div>
 				}
@@ -51,7 +51,7 @@ pub fn home(props: &Props) -> Html {
 					<div class="overlay-lecturer-info">{lecturer_info}</div>
 				}
 				if data.for_younger {
-					<i>{"Vhodné i pro mladší diváky"}</i>
+					<i>{"Vhodné i pro mladší diváky."}</i>
 				}
 			}
 			if let Some(warning) = &props.data_state.warning {
@@ -62,7 +62,7 @@ pub fn home(props: &Props) -> Html {
 				<br />
 				<div class="overlay-error">{error}</div>
 			}
-			<p>{update_date_local.format("Data z %d.%m.%Y %H:%M:%S").to_string()}</p>
+			<p class="data_from">{update_date_local.format("Data z %d.%m.%Y %H:%M:%S").to_string()}</p>
 			<div class="overlay-back" onclick={
 				let cloned_additional_cell_info_enabled_state = props.enabled_state.clone();
 				let cloned_data_state = props.data_state.clone();

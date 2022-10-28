@@ -211,9 +211,11 @@ pub fn harmonogram(props: &Props) -> Html {
 														<div class="for_younger">{"*"}</div>
 													}
 													if row_id > 0 {
-														{"Start: "}{start_time}{" Konec: "}{end_time}
+														/*{"Start: "}{start_time}{" Konec: "}{end_time}*/
 														if !lecture_rooms.is_empty() {
-															<br />{"Místnost"}{if lecture_rooms.len() > 1 { "i" } else { "" }}{": "}{lecture_rooms.join(", ")}
+															<div class="lecture_room">
+																{lecture_rooms.join(", ")}
+															</div>
 														}
 													}
 												</td>
@@ -235,7 +237,7 @@ pub fn harmonogram(props: &Props) -> Html {
 						}
 					}
 					</table>
-					<p>{update_date_local.format("Data z %d.%m.%Y %H:%M:%S").to_string()}</p>
+					<p class="data_from">{update_date_local.format("Data z %d.%m.%Y %H:%M:%S").to_string()}</p>
 					</>
 				}
 			}).collect::<Html>()
