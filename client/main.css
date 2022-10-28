@@ -3,39 +3,15 @@
   display: none;
   width: 90vw;
   height: 90vh;
-  z-index: 999;
-  position: fixed;
-  top: 5vh;
-  left: calc(5vw - 2rem);
+  z-index: 1000;
+  position: relative;
   overflow-y: scroll;
+  margin-top: 5vh;
+  margin-left: 5vw;
   overscroll-behavior: contain;
-  background: rgb(113, 110, 126);
-  padding: 0 2rem;
+  background: black;
+  color: white;
 }
-
-.overlay-lecturer {
-  width: fit-content;
-  font-size: 2rem;
-  text-align: center;
-  margin: 2rem auto;
-}
-
-.overlay-lecture {
-  font-size: 1.5rem;
-}
-
-.overlay-background {
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  z-index: 998;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: rgba(0, 0, 0, 0.8);
-}
-
 
 .unsupported_browser {
   color: black;

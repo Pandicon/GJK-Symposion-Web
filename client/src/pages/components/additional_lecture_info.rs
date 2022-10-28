@@ -16,13 +16,6 @@ pub fn home(props: &Props) -> Html {
 	let update_date_local: chrono::DateTime<chrono::Local> = chrono::DateTime::from(utc_date);
 	html! {
 		<>
-		<div class="overlay-background" style={
-			if *props.enabled_state {
-				"display: block;"
-			} else {
-				"display: none;"
-			}
-		}></div>
 		<div class="overlay-body" style={
 			if *props.enabled_state {
 				"display: block;"
@@ -31,23 +24,22 @@ pub fn home(props: &Props) -> Html {
 			}
 		}>
 			if let Some(data) = &props.data_state.data {
-				<div class="overlay-lecturer">
-					<span class="most">{&data.lecturer}</span>
-					<div class="opakujici_most"></div>
-				</div>
-				<div class="overlay-lecture">
-					<span class="most">{&data.title}</span>
-				</div>
+				<div class="overlay-lecture">{&data.title}</div>
 				if let (Some(start_time), Some(end_time)) = (&data.start_time, &data.end_time) {
 					<div class="overlay-time">{"Čas: "}{start_time}{" - "}{end_time}</div>
 				}
+				<br />
+				<div class="overlay-lecturer">{&data.lecturer}</div>
 				if let Some(annotation) = &data.annotation {
+					<br />
 					<div class="overlay-annotation">{annotation}</div>
 				}
 				if let Some(lecturer_info) = &data.lecturer_info {
+					<br />
 					<div class="overlay-lecturer-info">{lecturer_info}</div>
 				}
 				if data.for_younger {
+					<br />
 					<i>{"Vhodné i pro mladší diváky"}</i>
 				}
 			}
