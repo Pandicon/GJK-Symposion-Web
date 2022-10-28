@@ -25,6 +25,19 @@ pub fn home() -> Html {
 				<b><a href="/harmonogram"><span class="most">{"HARMONOGRAM"}</span></a></b>
 				<b><a href="/o_akci"><nobr><span class="most">{"O AKCI"}</span></nobr></a></b>
 			</nav>
+			<div class="mosty_jako">
+				<p class="most">
+					{"mosty jako podání ruky"}
+					<br />
+					{"mosty jako spojující prvek"}
+					<br />
+					{"mosty jako přechod, změna a vývoj"}
+					<br />
+					{"mosty jako způsob překonání překážek"}
+					<br />
+					{"mosty jako možnost spojení nespojitelného"}
+				</p>
+			</div>
 			<div class="opakujici_most_naopak"></div>
 		</main>
 		<footer>

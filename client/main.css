@@ -1,5 +1,5 @@
 .data_from {
-  display: none;
+  opacity: 0.5;
 }
 
 @media only screen and (min-width: 850px) {
@@ -164,6 +164,20 @@ main .opakujici_most_naopak {
 
 footer {
   height: 3rem;
+}
+
+.mosty_jako {
+  display: flex;
+  align-items: center;
+  font-size: x-large;
+  line-height: 5rem;
+  width: fit-content;
+  aspect-ratio: calc(1210 / 831);
+  margin: 7vh auto;
+  padding: 3rem;
+  background-image: url("images/obrazek_mostu.png");
+  background-position: center;
+  background-size: cover 100%;
 }
 
 @media only screen and (max-width: 599px) {
