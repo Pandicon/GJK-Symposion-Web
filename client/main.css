@@ -479,6 +479,10 @@ nav b {
 }
 
 @media only screen and (max-width: 999px) {
+  .mobile_hidden {
+    display: none;
+  }
+
   .harmonogram_day {
     width: 90%;
     max-width: 40rem;
