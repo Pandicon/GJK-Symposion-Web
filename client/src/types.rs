@@ -11,6 +11,7 @@ pub struct AdditionalCellInfoBase {
 	pub for_younger: bool,
 	pub start_time: Option<String>,
 	pub end_time: Option<String>,
+	pub lecture_rooms: Vec<String>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -83,6 +84,7 @@ pub struct AdditionalCellInfoData {
 	pub end_time: Option<String>,
 	pub annotation: Option<String>,
 	pub lecturer_info: Option<String>,
+	pub lecture_rooms: Vec<String>,
 }
 
 #[derive(Debug, Deserialize, Serialize)]

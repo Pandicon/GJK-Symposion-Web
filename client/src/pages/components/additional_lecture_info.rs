@@ -41,6 +41,7 @@ pub fn home(props: &Props) -> Html {
 				if let (Some(start_time), Some(end_time)) = (&data.start_time, &data.end_time) {
 					<div class="overlay-time">{"Čas: "}{start_time}{" - "}{end_time}</div>
 				}
+				<div class="overlay-rooms">{"Místnost"}{if data.lecture_rooms.len() > 1 { "i" } else { "" }}{": "}{data.lecture_rooms.join(", ")}</div>
 				if let Some(annotation) = &data.annotation {
 					<div class="overlay-annotation">{annotation}</div>
 				}

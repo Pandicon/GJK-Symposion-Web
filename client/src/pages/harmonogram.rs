@@ -78,6 +78,17 @@ pub fn harmonogram(props: &Props) -> Html {
 						None => None
 					}
 				}).collect::<Vec<Option<[&str; 2]>>>();
+				let rooms = if let Some(row) = day_data.harmonogram.first() {
+					row.iter().map(|cell_option| {
+						if let Some(cell) = cell_option {
+							Some(cell.title.clone())
+						} else {
+							None
+						}
+					}).collect::<Vec<Option<String>>>()
+				} else {
+					vec![None]
+				};
 				html!{
 					<>
 						<div class="harmonogram_day_title">
@@ -155,7 +166,20 @@ pub fn harmonogram(props: &Props) -> Html {
 												"???"
 											};
 											let cell_day = day.clone();
+											let mut lecture_rooms = vec![];
 											let (class_name, on_click) = if let Some(cell_id) = &cell.id {
+												let id_split = cell_id.split('-').collect::<Vec<&str>>();
+												if let Ok(column_id) = id_split[1].trim().parse::<usize>() {
+													for i in 0..(col_span as usize) {
+														let col = column_id + i;
+														if col >= rooms.len() {
+															break;
+														}
+														if let Some(room) = &rooms[col] {
+															lecture_rooms.push(room.clone());
+														}
+													}
+												};
 												let cloned_cell_id = cell_id.clone();
 												let cloned_additional_info_state = additional_cell_info_state.clone();
 												let cloned_additional_cell_info_enabled_state = additional_cell_info_enabled_state.clone();
@@ -163,6 +187,7 @@ pub fn harmonogram(props: &Props) -> Html {
 												let cloned_cell = cell.clone();
 												let cloned_start_time = start_time.to_string();
 												let cloned_end_time = end_time.to_string();
+												let cloned_rooms = lecture_rooms.clone();
 												("clickable", Callback::from(move |_| {
 													cloned_additional_cell_info_enabled_state.set(true);
 													let base_info = AdditionalCellInfoBase {
@@ -170,7 +195,8 @@ pub fn harmonogram(props: &Props) -> Html {
 														title: cloned_cell.title.clone(),
 														for_younger: cloned_cell.for_younger,
 														start_time: if row_id > 0 { Some(cloned_start_time.clone()) } else { None },
-														end_time: if row_id > 0 { Some(cloned_end_time.clone()) } else { None }
+														end_time: if row_id > 0 { Some(cloned_end_time.clone()) } else { None },
+														lecture_rooms: cloned_rooms.clone()
 													};
 													set_additional_info_state(cloned_additional_info_state.clone(), &cloned_api_base, current_timestamp_seconds, cell_day.clone(), cloned_cell_id.clone(), base_info);
 												}))
@@ -186,6 +212,9 @@ pub fn harmonogram(props: &Props) -> Html {
 													}
 													if row_id > 0 {
 														{"Start: "}{start_time}{" Konec: "}{end_time}
+														if !lecture_rooms.is_empty() {
+															<br />{"Místnost"}{if lecture_rooms.len() > 1 { "i" } else { "" }}{": "}{lecture_rooms.join(", ")}
+														}
 													}
 												</td>
 											}
@@ -226,6 +255,7 @@ fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base
 		for_younger,
 		start_time,
 		end_time,
+		lecture_rooms,
 	} = base_info;
 	let mut data_to_set = AdditionalCellInfo::new(
 		Some(AdditionalCellInfoData {
@@ -236,6 +266,7 @@ fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base
 			for_younger,
 			annotation: None,
 			lecturer_info: None,
+			lecture_rooms: lecture_rooms.clone(),
 		}),
 		None,
 		None,
@@ -282,6 +313,7 @@ fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base
 										end_time,
 										annotation: data.info.annotation,
 										lecturer_info: data.info.lecturer_info,
+										lecture_rooms,
 									};
 									set_harmonogram_additional_data_cache(&day, &id, current_timestamp_seconds, cell_info_data.clone(), data.last_updated);
 									let state_data = AdditionalCellInfo::new(Some(cell_info_data), None, None, data.last_updated);
