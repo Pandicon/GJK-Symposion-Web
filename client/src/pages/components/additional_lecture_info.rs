@@ -31,10 +31,12 @@ pub fn home(props: &Props) -> Html {
 			}
 		}>
 			if let Some(data) = &props.data_state.data {
-				<div class="overlay-lecturer">
-					<span class="most">{&data.lecturer}</span>
-					<div class="opakujici_most"></div>
-				</div>
+				if !data.lecturer.trim().is_empty() {
+					<div class="overlay-lecturer">
+						<span class="most">{&data.lecturer}</span>
+						<div class="opakujici_most"></div>
+					</div>
+				}
 				<div class="overlay-lecture">
 					<span class="most">{&data.title}</span>
 				</div>
