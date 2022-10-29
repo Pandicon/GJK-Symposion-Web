@@ -16,6 +16,7 @@ pub struct Props {
 pub fn home(props: &Props) -> Html {
 	let utc_date = chrono::Utc.timestamp(props.data_state.last_updated, 0);
 	let update_date_local: chrono::DateTime<chrono::Local> = chrono::DateTime::from(utc_date);
+	let day = props.day.clone();
 	html! {
 		<>
 		<div class="overlay-background" style={
@@ -69,7 +70,6 @@ pub fn home(props: &Props) -> Html {
 				<div class="overlay-back" onclick={
 					let cloned_additional_cell_info_enabled_state = props.enabled_state.clone();
 					let cloned_data_state = props.data_state.clone();
-					let day = props.day.clone();
 					Callback::from(move |_| {
 						history.push(if day == *"all" {
 							Route::HarmonogramAll
@@ -80,6 +80,14 @@ pub fn home(props: &Props) -> Html {
 						cloned_data_state.set(AdditionalCellInfo::default());
 					})
 				}>{"Zpět"}</div>
+			} else {
+				<a class="overlay-back" style="text-decoration: none; color: inherit;" href={
+					if day == *"all" {
+						String::from("/harmonogram")
+					} else {
+						format!("/harmonogram/{}", day)
+					}
+				}>{"Zpět"}</a>
 			}
 		</div>
 		</>
