@@ -216,10 +216,11 @@ pub fn harmonogram(props: &Props) -> Html {
 												if let Some(history) = yew_router::hooks::use_history() {
 													lecture_rooms = get_lecture_rooms(&cell_id, col_span as usize, &rooms);
 													let cloned_cell_id = cell_id.clone();
+													let cloned_day = day.clone();
 													let cloned_url_day = day_from_url.clone();
 													("clickable", Callback::from(move |_| {
 														history.push(if cloned_url_day == *"all" {
-															Route::HarmonogramAllDetails { id: format!("{}-{}", cloned_url_day.clone(), cloned_cell_id.clone()) }
+															Route::HarmonogramAllDetails { id: format!("{}-{}", cloned_day.clone(), cloned_cell_id.clone()) }
 														} else {
 															Route::HarmonogramDetails { day: cloned_url_day.clone(), id: cloned_cell_id.clone() }
 														});
