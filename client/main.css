@@ -115,11 +115,12 @@ header {
   min-height: 5rem;
   display: flex;
   flex-direction: row;
+  flex-shrink: 0;
   overflow-x: hidden;
   overflow-y: hidden;
 }
 
-header h1 a {
+header a {
   text-decoration: none;
   color: inherit;
 }
@@ -168,17 +169,55 @@ footer {
 }
 
 .mosty_jako {
+  max-width: 95vw;
   display: flex;
   align-items: center;
-  font-size: x-large;
-  line-height: 5rem;
+  font-size: small;
+  line-height: 3rem;
+  padding: 0.5rem;
   width: fit-content;
   aspect-ratio: calc(1210 / 831);
-  margin: 7vh auto;
-  padding: 3rem;
+  margin: 0 auto;
   background-image: url("images/obrazek_mostu.png");
   background-position: center;
-  background-size: cover 100%;
+  background-size: cover;
+}
+
+@media only screen and (min-width: 440px) {
+  .mosty_jako {
+    font-size: medium;
+  }
+}
+
+@media only screen and (min-width: 530px) {
+  .mosty_jako {
+    font-size: larger;
+    line-height: 4rem;
+    padding: 1rem;
+  }
+}
+
+@media only screen and (min-width: 530px) {
+  .mosty_jako {
+    font-size: larger;
+    line-height: 4rem;
+    padding: 1rem;
+  }
+}
+
+@media only screen and (min-width: 650px) {
+  .mosty_jako {
+    font-size: larger;
+    line-height: 4rem;
+    padding: 3rem;
+  }
+}
+
+@media only screen and (min-width: 1000px) {
+  .mosty_jako {
+    font-size: xx-large;
+    line-height: 5rem;
+  }
 }
 
 @media only screen and (max-width: 599px) {
