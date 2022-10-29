@@ -5,7 +5,7 @@ use crate::types::{
 };
 use crate::utils;
 
-use super::components::additional_lecture_info::AdditionalLectureInfo;
+use super::components::{additional_lecture_info::AdditionalLectureInfo, link_to::LinkTo};
 
 use chrono::TimeZone;
 use yew::prelude::*;
@@ -142,13 +142,17 @@ pub fn harmonogram(props: &Props) -> Html {
 	html! {
 		<>
 		<header class="harmonogram_header">
-			<h1><a href="/"><span class="most">{"MOSTY"}</span></a></h1>
+			<h1>
+			<LinkTo path="/" route={Route::Home} div_style="cursor: pointer;">
+				<span class="most">{"MOSTY"}</span>
+			</LinkTo>
+			</h1>
 			<div class="hlavicka_most_nad">
 				<div class="opakujici_most"></div>
 				<h2>
-					<a href="/harmonogram" style="text-decoration: none; color: inherit;">
+					<LinkTo path="/harmonogram" route={Route::HarmonogramAll} a_style="text-decoration: none; color: inherit;" div_style="cursor: pointer;">
 						<span class="most">{"Harmonogram"}</span>
-					</a>
+					</LinkTo>
 				</h2>
 			</div>
 			if day_from_url != *"all" {
@@ -167,9 +171,9 @@ pub fn harmonogram(props: &Props) -> Html {
 					<>
 					if day_from_url == *"all" {
 						<div class="harmonogram_day_title">
-							<a href={format!("/harmonogram/{}", day)} style="text-decoration: none; color: inherit;">
+							<LinkTo path={format!("/harmonogram/{}", day)} route={Route::Harmonogram { day: day.clone() }} a_style="text-decoration: none; color: inherit;" div_style="cursor: pointer;">
 								<p class="most">{utils::raw_harmonogram_day_to_display_day(day)}</p>
-							</a>
+							</LinkTo>
 							<div class="opakujici_most"></div>
 						</div>
 					}
@@ -226,6 +230,7 @@ pub fn harmonogram(props: &Props) -> Html {
 														});
 													}))
 												} else {
+													//TODO: Make this work without history
 													("", Callback::from(|_| {}))
 												}
 											} else {
