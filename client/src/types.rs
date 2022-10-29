@@ -85,6 +85,7 @@ pub struct AdditionalCellInfoData {
 	pub annotation: Option<String>,
 	pub lecturer_info: Option<String>,
 	pub lecture_rooms: Vec<String>,
+	pub day: String,
 }
 
 #[derive(Debug, Deserialize, Serialize)]

@@ -296,6 +296,7 @@ fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base
 			annotation: None,
 			lecturer_info: None,
 			lecture_rooms: lecture_rooms.clone(),
+			day: day.clone(),
 		}),
 		None,
 		None,
@@ -343,6 +344,7 @@ fn set_additional_info_state(state: UseStateHandle<AdditionalCellInfo>, api_base
 										annotation: data.info.annotation,
 										lecturer_info: data.info.lecturer_info,
 										lecture_rooms,
+										day: day.clone(),
 									};
 									set_harmonogram_additional_data_cache(&day, &id, current_timestamp_seconds, cell_info_data.clone(), data.last_updated);
 									let state_data = AdditionalCellInfo::new(Some(cell_info_data), None, None, data.last_updated);

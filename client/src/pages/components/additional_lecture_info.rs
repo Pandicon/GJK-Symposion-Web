@@ -1,6 +1,6 @@
 use yew::prelude::*;
 
-use crate::{router::Route, types::AdditionalCellInfo};
+use crate::{router::Route, types::AdditionalCellInfo, utils};
 
 use chrono::TimeZone;
 use yew_router::history::History;
@@ -43,7 +43,7 @@ pub fn home(props: &Props) -> Html {
 					<span class="most">{&data.title}</span>
 				</div>
 				if let (Some(start_time), Some(end_time)) = (&data.start_time, &data.end_time) {
-					<div class="overlay-time">{start_time}{" - "}{end_time}</div>
+					<div class="overlay-time">{utils::raw_harmonogram_day_to_display_day(&data.day)}{", "}{start_time}{" - "}{end_time}</div>
 				}
 				<div class="overlay-rooms">{data.lecture_rooms.join(", ")}</div>
 				if let Some(annotation) = &data.annotation {
