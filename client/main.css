@@ -197,14 +197,6 @@ footer {
   }
 }
 
-@media only screen and (min-width: 530px) {
-  .mosty_jako {
-    font-size: larger;
-    line-height: 4rem;
-    padding: 1rem;
-  }
-}
-
 @media only screen and (min-width: 650px) {
   .mosty_jako {
     font-size: larger;
