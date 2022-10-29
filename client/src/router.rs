@@ -12,10 +12,14 @@ const CONFIG_TEXT: &str = include_str!("../config.json");
 pub enum Route {
 	#[at("/")]
 	Home,
-	#[at("/harmonogram/:day")]
-	Harmonogram { day: String },
 	#[at("/harmonogram")]
 	HarmonogramAll,
+	#[at("/harmonogram/details/:id")]
+	HarmonogramAllDetails { id: String },
+	#[at("/harmonogram/:day")]
+	Harmonogram { day: String },
+	#[at("/harmonogram/:day/details/:id")]
+	HarmonogramDetails { day: String, id: String },
 	#[at("/kontakty")]
 	Kontakty,
 	#[not_found]
@@ -37,7 +41,9 @@ pub fn switch(route: &Route) -> Html {
 	match route {
 		Route::Home => html! { <Home /> },
 		Route::Harmonogram { day } => html! { <Harmonogram day={Some(day.to_owned())} config={config} />},
+		Route::HarmonogramDetails { day, id } => html! { <Harmonogram day={Some(day.to_owned())} config={config} details_id={id.clone()} />},
 		Route::HarmonogramAll => html! { <Harmonogram config={config} />},
+		Route::HarmonogramAllDetails { id } => html! { <Harmonogram config={config} details_id={id.clone()} /> },
 		Route::Kontakty => html! { <Kontakty />},
 		Route::NotFound => html! { <NotFound /> },
 		Route::OAkci => html! { <OAkci /> },

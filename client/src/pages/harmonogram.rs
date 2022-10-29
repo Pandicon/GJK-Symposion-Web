@@ -1,3 +1,4 @@
+use crate::router::Route;
 use crate::types::{
 	AdditionalCellInfo, AdditionalCellInfoBase, AdditionalCellInfoCache, AdditionalCellInfoData, AdditionalCellInfoResponse, HarmonogramData, HarmonogramDayCache, HarmonogramDayData,
 	HarmonogramDayResponse, HarmonogramField, HarmonogramState,
@@ -8,7 +9,7 @@ use super::components::additional_lecture_info::AdditionalLectureInfo;
 
 use chrono::TimeZone;
 use yew::prelude::*;
-use yew_router::history::Location;
+use yew_router::history::History;
 
 const VALID_DAYS: [&str; 3] = ["streda", "ctvrtek", "patek"];
 const CACHE_LIFETIME: i64 = 5 * 60; // 5 minutes represented in seconds
@@ -17,11 +18,7 @@ const CACHE_LIFETIME: i64 = 5 * 60; // 5 minutes represented in seconds
 pub struct Props {
 	pub day: Option<String>,
 	pub config: crate::types::Config,
-}
-
-#[derive(Debug, serde_derive::Deserialize)]
-struct Query {
-	details: Option<String>,
+	pub details_id: Option<String>,
 }
 
 #[function_component(Harmonogram)]
@@ -45,23 +42,19 @@ pub fn harmonogram(props: &Props) -> Html {
 	};
 
 	let mut details_id = None;
-	if let Some(location) = yew_router::hooks::use_location() {
-		if let Ok(query) = location.query::<Query>() {
-			if let Some(id) = query.details {
-				let mut split_id = id.split('-').collect::<Vec<&str>>();
-				let mut day = None;
-				if VALID_DAYS.contains(&split_id[0]) {
-					day = Some(split_id.remove(0).to_owned());
-				} else if day_from_url != *"all" {
-					day = Some(day_from_url.clone());
-				}
-				let filtered = split_id.iter().filter_map(|el| el.parse::<usize>().ok()).collect::<Vec<usize>>();
-				if filtered.len() > 1 {
-					details_id = Some((day, format!("{}-{}", filtered[0], filtered[1])));
-				}
-			}
+	if let Some(id) = &props.details_id {
+		let mut split_id = id.split('-').collect::<Vec<&str>>();
+		let mut day = None;
+		if VALID_DAYS.contains(&split_id[0]) {
+			day = Some(split_id.remove(0).to_owned());
+		} else if day_from_url != *"all" {
+			day = Some(day_from_url.clone());
 		}
-	};
+		let filtered = split_id.iter().filter_map(|el| el.parse::<usize>().ok()).collect::<Vec<usize>>();
+		if filtered.len() > 1 {
+			details_id = Some((day, format!("{}-{}", filtered[0], filtered[1])));
+		}
+	}
 
 	let harmonogram_state: UseStateHandle<HarmonogramState> = use_state(HarmonogramState::default);
 	if harmonogram_state.data.is_none() && harmonogram_state.error.is_none() {
@@ -218,31 +211,22 @@ pub fn harmonogram(props: &Props) -> Html {
 										row.iter().skip(1).map(|cell_option| {
 										if let Some(cell) = cell_option {
 											let [col_span, row_span] = get_cell_spans(cell);
-											let [start_time, end_time] = get_cell_start_end_times(row_id, row_span as usize, &times);
-											let cell_day = day.clone();
 											let mut lecture_rooms = vec![];
 											let (class_name, on_click) = if let Some(cell_id) = &cell.id {
-												lecture_rooms = get_lecture_rooms(&cell_id, col_span as usize, &rooms);
-												let cloned_cell_id = cell_id.clone();
-												let cloned_additional_info_state = additional_cell_info_state.clone();
-												let cloned_additional_cell_info_enabled_state = additional_cell_info_enabled_state.clone();
-												let cloned_api_base = api_base.clone();
-												let cloned_cell = cell.clone();
-												let cloned_start_time = start_time.to_string();
-												let cloned_end_time = end_time.to_string();
-												let cloned_rooms = lecture_rooms.clone();
-												("clickable", Callback::from(move |_| {
-													cloned_additional_cell_info_enabled_state.set(true);
-													let base_info = AdditionalCellInfoBase {
-														lecturer: cloned_cell.lecturer.clone(),
-														title: cloned_cell.title.clone(),
-														for_younger: cloned_cell.for_younger,
-														start_time: if row_id > 0 { Some(cloned_start_time.clone()) } else { None },
-														end_time: if row_id > 0 { Some(cloned_end_time.clone()) } else { None },
-														lecture_rooms: cloned_rooms.clone()
-													};
-													set_additional_info_state(cloned_additional_info_state.clone(), &cloned_api_base, current_timestamp_seconds, cell_day.clone(), cloned_cell_id.clone(), base_info);
-												}))
+												if let Some(history) = yew_router::hooks::use_history() {
+													lecture_rooms = get_lecture_rooms(&cell_id, col_span as usize, &rooms);
+													let cloned_cell_id = cell_id.clone();
+													let cloned_url_day = day_from_url.clone();
+													("clickable", Callback::from(move |_| {
+														history.push(if cloned_url_day == *"all" {
+															Route::HarmonogramAllDetails { id: format!("{}-{}", cloned_url_day.clone(), cloned_cell_id.clone()) }
+														} else {
+															Route::HarmonogramDetails { day: cloned_url_day.clone(), id: cloned_cell_id.clone() }
+														});
+													}))
+												} else {
+													("", Callback::from(|_| {}))
+												}
 											} else {
 												("", Callback::from(|_| {}))
 											};
