@@ -217,8 +217,8 @@ pub fn harmonogram(props: &Props) -> Html {
 											let [col_span, row_span] = get_cell_spans(cell);
 											let mut lecture_rooms = vec![];
 											let (class_name, on_click) = if let Some(cell_id) = &cell.id {
+												lecture_rooms = get_lecture_rooms(&cell_id, col_span as usize, &rooms);
 												if let Some(history) = yew_router::hooks::use_history() {
-													lecture_rooms = get_lecture_rooms(&cell_id, col_span as usize, &rooms);
 													let cloned_cell_id = cell_id.clone();
 													let cloned_day = day.clone();
 													let cloned_url_day = day_from_url.clone();
@@ -230,8 +230,29 @@ pub fn harmonogram(props: &Props) -> Html {
 														});
 													}))
 												} else {
-													//TODO: Make this work without history
-													("", Callback::from(|_| {}))
+													let cell_day = day.clone();
+													let cloned_cell_id = cell_id.clone();
+													let [_col_span, row_span] = get_cell_spans(cell);
+													let [start_time, end_time] = get_cell_start_end_times(row_id, row_span as usize, times);
+													let cloned_additional_info_state = additional_cell_info_state.clone();
+													let cloned_additional_cell_info_enabled_state = additional_cell_info_enabled_state.clone();
+													let cloned_api_base = api_base.clone();
+													let cloned_cell = cell.clone();
+													let cloned_start_time = start_time.to_string();
+													let cloned_end_time = end_time.to_string();
+													let cloned_lecture_rooms = lecture_rooms.clone();
+													("clickable", Callback::from(move |_| {
+														cloned_additional_cell_info_enabled_state.set(true);
+														let base_info = AdditionalCellInfoBase {
+															lecturer: cloned_cell.lecturer.clone(),
+															title: cloned_cell.title.clone(),
+															for_younger: cloned_cell.for_younger,
+															start_time: if row_id > 0 { Some(cloned_start_time.clone()) } else { None },
+															end_time: if row_id > 0 { Some(cloned_end_time.clone()) } else { None },
+															lecture_rooms: cloned_lecture_rooms.clone()
+														};
+														set_additional_info_state(cloned_additional_info_state.clone(), &cloned_api_base, current_timestamp_seconds, cell_day.clone(), cloned_cell_id.clone(), base_info);
+													}))
 												}
 											} else {
 												("", Callback::from(|_| {}))
