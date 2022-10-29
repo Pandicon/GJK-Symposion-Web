@@ -1,5 +1,5 @@
 mod pages;
-mod router;
+pub mod router;
 pub mod types;
 pub mod utils;
 

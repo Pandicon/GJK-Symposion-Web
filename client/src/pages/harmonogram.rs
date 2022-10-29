@@ -62,7 +62,6 @@ pub fn harmonogram(props: &Props) -> Html {
 			}
 		}
 	};
-	gloo::console::log!(format!("{details_id:?}"));
 
 	let harmonogram_state: UseStateHandle<HarmonogramState> = use_state(HarmonogramState::default);
 	if harmonogram_state.data.is_none() && harmonogram_state.error.is_none() {
@@ -108,7 +107,6 @@ pub fn harmonogram(props: &Props) -> Html {
 	if !*additional_cell_info_enabled_state || additional_cell_info_state.last_updated == 0 {
 		if let Some(details_id) = details_id {
 			if let Some(day_index) = if let Some(day) = details_id.0.clone() { days.iter().position(|el| el.0 == day) } else { None } {
-				gloo::console::log!(day_index);
 				if let Some(cell_option) = days[day_index].1.harmonogram.iter().flatten().find(|cell_option| {
 					if let Some(cell) = cell_option {
 						if let Some(cell_id) = &cell.id {
@@ -124,7 +122,6 @@ pub fn harmonogram(props: &Props) -> Html {
 						if !*additional_cell_info_enabled_state {
 							additional_cell_info_enabled_state.set(true);
 						}
-						gloo::console::log!(format!("{:?}", cell));
 						let (cell_day, cell_id) = details_id;
 						let cell_day = cell_day.unwrap();
 						let times = &times_all_days[day_index];
@@ -288,7 +285,7 @@ pub fn harmonogram(props: &Props) -> Html {
 				}
 			}).collect::<Html>()
 		}
-		<AdditionalLectureInfo enabled_state={additional_cell_info_enabled_state.clone()} data_state={additional_cell_info_state.clone()}/>
+		<AdditionalLectureInfo enabled_state={additional_cell_info_enabled_state.clone()} data_state={additional_cell_info_state.clone()} day={day_from_url}/>
 		<div class="opakujici_most_naopak"></div>
 		</main>
 		<footer></footer>
