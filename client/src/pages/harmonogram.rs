@@ -1,6 +1,6 @@
 use crate::types::{
 	AdditionalCellInfo, AdditionalCellInfoBase, AdditionalCellInfoCache, AdditionalCellInfoData, AdditionalCellInfoResponse, HarmonogramData, HarmonogramDayCache, HarmonogramDayData,
-	HarmonogramDayResponse, HarmonogramState,
+	HarmonogramDayResponse, HarmonogramField, HarmonogramState,
 };
 use crate::utils;
 
@@ -8,6 +8,7 @@ use super::components::additional_lecture_info::AdditionalLectureInfo;
 
 use chrono::TimeZone;
 use yew::prelude::*;
+use yew_router::history::Location;
 
 const VALID_DAYS: [&str; 3] = ["streda", "ctvrtek", "patek"];
 const CACHE_LIFETIME: i64 = 5 * 60; // 5 minutes represented in seconds
@@ -16,6 +17,11 @@ const CACHE_LIFETIME: i64 = 5 * 60; // 5 minutes represented in seconds
 pub struct Props {
 	pub day: Option<String>,
 	pub config: crate::types::Config,
+}
+
+#[derive(Debug, serde_derive::Deserialize)]
+struct Query {
+	details: Option<String>,
 }
 
 #[function_component(Harmonogram)]
@@ -38,6 +44,26 @@ pub fn harmonogram(props: &Props) -> Html {
 		String::from("all")
 	};
 
+	let mut details_id = None;
+	if let Some(location) = yew_router::hooks::use_location() {
+		if let Ok(query) = location.query::<Query>() {
+			if let Some(id) = query.details {
+				let mut split_id = id.split('-').collect::<Vec<&str>>();
+				let mut day = None;
+				if VALID_DAYS.contains(&split_id[0]) {
+					day = Some(split_id.remove(0).to_owned());
+				} else if day_from_url != *"all" {
+					day = Some(day_from_url.clone());
+				}
+				let filtered = split_id.iter().filter_map(|el| el.parse::<usize>().ok()).collect::<Vec<usize>>();
+				if filtered.len() > 1 {
+					details_id = Some((day, format!("{}-{}", filtered[0], filtered[1])));
+				}
+			}
+		}
+	};
+	gloo::console::log!(format!("{details_id:?}"));
+
 	let harmonogram_state: UseStateHandle<HarmonogramState> = use_state(HarmonogramState::default);
 	if harmonogram_state.data.is_none() && harmonogram_state.error.is_none() {
 		set_harmonogram_state(harmonogram_state.clone(), api_base, current_timestamp_seconds, &day_from_url);
@@ -47,6 +73,82 @@ pub fn harmonogram(props: &Props) -> Html {
 		Some(data) => data,
 		None => vec![],
 	};
+	let times_all_days = days
+		.iter()
+		.map(|(_day, day_data)| {
+			day_data
+				.harmonogram
+				.iter()
+				.map(|row| match &row[0] {
+					Some(field) => {
+						let time_split = &field.title.split('-').map(|s| s.trim()).collect::<Vec<&str>>();
+						if time_split.len() < 2 {
+							None
+						} else {
+							Some([time_split[0], time_split[1]])
+						}
+					}
+					None => None,
+				})
+				.collect::<Vec<Option<[&str; 2]>>>()
+		})
+		.collect::<Vec<Vec<Option<[&str; 2]>>>>();
+	let rooms_all_days = days
+		.iter()
+		.map(|(_day, day_data)| {
+			if let Some(row) = day_data.harmonogram.first() {
+				row.iter()
+					.map(|cell_option| if let Some(cell) = cell_option { Some(cell.title.clone()) } else { None })
+					.collect::<Vec<Option<String>>>()
+			} else {
+				vec![None]
+			}
+		})
+		.collect::<Vec<Vec<Option<String>>>>();
+	if !*additional_cell_info_enabled_state || additional_cell_info_state.last_updated == 0 {
+		if let Some(details_id) = details_id {
+			if let Some(day_index) = if let Some(day) = details_id.0.clone() { days.iter().position(|el| el.0 == day) } else { None } {
+				gloo::console::log!(day_index);
+				if let Some(cell_option) = days[day_index].1.harmonogram.iter().flatten().find(|cell_option| {
+					if let Some(cell) = cell_option {
+						if let Some(cell_id) = &cell.id {
+							cell_id == &details_id.1
+						} else {
+							false
+						}
+					} else {
+						false
+					}
+				}) {
+					if let Some(cell) = cell_option {
+						if !*additional_cell_info_enabled_state {
+							additional_cell_info_enabled_state.set(true);
+						}
+						gloo::console::log!(format!("{:?}", cell));
+						let (cell_day, cell_id) = details_id;
+						let cell_day = cell_day.unwrap();
+						let times = &times_all_days[day_index];
+						let rooms = &rooms_all_days[day_index];
+						let [col_span, row_span] = get_cell_spans(cell);
+						let row_id = cell_id.split('-').collect::<Vec<&str>>()[0].parse().unwrap();
+						let [start_time, end_time] = get_cell_start_end_times(row_id, row_span as usize, times);
+						let lecture_rooms = get_lecture_rooms(&cell_id, col_span as usize, rooms);
+						let base_info = AdditionalCellInfoBase {
+							lecturer: cell.lecturer.clone(),
+							title: cell.title.clone(),
+							for_younger: cell.for_younger,
+							start_time: if row_id > 0 { Some(start_time.clone()) } else { None },
+							end_time: if row_id > 0 { Some(end_time.clone()) } else { None },
+							lecture_rooms,
+						};
+						if additional_cell_info_state.last_updated == 0 {
+							set_additional_info_state(additional_cell_info_state.clone(), &api_base, current_timestamp_seconds, cell_day, cell_id.clone(), base_info);
+						}
+					}
+				};
+			};
+		}
+	}
 	html! {
 		<>
 		<header class="harmonogram_header">
@@ -66,33 +168,11 @@ pub fn harmonogram(props: &Props) -> Html {
 		<main>
 		<div class="opakujici_most"></div>
 		{
-			days.iter().map(|(day, day_data)| {
+			days.iter().enumerate().map(|(day_index, (day, day_data))| {
 				let utc_date = chrono::Utc.timestamp(day_data.last_updated, 0);
 				let update_date_local: chrono::DateTime<chrono::Local> = chrono::DateTime::from(utc_date);
-				let times = day_data.harmonogram.iter().map(|row| {
-					match &row[0] {
-						Some(field) => {
-							let time_split = &field.title.split('-').map(|s| s.trim()).collect::<Vec<&str>>();
-							if time_split.len() < 2 {
-								None
-							} else {
-								Some([time_split[0], time_split[1]])
-							}
-						},
-						None => None
-					}
-				}).collect::<Vec<Option<[&str; 2]>>>();
-				let rooms = if let Some(row) = day_data.harmonogram.first() {
-					row.iter().map(|cell_option| {
-						if let Some(cell) = cell_option {
-							Some(cell.title.clone())
-						} else {
-							None
-						}
-					}).collect::<Vec<Option<String>>>()
-				} else {
-					vec![None]
-				};
+				let times = &times_all_days[day_index];
+				let rooms = &rooms_all_days[day_index];
 				html!{
 					<>
 					if day_from_url == *"all" {
@@ -140,50 +220,12 @@ pub fn harmonogram(props: &Props) -> Html {
 									{
 										row.iter().skip(1).map(|cell_option| {
 										if let Some(cell) = cell_option {
-											let col_span = if let Some(span) = cell.col_span {
-												span
-											} else {
-												1
-											};
-											let row_span = if let Some(span) = cell.row_span {
-												span
-											} else {
-												1
-											};
-											let start_time = if row_id < times.len() {
-												if let Some(time) = times[row_id] {
-													time[0]
-												} else {
-													"???"
-												}
-											} else {
-												"???"
-											};
-											let end_index = row_id + (row_span as usize) - 1;
-											let end_time = if end_index < times.len() {
-												if let Some(time) = times[end_index] {
-													time[1]
-												} else {
-													"???"
-												}
-											} else {
-												"???"
-											};
+											let [col_span, row_span] = get_cell_spans(cell);
+											let [start_time, end_time] = get_cell_start_end_times(row_id, row_span as usize, &times);
 											let cell_day = day.clone();
 											let mut lecture_rooms = vec![];
 											let (class_name, on_click) = if let Some(cell_id) = &cell.id {
-												let id_split = cell_id.split('-').collect::<Vec<&str>>();
-												if let Ok(column_id) = id_split[1].trim().parse::<usize>() {
-													for i in 0..(col_span as usize) {
-														let col = column_id + i;
-														if col >= rooms.len() {
-															break;
-														}
-														if let Some(room) = &rooms[col] {
-															lecture_rooms.push(room.clone());
-														}
-													}
-												};
+												lecture_rooms = get_lecture_rooms(&cell_id, col_span as usize, &rooms);
 												let cloned_cell_id = cell_id.clone();
 												let cloned_additional_info_state = additional_cell_info_state.clone();
 												let cloned_additional_cell_info_enabled_state = additional_cell_info_enabled_state.clone();
@@ -462,4 +504,50 @@ fn set_harmonogram_additional_data_cache(day: &str, id: &str, timestamp: i64, da
 		}
 		Err(error) => gloo::console::error!(format!("Failed to parse cache to string: {}", error)),
 	};
+}
+
+fn get_lecture_rooms(cell_id: &str, col_span: usize, rooms: &Vec<Option<String>>) -> Vec<String> {
+	let mut lecture_rooms = vec![];
+	let id_split = cell_id.split('-').collect::<Vec<&str>>();
+	if let Ok(column_id) = id_split[1].trim().parse::<usize>() {
+		for i in 0..col_span {
+			let col = column_id + i;
+			if col >= rooms.len() {
+				break;
+			}
+			if let Some(room) = &rooms[col] {
+				lecture_rooms.push(room.clone());
+			}
+		}
+	};
+	lecture_rooms
+}
+
+fn get_cell_spans(cell: &HarmonogramField) -> [u8; 2] {
+	let col_span = if let Some(span) = cell.col_span { span } else { 1 };
+	let row_span = if let Some(span) = cell.row_span { span } else { 1 };
+	[col_span, row_span]
+}
+
+fn get_cell_start_end_times(row_id: usize, row_span: usize, times: &Vec<Option<[&str; 2]>>) -> [String; 2] {
+	let start_time = if row_id < times.len() {
+		if let Some(time) = times[row_id] {
+			time[0]
+		} else {
+			"???"
+		}
+	} else {
+		"???"
+	};
+	let end_index = row_id + row_span - 1;
+	let end_time = if end_index < times.len() {
+		if let Some(time) = times[end_index] {
+			time[1]
+		} else {
+			"???"
+		}
+	} else {
+		"???"
+	};
+	[start_time.to_string(), end_time.to_string()]
 }
