@@ -53,7 +53,11 @@ pub fn harmonogram(props: &Props) -> Html {
 			<h1><a href="/"><span class="most">{"MOSTY"}</span></a></h1>
 			<div class="hlavicka_most_nad">
 				<div class="opakujici_most"></div>
-				<h2><span class="most">{"Harmonogram"}</span></h2>
+				<h2>
+					<a href="/harmonogram" style="text-decoration: none; color: inherit;">
+						<span class="most">{"Harmonogram"}</span>
+					</a>
+				</h2>
 			</div>
 			if day_from_url != *"all" {
 				<b class="day"><span class="most">{utils::raw_harmonogram_day_to_display_day(&day_from_url).to_uppercase()}</span></b>
@@ -91,14 +95,14 @@ pub fn harmonogram(props: &Props) -> Html {
 				};
 				html!{
 					<>
+					if day_from_url == *"all" {
 						<div class="harmonogram_day_title">
-						<p class="most">
-							if day_from_url == *"all" {
-								{utils::raw_harmonogram_day_to_display_day(day)}
-							}
-						</p>
-						<div class="opakujici_most"></div>
-					</div>
+							<a href={format!("/harmonogram/{}", day)} style="text-decoration: none; color: inherit;">
+								<p class="most">{utils::raw_harmonogram_day_to_display_day(day)}</p>
+							</a>
+							<div class="opakujici_most"></div>
+						</div>
+					}
 					<table class="harmonogram_day">
 					{
 						day_data.harmonogram.iter().enumerate().map(|(row_id, row)| {
