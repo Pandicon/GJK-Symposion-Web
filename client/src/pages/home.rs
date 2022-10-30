@@ -2,6 +2,8 @@ use crate::{components::link_to::LinkTo, router::Route};
 
 use yew::prelude::*;
 
+/// # The Home page
+/// This page shows the page you see when you open the Symposion webpage
 #[function_component(Home)]
 pub fn home() -> Html {
 	yew_hooks::use_title("Mosty - Symposion 2022 | Gymnázium Jana Keplera".to_string());

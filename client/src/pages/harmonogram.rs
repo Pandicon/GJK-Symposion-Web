@@ -16,11 +16,16 @@ const CACHE_LIFETIME: i64 = 5 * 60; // 5 minutes represented in seconds
 
 #[derive(PartialEq, Properties, Debug)]
 pub struct Props {
+	/// The day for which to display the schedule. If it is missing, all days are rendered.
 	pub day: Option<String>,
+	/// The config including the API base.
 	pub config: crate::types::Config,
+	/// The Id of the lecture for which the details should be shown, if any.
 	pub details_id: Option<String>,
 }
 
+/// # The Harmonogram page
+/// This page handles rendering of the schedule and additional information about the lectures.
 #[function_component(Harmonogram)]
 pub fn harmonogram(props: &Props) -> Html {
 	yew_hooks::use_title("Harmonogram | Mosty - Symposion 2022 | Gymnázium Jana Keplera".to_string());

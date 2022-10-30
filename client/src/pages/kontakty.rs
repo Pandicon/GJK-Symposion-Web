@@ -1,6 +1,8 @@
 use crate::{components::link_to::LinkTo, router::Route};
 use yew::prelude::*;
 
+/// # The Kontakty page
+/// This page displays the contacts relevant for the Symposion
 #[function_component(Kontakty)]
 pub fn kontakty() -> Html {
 	yew_hooks::use_title("Kontakty | Mosty - Symposion 2022 | Gymnázium Jana Keplera".to_string());

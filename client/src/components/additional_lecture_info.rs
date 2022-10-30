@@ -7,11 +7,16 @@ use yew_router::history::History;
 
 #[derive(PartialEq, Properties, Debug)]
 pub struct Props {
+	/// The enabled state for the additional data component
 	pub enabled_state: UseStateHandle<bool>,
+	/// The additional data state
 	pub data_state: UseStateHandle<AdditionalCellInfo>,
+	/// The day on which the lecture the details will be shown takes place
 	pub day: String,
 }
 
+/// # The AdditionalLectureInfo component
+/// This component shows additional information about a lecture in the form of a pop-up. It includes the time, room, annotation, and some information about the lecturer.
 #[function_component(AdditionalLectureInfo)]
 pub fn additional_lecture_info(props: &Props) -> Html {
 	let utc_date = chrono::Utc.timestamp(props.data_state.last_updated, 0);
