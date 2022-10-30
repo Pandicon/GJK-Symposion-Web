@@ -18,5 +18,6 @@ wasm-bindgen-futures = "0.4.33"
 web-sys = "0.3.60"
 
 [profile.release]
+codegen-units = 1
 lto = true
 opt-level = 's'
