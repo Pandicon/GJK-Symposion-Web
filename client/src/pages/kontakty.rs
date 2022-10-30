@@ -22,9 +22,9 @@ pub fn kontakty() -> Html {
 		<main>
 			<div class="opakujici_most"></div>
 			<div class="icons">
-				<img src="../../images/FACEBOOK.png" />
-				<img src="../../images/INSTAGRAM.png" />
-				<img src="../../images/MAIL.png" />
+				<a href="https://fb.me/SymposionGjk"><img src="../../images/FACEBOOK.png" /></a>
+				<a href="https://instagram.com/symposion_gjk"><img src="../../images/INSTAGRAM.png" /></a>
+				<a href="mailto:symposion@gjk.cz"><img src="../../images/MAIL.png" /></a>
 			</div>
 			<div class="address">
 				<iframe id="gmaps" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2559.91428932703!2d14.385109315786583!3d50.08789157942699!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470b951a87784a87%3A0x7cc9fd475f7b8166!2sGymn%C3%A1zium%20Jana%20Keplera!5e0!3m2!1scs!2scz!4v1609597010791!5m2!1scs!2scz" aria-hidden="false" tabindex="0" frameborder="0"></iframe>
