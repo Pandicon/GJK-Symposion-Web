@@ -5,7 +5,7 @@ use crate::types::{
 };
 use crate::utils;
 
-use super::components::{additional_lecture_info::AdditionalLectureInfo, link_to::LinkTo};
+use crate::components::{additional_lecture_info::AdditionalLectureInfo, link_to::LinkTo};
 
 use chrono::TimeZone;
 use yew::prelude::*;

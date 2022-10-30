@@ -1,3 +1,4 @@
+mod components;
 mod pages;
 pub mod router;
 pub mod types;

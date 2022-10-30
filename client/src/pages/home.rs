@@ -1,4 +1,4 @@
-use crate::{pages::components::link_to::LinkTo, router::Route};
+use crate::{components::link_to::LinkTo, router::Route};
 
 use yew::prelude::*;
 
