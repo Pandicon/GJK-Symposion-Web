@@ -111,7 +111,7 @@ namespace api_server {
 		for (i = sheet.begin(); i != sheet.end() && i->size() > 9; i++) {
 			if (!(*i)[8].empty() && !(*i)[9].empty()) {
 				place_annotations.emplace((*i)[8], annotations.size());
-				annotations.push_back((*i)[9]);
+				annotations.push_back("{\"annotation\":" + json_str((*i)[9]) + ",\"about_lecturer\":\"\"}");
 			}
 		}
 		// generate
