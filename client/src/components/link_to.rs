@@ -12,9 +12,9 @@ pub struct Props {
 	pub path: String,
 	/// The children of this component
 	pub children: Option<Children>,
-	/// The styles to apply in case it is a normal <a> link
+	/// The styles to apply in case it is a normal `<a>` link
 	pub link_style: Option<String>,
-	/// The styles to apply in case it uses browser history so the <a> tag has no href attribute
+	/// The styles to apply in case it uses browser history so the `<a>` tag has no href attribute
 	pub history_style: Option<String>,
 }
 
