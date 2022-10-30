@@ -59,6 +59,7 @@ namespace api_server {
 			bad_res.code = 400;\
 			bad_res.content_type = "text/json";\
 			std::cerr << "[parse_http_request::error]: " msg << std::endl;\
+			std::cerr << "\t" << std::string(buff, transferred) << std::endl;\
 			bad_res.content = "{\"error\":\"" repl "\",\"data\":null}";\
 			reply(bad_res);\
 			return std::nullopt;\

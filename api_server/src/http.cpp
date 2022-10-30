@@ -26,6 +26,7 @@ namespace api_server {
 		//if (close) {
 		//	oss << "Connection: close\r\n";
 		//}
+		oss << "Access-Control-Allow-Origin: *\r\n";
 		oss << "\r\n";
 		if (!content.empty()) {
 			oss << content;
