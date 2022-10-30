@@ -61,8 +61,12 @@ pub fn harmonogram(props: &Props) -> Html {
 		}
 	}
 
+	let update_harmonogram_state = use_state(|| true);
 	let harmonogram_state: UseStateHandle<HarmonogramState> = use_state(HarmonogramState::default);
-	if harmonogram_state.data.is_none() && harmonogram_state.error.is_none() {
+	if (harmonogram_state.data.is_none() && harmonogram_state.error.is_none()) || *update_harmonogram_state {
+		if *update_harmonogram_state {
+			update_harmonogram_state.set(false);
+		}
 		set_harmonogram_state(harmonogram_state.clone(), api_base, current_timestamp_seconds, &day_from_url);
 	}
 
@@ -151,7 +155,7 @@ pub fn harmonogram(props: &Props) -> Html {
 			<div class="hlavicka_most_nad">
 				<div class="opakujici_most"></div>
 				<h2>
-					<LinkTo path="/harmonogram" route={Route::HarmonogramAll} link_style="text-decoration: none; color: inherit;" history_style="cursor: pointer;">
+					<LinkTo path="/harmonogram" route={Route::HarmonogramAll} link_style="text-decoration: none; color: inherit;" history_style="cursor: pointer;" set_to_value={(update_harmonogram_state.clone(), true)}>
 						<span class="most">{"Harmonogram"}</span>
 					</LinkTo>
 				</h2>
@@ -172,7 +176,7 @@ pub fn harmonogram(props: &Props) -> Html {
 					<>
 					if day_from_url == *"all" {
 						<div class="harmonogram_day_title">
-							<LinkTo path={format!("/harmonogram/{}", day)} route={Route::Harmonogram { day: day.clone() }} link_style="text-decoration: none; color: inherit;" history_style="cursor: pointer;">
+							<LinkTo path={format!("/harmonogram/{}", day)} route={Route::Harmonogram { day: day.clone() }} link_style="text-decoration: none; color: inherit;" history_style="cursor: pointer;" set_to_value={(update_harmonogram_state.clone(), true)}>
 								<p class="most">{utils::raw_harmonogram_day_to_display_day(day)}</p>
 							</LinkTo>
 							<div class="opakujici_most"></div>

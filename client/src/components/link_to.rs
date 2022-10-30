@@ -16,6 +16,7 @@ pub struct Props {
 	pub link_style: Option<String>,
 	/// The styles to apply in case it uses browser history so the `<a>` tag has no href attribute
 	pub history_style: Option<String>,
+	pub set_to_value: Option<(UseStateHandle<bool>, bool)>,
 }
 
 /// # The LinkTo component
@@ -27,9 +28,13 @@ pub fn link_to(props: &Props) -> Html {
 		<>
 		if let Some(history) = yew_router::hooks::use_history() {
 			<a onclick={
+				let set_to_value = props.set_to_value.clone();
 				let route = props.route.clone();
 				Callback::from(move |_| {
 					history.push(route.clone());
+					if let Some((set_to_value_state, set_to_value_val)) = set_to_value.clone() {
+						set_to_value_state.set(set_to_value_val);
+					}
 				})
 			} style={props.history_style.clone()}>
 			if let Some(children) = props.children.clone() {
