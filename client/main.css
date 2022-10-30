@@ -2,6 +2,163 @@
   opacity: 0.5;
 }
 
+* {
+  font-family: Arial;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+@font-face {
+  font-family: "ArialBlackS";
+  src: url("Arial-Black_S.ttf");
+}
+
+.most {
+  font-family: "ArialBlackS";
+}
+
+header {
+  min-height: 5rem;
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+header a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.opakujici_most {
+  background-image: url("images/oblouky.png");
+  background-repeat: repeat-x;
+  height: 23px;
+}
+
+.opakujici_most_naopak {
+  background-image: url("images/oblouky_naopak.png");
+  background-repeat: repeat-x;
+  height: 23px;
+}
+
+main {
+  flex-grow: 1;
+  background-color: #828696;
+  position: relative;
+  padding-bottom: 23px;
+}
+
+@keyframes posun_most {
+  100% {
+    background-position: 362px;
+  }
+}
+
+main .opakujici_most:first-child {
+  width: 100%;
+  animation: posun_most 30s linear infinite;
+}
+
+main .opakujici_most_naopak {
+  width: 100%;
+  animation: posun_most 30s linear infinite;
+  animation-direction: reverse;
+  position: absolute;
+  bottom: 0;
+}
+
+@media only screen and (max-width: 529px) {
+
+  main .opakujici_most:first-child,
+  main .opakujici_most_naopak {
+    background-size: 260px 16px !important;
+    height: 16px !important;
+  }
+}
+
+footer {
+  height: 3rem;
+  flex-shrink: 0;
+}
+
+/* ---------------------------------------- generic header */
+
+@media only screen and (max-width: 599px) {
+  header {
+    min-height: 5.5rem;
+  }
+
+  .generic_header h1 {
+    margin-top: 3rem !important;
+    margin-left: 0.5rem !important;
+  }
+
+  .generic_header .hlavicka_most_nad {
+    height: 2.5rem !important;
+    margin-top: 3rem !important;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  header {
+    min-height: 6.5rem;
+  }
+
+  .generic_header h1 {
+    font-size: 3rem !important;
+    line-height: 3rem !important;
+  }
+}
+
+@media only screen and (min-width: 850px) {
+  header {
+    min-height: 8rem;
+  }
+}
+
+.generic_header h1 {
+  display: block;
+  width: auto;
+  flex-shrink: 0;
+  line-height: 2.5rem;
+  margin-left: 3rem;
+  margin-top: 3rem;
+  font-size: 2.5rem;
+  padding-right: 1rem;
+}
+
+.generic_header .hlavicka_most_nad {
+  height: 2.5rem;
+  margin-top: 3.5rem;
+}
+
+.generic_header .hlavicka_most_nad .opakujici_most {
+  height: 12px !important;
+  background-size: cover;
+}
+
+@media only screen and (max-width: 350px) {
+  .generic_header h1 {
+    margin-left: 0.5rem !important;
+    margin-top: 0.3rem !important;
+  }
+
+  .generic_header .hlavicka_most_nad {
+    position: absolute;
+    left: 0.5rem;
+  }
+}
+
+/* --------------------------------------- overlay */
+
 @media only screen and (min-width: 850px) {
   .overlay-body * {
     font-size: larger;
@@ -88,85 +245,7 @@
   }
 }
 
-* {
-  /* vymenit za font s "S" */
-  font-family: Arial;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  height: 100vh;
-  /* rád bych se tomu vyhnul */
-  display: flex;
-  flex-direction: column;
-}
-
-@font-face {
-  font-family: "ArialBlackS";
-  src: url("Arial-Black_S.ttf");
-}
-
-.most {
-  font-family: "ArialBlackS";
-}
-
-header {
-  min-height: 5rem;
-  display: flex;
-  flex-direction: row;
-  flex-shrink: 0;
-  overflow-x: hidden;
-  overflow-y: hidden;
-}
-
-header a {
-  text-decoration: none;
-  color: inherit;
-}
-
-.opakujici_most {
-  background-image: url("images/oblouky.png");
-  background-repeat: repeat-x;
-  height: 23px;
-}
-
-.opakujici_most_naopak {
-  background-image: url("images/oblouky_naopak.png");
-  background-repeat: repeat-x;
-  height: 23px;
-}
-
-main {
-  flex-grow: 1;
-  background-color: #828696;
-  position: relative;
-  padding-bottom: 23px;
-}
-
-@keyframes posun_most {
-  100% {
-    background-position: 362px;
-  }
-}
-
-main .opakujici_most:first-child {
-  width: 100%;
-  animation: posun_most 30s linear infinite;
-}
-
-main .opakujici_most_naopak {
-  width: 100%;
-  animation: posun_most 30s linear infinite;
-  animation-direction: reverse;
-  position: absolute;
-  bottom: 0;
-}
-
-footer {
-  height: 3rem;
-  flex-shrink: 0;
-}
+/* ---------------------------------------------- homepage */
 
 .mosty_jako {
   max-width: 95vw;
@@ -187,6 +266,7 @@ footer {
   .mosty_jako {
     font-size: medium;
   }
+
 }
 
 @media only screen and (min-width: 530px) {
@@ -212,71 +292,6 @@ footer {
   }
 }
 
-@media only screen and (max-width: 599px) {
-  header {
-    min-height: 5.5rem;
-  }
-
-  .generic_header h1 {
-    margin-top: 3rem !important;
-    margin-left: 0.5rem !important;
-  }
-
-  .generic_header .hlavicka_most_nad {
-    height: 2.5rem !important;
-    margin-top: 3rem !important;
-  }
-}
-
-@media only screen and (min-width: 600px) {
-  header {
-    min-height: 6.5rem;
-  }
-
-  .generic_header h1 {
-    font-size: 3rem !important;
-    line-height: 3rem !important;
-  }
-}
-
-@media only screen and (min-width: 850px) {
-  header {
-    min-height: 8rem;
-  }
-}
-
-.generic_header h1 {
-  display: block;
-  width: auto;
-  flex-shrink: 0;
-  line-height: 2.5rem;
-  margin-left: 3rem;
-  margin-top: 3rem;
-  font-size: 2.5rem;
-  padding-right: 1rem;
-}
-
-.generic_header .hlavicka_most_nad {
-  height: 2.5rem;
-  margin-top: 3.5rem;
-}
-
-.generic_header .hlavicka_most_nad .opakujici_most {
-  height: 12px !important;
-  background-size: cover;
-}
-
-@media only screen and (max-width: 350px) {
-  .generic_header h1 {
-    margin-left: 0.5rem !important;
-    margin-top: 0.3rem !important;
-  }
-
-  .generic_header .hlavicka_most_nad {
-    position: absolute;
-    left: 0.5rem;
-  }
-}
 
 /* ---------------------------------- harmonogram */
 
@@ -383,13 +398,14 @@ footer {
 /* ------------------------------------------ domovská stránka */
 @media only screen and (max-width: 550px) {
   nav a {
-    font-size: 4.8vw !important;
+    font-size: 4.3vw !important;
     padding: 0 1vw !important;
   }
 }
 
 @media only screen and (max-width: 760px) and (min-width: 550px) {
   nav a {
+    font-size: 1.3rem !important;
     padding: 0 1rem !important;
   }
 }
@@ -465,7 +481,7 @@ nav b {
 
   .first_line .opakujici_most {
     margin-top: 0.3rem;
-    background-size: 13rem;
+    background-size: 208px;
   }
 
   .uvod_header p {
@@ -484,7 +500,7 @@ nav b {
 
   .date .opakujici_most {
     margin-top: 0.3rem;
-    background-size: 13rem;
+    background-size: 208px;
   }
 }
 
@@ -704,6 +720,6 @@ td.clickable {
 }
 
 td a {
-	color: inherit;
-	text-decoration: none;
+  color: inherit;
+  text-decoration: none;
 }
