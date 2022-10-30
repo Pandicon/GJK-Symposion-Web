@@ -216,13 +216,13 @@ pub fn harmonogram(props: &Props) -> Html {
 										if let Some(cell) = cell_option {
 											let [col_span, row_span] = get_cell_spans(cell);
 											let mut lecture_rooms = vec![];
-											let (class_name, on_click) = if let Some(cell_id) = &cell.id {
+											let (class_name, href, on_click) = if let Some(cell_id) = &cell.id {
 												lecture_rooms = get_lecture_rooms(&cell_id, col_span as usize, &rooms);
 												if let Some(history) = yew_router::hooks::use_history() {
 													let cloned_cell_id = cell_id.clone();
 													let cloned_day = day.clone();
 													let cloned_url_day = day_from_url.clone();
-													("clickable", Callback::from(move |_| {
+													("clickable", None, Callback::from(move |_| {
 														history.push(if cloned_url_day == *"all" {
 															Route::HarmonogramAllDetails { id: format!("{}-{}", cloned_day.clone(), cloned_cell_id.clone()) }
 														} else {
@@ -230,48 +230,32 @@ pub fn harmonogram(props: &Props) -> Html {
 														});
 													}))
 												} else {
-													let cell_day = day.clone();
-													let cloned_cell_id = cell_id.clone();
-													let [_col_span, row_span] = get_cell_spans(cell);
-													let [start_time, end_time] = get_cell_start_end_times(row_id, row_span as usize, times);
-													let cloned_additional_info_state = additional_cell_info_state.clone();
-													let cloned_additional_cell_info_enabled_state = additional_cell_info_enabled_state.clone();
-													let cloned_api_base = api_base.clone();
-													let cloned_cell = cell.clone();
-													let cloned_start_time = start_time.to_string();
-													let cloned_end_time = end_time.to_string();
-													let cloned_lecture_rooms = lecture_rooms.clone();
-													("clickable", Callback::from(move |_| {
-														cloned_additional_cell_info_enabled_state.set(true);
-														let base_info = AdditionalCellInfoBase {
-															lecturer: cloned_cell.lecturer.clone(),
-															title: cloned_cell.title.clone(),
-															for_younger: cloned_cell.for_younger,
-															start_time: if row_id > 0 { Some(cloned_start_time.clone()) } else { None },
-															end_time: if row_id > 0 { Some(cloned_end_time.clone()) } else { None },
-															lecture_rooms: cloned_lecture_rooms.clone()
-														};
-														set_additional_info_state(cloned_additional_info_state.clone(), &cloned_api_base, current_timestamp_seconds, cell_day.clone(), cloned_cell_id.clone(), base_info);
-													}))
+													("", Some(if day_from_url == *"all" {
+														format!("/harmonogram/details/{}-{}", day.clone(), cell_id.clone())
+													} else {
+														format!("/harmonogram/{}/details/{}", day.clone(), cell_id.clone())
+													}), Callback::from(|_| {}))
 												}
 											} else {
-												("", Callback::from(|_| {}))
+												("", None, Callback::from(|_| {}))
 											};
 											html!{
 												<td class={class_name} colspan={format!("{col_span}")} rowspan={format!("{row_span}")} onclick={on_click}>
-													<b>{&cell.lecturer}</b>
-													<span class="nazev_prednasky">{ &cell.title }</span>
-													if cell.for_younger {
-														<div class="for_younger">{"*"}</div>
-													}
-													if row_id > 0 {
-														/*{"Start: "}{start_time}{" Konec: "}{end_time}*/
-														if !lecture_rooms.is_empty() {
-															<div class="lecture_room">
-																{lecture_rooms.join(", ")}
-															</div>
+													<a href={href}>
+														<b>{&cell.lecturer}</b>
+														<span class="nazev_prednasky">{ &cell.title }</span>
+														if cell.for_younger {
+															<div class="for_younger">{"*"}</div>
 														}
-													}
+														if row_id > 0 {
+															/*{"Start: "}{start_time}{" Konec: "}{end_time}*/
+															if !lecture_rooms.is_empty() {
+																<div class="lecture_room">
+																	{lecture_rooms.join(", ")}
+																</div>
+															}
+														}
+													</a>
 												</td>
 											}
 										} else {

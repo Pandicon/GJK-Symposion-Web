@@ -702,3 +702,8 @@ nav b {
 td.clickable {
   cursor: pointer;
 }
+
+td a {
+	color: inherit;
+	text-decoration: none;
+}
