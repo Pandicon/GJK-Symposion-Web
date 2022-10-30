@@ -6,7 +6,7 @@ pub struct Props {
 }
 
 #[function_component(Chyba)]
-pub fn home(props: &Props) -> Html {
+pub fn chyba(props: &Props) -> Html {
 	yew_hooks::use_title("Nastala chyba | Mosty - Symposion 2022 | Gymnázium Jana Keplera".to_string());
 	html! {
 		<>

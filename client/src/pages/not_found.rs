@@ -1,7 +1,7 @@
 use yew::prelude::*;
 
 #[function_component(NotFound)]
-pub fn harmonogram() -> Html {
+pub fn not_found() -> Html {
 	yew_hooks::use_title("404 | Mosty - Symposion 2022 | Gymnázium Jana Keplera".to_string());
 	html! {
 		<>

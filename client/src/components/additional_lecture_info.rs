@@ -13,7 +13,7 @@ pub struct Props {
 }
 
 #[function_component(AdditionalLectureInfo)]
-pub fn home(props: &Props) -> Html {
+pub fn additional_lecture_info(props: &Props) -> Html {
 	let utc_date = chrono::Utc.timestamp(props.data_state.last_updated, 0);
 	let update_date_local: chrono::DateTime<chrono::Local> = chrono::DateTime::from(utc_date);
 	let day = props.day.clone();
