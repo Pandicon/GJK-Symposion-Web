@@ -143,14 +143,14 @@ pub fn harmonogram(props: &Props) -> Html {
 		<>
 		<header class="harmonogram_header">
 			<h1>
-			<LinkTo path="/" route={Route::Home} div_style="cursor: pointer;">
+			<LinkTo path="/" route={Route::Home} history_style="cursor: pointer;">
 				<span class="most">{"MOSTY"}</span>
 			</LinkTo>
 			</h1>
 			<div class="hlavicka_most_nad">
 				<div class="opakujici_most"></div>
 				<h2>
-					<LinkTo path="/harmonogram" route={Route::HarmonogramAll} a_style="text-decoration: none; color: inherit;" div_style="cursor: pointer;">
+					<LinkTo path="/harmonogram" route={Route::HarmonogramAll} link_style="text-decoration: none; color: inherit;" history_style="cursor: pointer;">
 						<span class="most">{"Harmonogram"}</span>
 					</LinkTo>
 				</h2>
@@ -171,7 +171,7 @@ pub fn harmonogram(props: &Props) -> Html {
 					<>
 					if day_from_url == *"all" {
 						<div class="harmonogram_day_title">
-							<LinkTo path={format!("/harmonogram/{}", day)} route={Route::Harmonogram { day: day.clone() }} a_style="text-decoration: none; color: inherit;" div_style="cursor: pointer;">
+							<LinkTo path={format!("/harmonogram/{}", day)} route={Route::Harmonogram { day: day.clone() }} link_style="text-decoration: none; color: inherit;" history_style="cursor: pointer;">
 								<p class="most">{utils::raw_harmonogram_day_to_display_day(day)}</p>
 							</LinkTo>
 							<div class="opakujici_most"></div>

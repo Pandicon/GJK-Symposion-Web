@@ -1,3 +1,5 @@
+use crate::{pages::components::link_to::LinkTo, router::Route};
+
 use yew::prelude::*;
 
 #[function_component(Home)]
@@ -8,7 +10,11 @@ pub fn home() -> Html {
 		<header class="uvod_header">
 			<div class="title">
 				<div class="first_line">
-					<h1><a href="/"><span class="most">{"MOSTY"}</span></a></h1>
+					<h1>
+					<LinkTo path="/" route={Route::Home} link_style="text-decoration: none; color: inherit;" history_style="cursor: pointer;">
+						<span class="most">{"MOSTY"}</span>
+					</LinkTo>
+					</h1>
 					<div class="opakujici_most"></div>
 				</div>
 				<p><span class="most">{"SYMPOSION GYMNÁZIA JANA KEPLERA"}</span></p>
@@ -21,9 +27,21 @@ pub fn home() -> Html {
 		<main>
 			<div class="opakujici_most"></div>
 			<nav>
-				<b><a href="/kontakty"><span class="most">{"KONTAKTY"}</span></a></b>
-				<b><a href="/harmonogram"><span class="most">{"HARMONOGRAM"}</span></a></b>
-				<b><a href="/o_akci"><nobr><span class="most">{"O AKCI"}</span></nobr></a></b>
+				<b>
+				<LinkTo path="/kontakty" route={Route::Kontakty} link_style="text-decoration: none; color: inherit;" history_style="cursor: pointer;">
+					<span class="most">{"KONTAKTY"}</span>
+				</LinkTo>
+				</b>
+				<b>
+				<LinkTo path="/harmonogram" route={Route::HarmonogramAll} link_style="text-decoration: none; color: inherit;" history_style="cursor: pointer;">
+					<span class="most">{"HARMONOGRAM"}</span>
+				</LinkTo>
+				</b>
+				<b>
+				<LinkTo path="/o_akci" route={Route::OAkci} link_style="text-decoration: none; color: inherit;" history_style="cursor: pointer;">
+					<span class="most">{"O AKCI"}</span>
+				</LinkTo>
+				</b>
 			</nav>
 			<div class="mosty_jako">
 				<p class="most">
