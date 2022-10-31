@@ -71,19 +71,33 @@ namespace api_server {
 				buff = buff.substr(it + 4);
 				if (chunked) {
 					asio::error_code cec;
-					// TODO: read the chunk size
-					// I tried to do it, but I couldn't get it to work, so the data limit is 512KiB now
-					constexpr size_t limit = 524288;
+					constexpr size_t limit = 4096;
 					char arr[limit];
-					size_t nbytes = socket->read_some(asio::buffer(arr, limit), cec);
-					if (cec) { std::cerr << "[sheet_fetcher]: unable to retrieve content " << cec.value() << " " << cec.message() << std::endl; done = true; return; }
-					std::string tmp_str(arr, nbytes);
-					auto nl = tmp_str.find("\r\n");
-					if (nl == std::string::npos) {
-						std::cerr << "[sheet_fetcher]: failed to fetch content" << std::endl;
-						done = true; return;
+					buff.clear();
+					while (true) {
+						size_t nbytes = socket->read_some(asio::buffer(arr, limit), cec);
+						if (cec) { std::cerr << "[sheet_fetcher]: unable to retrieve content " << cec.value() << " " << cec.message() << std::endl; done = true; return; }
+						std::string arr_s(arr, nbytes);
+						auto nl = arr_s.find("\r\n");
+						if (nl == std::string::npos) { std::cerr << "[sheet_fetcher]: failed to fetch content" << std::endl; done = true; return; }
+						//std::cout << "[sheet_fetcher]: chunked transfer - incoming first chunk " << (nbytes - nl - 2) << ", [" << arr_s.substr(nl + 2) << "]" << std::endl;
+						buff.append(arr_s.substr(nl + 2));
+						arr_s = arr_s.substr(0, nl);
+						if (!arr_s.empty() && arr_s.find_first_not_of("0123456789ABCDEFabcdef") != std::string::npos) { std::cerr << "[sheet_fetcher]: invalid chunk size (" << arr_s << ")" << std::endl; done = true; return; }
+						size_t to_recv = std::stoul(arr_s, 0, 16) + 2; // + 2 is \r\n
+						if (to_recv < 3) {
+							//std::cout << "[sheet_fetcher]: chunked transfer - end" << std::endl;
+							break;
+						}
+						size_t recv = nbytes - nl - 2;
+						for (; recv < to_recv; recv += nbytes) {
+							nbytes = socket->read_some(asio::buffer(arr, limit), cec);
+							if (cec) { std::cerr << "[sheet_fetcher]: unable to retrieve content " << cec.value() << " " << cec.message() << std::endl; done = true; return; }
+							buff.append(arr, nbytes);
+							//std::cout << "[sheet_fetcher]: chunked transfer - incoming " << nbytes << ", [" << std::string(arr, nbytes) << "]" << std::endl;
+						}
+						//std::cout << "[sheet_fetcher]: chunk transfer finished with size " << recv << ", chunk size is " << to_recv << std::endl;
 					}
-					buff = tmp_str.substr(nl + 2);
 				} else {
 					size_t curr_size = transferred - it - 4; // content size so far
 					if (curr_size < content_length) {
@@ -99,38 +113,36 @@ namespace api_server {
 					}
 				}
 				std::cerr << "[sheet_fetcher]: sheet data " << buff << std::endl;
-				std::istringstream iss(buff);
 				data.clear();
 				data.shrink_to_fit();
-				std::string ln;
-				while (std::getline(iss, ln)) {
-					if (!ln.empty()) {
-						ln.erase(ln.begin(), std::find_if(ln.begin(), ln.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
-						ln.erase(std::find_if(ln.rbegin(), ln.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), ln.end());
-						std::string cell;
-						data.emplace_back();
-						std::string b;
-						bool in_text = false;
-						bool prev_quotes = false;
-						for (const char &c : ln) {
-							if (c == '"') {
-								if (!in_text && prev_quotes) {
-									b.push_back(c);
-								}
-								prev_quotes = true;
-								in_text = !in_text;
-							} else if (!in_text && c == ',') {
-								data.back().emplace_back(b);
-								b.clear();
-								prev_quotes = false;
-							} else {
-								b.push_back(c);
-								prev_quotes = false;
-							}
+				std::string b;
+				bool in_text = false;
+				bool prev_quotes = false;
+				data.emplace_back();
+				for (const char &c : buff) {
+					if (c == '"') {
+						if (!in_text && prev_quotes) {
+							b.push_back(c);
 						}
+						prev_quotes = true;
+						in_text = !in_text;
+					} else if (!in_text && c == ',') {
 						data.back().emplace_back(b);
+						b.clear();
+						prev_quotes = false;
+					} else if (!in_text && c == '\n') {
+						data.back().emplace_back(b);
+						b.clear();
+						data.emplace_back();
+						prev_quotes = false;
+					} else if (!in_text && c == '\r') {
+						prev_quotes = false;
+					} else {
+						b.push_back(c);
+						prev_quotes = false;
 					}
 				}
+				data.pop_back();
 				buff.clear();
 				buff.shrink_to_fit();
 				done = true;

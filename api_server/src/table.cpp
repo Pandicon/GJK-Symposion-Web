@@ -84,20 +84,21 @@ namespace api_server {
 			}
 			lecture_t lecture;
 			lecture.lecturer = (*i)[0];
-			std::string when = (*i)[1]; // I need to know format first
+			std::string when = (*i)[1];
 			const std::string &where = (*i)[2];
-			lecture.title = (*i)[3];
-			if (lecture.title.empty() || lecture.title.empty())
+			if (when.empty() || lecture.lecturer.empty() || where.empty())
 				continue; // does not count :)
+			lecture.title = (*i)[3];
 			const std::string &annotation = (*i)[4];
 			const std::string &about_lecturer = (*i)[5];
 			std::string for_younger_str = (*i)[6];
 			// handle multiple "yes" answers for "for younger" field
 			string_tolower_no_whitespace(for_younger_str);
 			lecture.for_younger = std::set<std::string>{"ano", "jo", "a"}.contains(for_younger_str);
+			// make annotation
 			lecture.annotation_id = annotations.size();
 			annotations.push_back(annotation.empty() && about_lecturer.empty() ? std::string("null") :
-				"{\"annotation\":" + json_str(annotation) + ",\"about_lecturer\":" + json_str(about_lecturer) + "}");
+				"{\"annotation\":" + json_str(annotation) + ",\"lecturer_info\":" + json_str(about_lecturer) + "}");
 			// parse "when"
 			string_tolower_no_whitespace(when);
 			unsigned int day, starth, startm, endh, endm;
@@ -111,7 +112,7 @@ namespace api_server {
 		for (i = sheet.begin(); i != sheet.end() && i->size() > 9; i++) {
 			if (!(*i)[8].empty() && !(*i)[9].empty()) {
 				place_annotations.emplace((*i)[8], annotations.size());
-				annotations.push_back("{\"annotation\":" + json_str((*i)[9]) + ",\"about_lecturer\":\"\"}");
+				annotations.push_back("{\"annotation\":" + json_str((*i)[9]) + ",\"lecturer_info\":\"\"}");
 			}
 		}
 		// generate
