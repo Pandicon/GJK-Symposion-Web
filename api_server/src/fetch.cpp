@@ -96,6 +96,8 @@ namespace api_server {
 							buff.append(arr, nbytes);
 							//std::cout << "[sheet_fetcher]: chunked transfer - incoming " << nbytes << ", [" << std::string(arr, nbytes) << "]" << std::endl;
 						}
+						buff.pop_back(); // ignore the \r\n at the end of chunk
+						buff.pop_back();
 						//std::cout << "[sheet_fetcher]: chunk transfer finished with size " << recv << ", chunk size is " << to_recv << std::endl;
 					}
 				} else {
