@@ -1,11 +1,18 @@
+use crate::pages::{harmonogram::Harmonogram, kontakty::Kontakty, o_akci::OAkci};
 use crate::{components::link_to::LinkTo, router::Route};
 
 use yew::prelude::*;
 
+#[derive(PartialEq, Properties, Debug)]
+pub struct Props {
+	/// The config including the API base.
+	pub config: crate::types::Config,
+}
+
 /// # The Home page
 /// This page shows the page you see when you open the Symposion webpage
 #[function_component(Home)]
-pub fn home() -> Html {
+pub fn home(props: &Props) -> Html {
 	yew_hooks::use_title("Mosty - Symposion 2022 | Gymnázium Jana Keplera".to_string());
 	html! {
 		<>
@@ -60,6 +67,11 @@ pub fn home() -> Html {
 			</div>
 			<div class="opakujici_most_naopak"></div>
 		</main>
+		if props.config.one_page {
+			<Harmonogram config={props.config.clone()} />
+			<Kontakty />
+			<OAkci />
+		}
 		<footer>
 		</footer>
 		</>

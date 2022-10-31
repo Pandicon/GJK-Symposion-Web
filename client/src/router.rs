@@ -39,7 +39,7 @@ pub fn switch(route: &Route) -> Html {
 		}
 	};
 	match route {
-		Route::Home => html! { <Home /> },
+		Route::Home => html! { <Home config={config} /> },
 		Route::Harmonogram { day } => html! { <Harmonogram day={Some(day.to_owned())} config={config} />},
 		Route::HarmonogramDetails { day, id } => html! { <Harmonogram day={Some(day.to_owned())} config={config} details_id={id.clone()} />},
 		Route::HarmonogramAll => html! { <Harmonogram config={config} />},

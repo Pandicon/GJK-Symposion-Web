@@ -1,10 +1,12 @@
 use serde_derive::{Deserialize, Serialize};
 
 /// The app configuration format
-#[derive(Debug, Deserialize, Serialize, PartialEq, yew::Properties)]
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, yew::Properties)]
 pub struct Config {
 	/// The API base to use
 	pub api: String,
+	/// Whether or not everything should be on the main page
+	pub one_page: bool,
 }
 
 /// The base additional lecture information data which will always be present and can be obtained from the schedule data itself (without calling the `/anotace` API endpoint)

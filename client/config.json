@@ -1,3 +1,4 @@
 {
-	"api": "https://api.simp.klubkepler.eu"
+	"api": "https://api.simp.klubkepler.eu",
+	"one_page": false
 }
