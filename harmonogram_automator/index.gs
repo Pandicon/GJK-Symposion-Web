@@ -6,6 +6,8 @@
  * @customfunction
  */
 function harmonogram(harmonogram) {
-  let table = cut_table(harmonogram);
-  return table;
+	let table = cut_table(harmonogram);
+	if (table.length < 2) return table;
+	let parsed_table = parse_table_data(table);
+	return parsed_table;
 }

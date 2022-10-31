@@ -11,6 +11,7 @@ function cut_table(table) {
 		if (row.filter((element) => element.trim() != '').length == 0) break;
 		cut_table.push(row);
 	}
+	if (cut_table.length == 0) return cut_table;
 	for (let i = 0; i < cut_table[0].length; i += 1) {
 		let empty = true;
 		for (const row of table) {
