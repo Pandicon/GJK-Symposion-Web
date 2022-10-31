@@ -22,9 +22,9 @@ pub fn kontakty() -> Html {
 		<main>
 			<div class="opakujici_most"></div>
 			<div class="icons">
-				<a href="https://fb.me/SymposionGjk"><img src="../../images/FACEBOOK.png" width="80px" alt="Facebook logo" /></a>
-				<a href="https://instagram.com/symposion_gjk"><img src="../../images/INSTAGRAM.png" width="80px" alt="Instagram logo" /></a>
-				<a href="mailto:symposion@gjk.cz"><img src="../../images/MAIL.png" width="80px" alt="Email logo" /></a>
+				<a href="https://fb.me/SymposionGjk"><img src="../../images/FACEBOOK.png" height="100px" alt="Facebook logo" /></a>
+				<a href="https://instagram.com/symposion_gjk"><img src="../../images/INSTAGRAM.png" height="100px" alt="Instagram logo" /></a>
+				<a href="mailto:symposion@gjk.cz"><img src="../../images/MAIL.png" height="100px" alt="Email logo" /></a>
 			</div>
 			<div class="address">
 				<iframe id="gmaps" src="https://frame.mapy.cz/s/gudusubala" aria-hidden="false" tabindex="0" frameborder="0" title="Gymnázium Jana Keplera na mapě"></iframe>
