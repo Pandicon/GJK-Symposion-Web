@@ -398,15 +398,15 @@ footer {
 /* ------------------------------------------ domovská stránka */
 @media only screen and (max-width: 550px) {
   nav a {
-    font-size: 4.3vw !important;
-    padding: 0 1vw !important;
+    font-size: 4vw !important;
+    padding: 0 3vw !important;
   }
 }
 
-@media only screen and (max-width: 760px) and (min-width: 550px) {
+@media only screen and (max-width: 770px) and (min-width: 550px) {
   nav a {
     font-size: 1.3rem !important;
-    padding: 0 1rem !important;
+    padding: 0 1.3rem !important;
   }
 }
 
