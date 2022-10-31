@@ -86,7 +86,7 @@ namespace api_server {
 			lecture.lecturer = (*i)[0];
 			std::string when = (*i)[1];
 			const std::string &where = (*i)[2];
-			if (when.empty() || lecture.lecturer.empty() || where.empty())
+			if (when.empty() || lecture.lecturer.empty())
 				continue; // does not count :)
 			lecture.title = (*i)[3];
 			const std::string &annotation = (*i)[4];
