@@ -19,7 +19,6 @@ function connect_lecture_additional_info(lectures, additional_info) {
 							additional_info[field],
 							lecturer
 					  );
-			console.log(lecturer, additional_lecturer_info);
 			if (!additional_lecturer_info) continue;
 			lecture[0] = lecturer_name_full;
 			let {
