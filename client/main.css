@@ -759,3 +759,12 @@ td a {
     justify-content: space-around;
   }
 }
+
+/* ---------------------------------------------------- 404 */
+
+.body_notf {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

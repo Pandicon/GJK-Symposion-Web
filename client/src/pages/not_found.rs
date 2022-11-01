@@ -28,11 +28,13 @@ pub fn not_found() -> Html {
 		</header>
 		<main>
 			<div class="opakujici_most"></div>
-			<div class="mosty_jako" style="transform: rotate(-20deg)">
-				<p class="most" style="transform: rotate(-10deg)">
-					<h2 class="most" style="transform: rotate(25deg)">{"404"}</h2>
-					<h3 class="most">{"Most do této destinace spadl"}</h3>
-				</p>
+			<div class = "body_notf">
+			    <div class="mosty_jako" style="transform: rotate(-20deg)">
+                				<p class="most" style="transform: rotate(-10deg)">
+                					<h2 class="most" style="transform: rotate(25deg)">{"404"}</h2>
+                					<h3 class="most">{"Most do této destinace spadl"}</h3>
+                				</p>
+                			</div>
 			</div>
 			<div class="opakujici_most_naopak"></div>
 		</main>
