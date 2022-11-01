@@ -374,7 +374,7 @@ footer {
 /* ------------------------------------------ domovská stránka */
 @media only screen and (max-width: 550px) {
   nav a {
-    font-size: 4vw !important;
+    font-size: 3.8vw !important;
     padding: 0 3vw !important;
   }
 }
