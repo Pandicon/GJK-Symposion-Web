@@ -53,7 +53,7 @@ pub fn home(props: &Props) -> Html {
 				</b>
 			</nav>
 			<div class="mosty_jako">
-				<p class="most scaling">
+				<p class="most">
 					{"mosty jako podání ruky"}
 					<br />
 					{"mosty jako spojující prvek"}

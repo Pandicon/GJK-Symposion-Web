@@ -256,47 +256,36 @@ footer {
   line-height: 5rem;
   padding: 3rem;
   width: fit-content;
-  aspect-ratio: calc(1210 / 831);
   margin: 0 auto;
   background-image: url("images/obrazek_mostu.png");
   background-position: center;
   background-size: cover;
 }
 
-.scaling {
-  font-size: 2.5vh;
-  line-height: 10vh;
-}
-
-@media only screen and (max-height: 905px) {
+@media only screen and (max-height: 780px) {
   .mosty_jako {
-    transform: scale(0.75);
+    line-height: 9vh;
   }
 }
 
-@media only screen and (max-height: 732px) {
-
-  .scaling {
-    line-height: 4vh;
-  }
-
+@media only screen and (max-height: 700px) {
   .mosty_jako {
-    aspect-ratio: calc(12/ 6);
+    line-height: 8vh;
   }
-
 }
 
-@media only screen and (max-height: 550px) {
-
-  .scaling {
-    line-height: 4vh;
-  }
-
+@media only screen and (max-width: 890px) {
   .mosty_jako {
-    aspect-ratio: calc(12/ 1);
+    font-size: 3.5vw;
   }
-
 }
+
+@media only screen and (max-width: 660px) {
+  .mosty_jako {
+    padding: 1.5rem;
+  }
+}
+
 
 /* ---------------------------------- harmonogram */
 
