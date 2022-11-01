@@ -1,3 +1,9 @@
+const DAYS_CONVERT = {
+	ST: 'streda',
+	ČT: 'ctvrtek',
+	PÁ: 'patek'
+};
+
 /**
  * Connects the time ranges, taking the start time of the first time and the end time of the last time
  *
@@ -7,11 +13,14 @@
  */
 function connect_times(times) {
 	return times.map((element) => {
-		let times = element[0];
+		let times = element.shift();
 		if (times.length == 0) return '';
 		if (times.length == 1) {
 			let time = times[0];
-			return [time, element[1]];
+			for (const day in DAYS_CONVERT) {
+				time = time.replace(day, DAYS_CONVERT[day]);
+			}
+			return [time, ...element];
 		}
 		let split_time = times[0].split(' ');
 		let day = split_time.shift().trim().toUpperCase();
@@ -27,6 +36,9 @@ function connect_times(times) {
 			.trim()
 			.split('-')
 			.map((e) => e.trim());
-		return [day + ' ' + [start_time, end_time].join(' - '), element[1]];
+		return [
+			`${DAYS_CONVERT[day]} ${[start_time, end_time].join(' - ')}`,
+			...element
+		];
 	});
 }

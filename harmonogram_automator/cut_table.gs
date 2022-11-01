@@ -8,7 +8,15 @@
 function cut_table(table) {
 	let cut_table = [];
 	for (const row of table) {
-		if (row.filter((element) => element.trim() != '').length == 0) break;
+		if (
+			row.filter(
+				(element) =>
+					!(
+						typeof element === 'string' || element instanceof String
+					) || element.trim() != ''
+			).length == 0
+		)
+			break;
 		cut_table.push(row);
 	}
 	if (cut_table.length == 0) return cut_table;
