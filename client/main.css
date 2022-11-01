@@ -263,10 +263,39 @@ footer {
   background-size: cover;
 }
 
+.scaling {
+  font-size: 2.5vh;
+  line-height: 10vh;
+}
+
 @media only screen and (max-height: 905px) {
   .mosty_jako {
     transform: scale(0.75);
   }
+}
+
+@media only screen and (max-height: 732px) {
+
+  .scaling {
+    line-height: 4vh;
+  }
+
+  .mosty_jako {
+    aspect-ratio: calc(12/ 6);
+  }
+
+}
+
+@media only screen and (max-height: 550px) {
+
+  .scaling {
+    line-height: 4vh;
+  }
+
+  .mosty_jako {
+    aspect-ratio: calc(12/ 1);
+  }
+
 }
 
 /* ---------------------------------- harmonogram */
