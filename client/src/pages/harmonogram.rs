@@ -509,6 +509,9 @@ fn get_lecture_rooms(cell_id: &str, col_span: usize, rooms: &[Option<String>]) -
 	let mut lecture_rooms = vec![];
 	let id_split = cell_id.split('-').collect::<Vec<&str>>();
 	if let Ok(column_id) = id_split[1].trim().parse::<usize>() {
+		if col_span > 1 {
+			return vec![];
+		}
 		for i in 0..col_span {
 			let col = column_id + i;
 			if col >= rooms.len() {
