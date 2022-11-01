@@ -21,6 +21,17 @@ pub fn o_akci() -> Html {
 		</header>
 		<main>
 			<div class="opakujici_most"></div>
+			<div class="about_wrapper">
+				<h1 class="most_bez_s">
+					{"Lorem ipsum dolor sit amet, consectetuer adipiscing elit."}
+				</h1>
+				<p class="most_bez_s">
+					{"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas lorem. Fusce dui leo, imperdiet in, aliquam sit amet, feugiat eu, orci. Praesent vitae arcu tempor neque lacinia pretium. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. Aenean fermentum risus id tortor. Proin pede metus, vulputate nec, fermentum fringilla, vehicula vitae, justo. Donec quis nibh at felis congue commodo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla non lectus sed nisl molestie malesuada. Mauris suscipit, ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit mauris vel metus. Nullam faucibus mi quis velit. "}
+				</p>
+				<p class="most_bez_s">
+					{"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas lorem. Fusce dui leo, imperdiet in, aliquam sit amet, feugiat eu, orci. Praesent vitae arcu tempor neque lacinia pretium. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. Aenean fermentum risus id tortor. Proin pede metus, vulputate nec, fermentum fringilla, vehicula vitae, justo. Donec quis nibh at felis congue commodo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla non lectus sed nisl molestie malesuada. Mauris suscipit, ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit mauris vel metus. Nullam faucibus mi quis velit. "}
+				</p>
+			</div>
 			<div class="opakujici_most_naopak"></div>
 		</main>
 		<footer>

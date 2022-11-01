@@ -23,6 +23,15 @@ body {
   font-family: "ArialBlackS";
 }
 
+@font-face {
+  font-family: "ArialBlack";
+  src: url("ariblk.ttf");
+}
+
+.most_bez_s {
+  font-family: "ArialBlack";
+}
+
 header {
   min-height: 5rem;
   display: flex;
@@ -718,6 +727,29 @@ td a {
   text-decoration: none;
 }
 
+
+
+/* ---------------------------------------------------- informace */
+.about_wrapper {
+  margin: 2rem 0 0 5rem;
+  width: 80vw;
+}
+
+.about_wrapper h1 {
+  padding-bottom: 1rem;
+}
+
+.about_wrapper p {
+  font-size: large;
+  padding-bottom: 1rem;
+}
+
+@media only screen and (max-width: 800px) {
+  .about_wrapper {
+    margin: 1vw 0 0 7vw;
+    width: 90vw;
+  }
+}
 
 
 /* ---------------------------------------------------- kontakty */
