@@ -32,7 +32,9 @@ pub fn kontakty() -> Html {
 				{"2) Mílovými kroky překonejte vrstevnice petřínských svahů nebo využijte hromadné dopravy do zastávek Pohořelec, Park Maxe van der Stoela, Hládkov či Malovanka."}
 			</p>
 			<p class="most_bez_s">
-				{"3) Neváhejte se k nám připojit na adrese:"}
+				{"3) Neváhejte se k nám připojit na adrese"}
+				<span class="address_pc most">{":"}</span>
+				<span class="address_mobile most_bez_s">{" Parléřova 2, 169 00, Praha 6"}</span>
 			</p>
 			</div>
 			<div class="icons">
