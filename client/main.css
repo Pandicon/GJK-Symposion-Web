@@ -749,7 +749,7 @@ td a {
   .about_wrapper {
     margin: 1vw 0 0 7vw;
     width: 90vw;
-	text-align: justify;
+    text-align: justify;
   }
 }
 
@@ -780,10 +780,19 @@ td a {
 .icons {
   width: 30vw;
   max-width: 260px;
-  margin: 20rem 0 0 10vw;
+  margin: 2rem 0 0 10vw;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+}
+
+.contacts_wrapper {
+  width: 30vw;
+  margin: 4rem 0 0 3rem;
+}
+
+.contacts_wrapper p {
+  padding-bottom: 1rem;
 }
 
 @media only screen and (max-width: 600px) {
@@ -805,10 +814,16 @@ td a {
 
   .icons {
     width: 70vw;
-    margin: 3rem 0 0 15vw;
+    margin: 1rem 0 0 15vw;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+  }
+
+  .contacts_wrapper {
+    width: 90vw;
+    margin-top: 1rem;
+    margin-left: 5vw;
   }
 }
 
