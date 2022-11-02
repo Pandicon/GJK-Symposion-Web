@@ -23,13 +23,13 @@ pub fn o_akci() -> Html {
 			<div class="opakujici_most"></div>
 			<div class="about_wrapper">
 				<h1 class="most_bez_s">
-					{"Lorem ipsum dolor sit amet, consectetuer adipiscing elit."}
+					{"25. ročník Symposionu Gymnázia Jana Keplera je tu!"}
 				</h1>
 				<p class="most_bez_s">
-					{"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas lorem. Fusce dui leo, imperdiet in, aliquam sit amet, feugiat eu, orci. Praesent vitae arcu tempor neque lacinia pretium. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. Aenean fermentum risus id tortor. Proin pede metus, vulputate nec, fermentum fringilla, vehicula vitae, justo. Donec quis nibh at felis congue commodo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla non lectus sed nisl molestie malesuada. Mauris suscipit, ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit mauris vel metus. Nullam faucibus mi quis velit. "}
+					{"Zveme všechny příznivce vědění a poznání k podívané, poslechu a počtení, které vyzývá k hledání paralel a provokuje diskuzi. Toužíte-li po zasazení do kontextu a po propojení známého s neznámým, vyslechněte slova, která vám letos Symposion prostřednictvím našich skvělých hostů nabídne. Jistě již netrpělivě čekají, až budou moci své myšlenky a podněty přenést i na Vás, posluchače. Přednášku přislíbili přednášející všech možných zaměření a zájmů, teoretici i praktici."}
 				</p>
 				<p class="most_bez_s">
-					{"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas lorem. Fusce dui leo, imperdiet in, aliquam sit amet, feugiat eu, orci. Praesent vitae arcu tempor neque lacinia pretium. Phasellus enim erat, vestibulum vel, aliquam a, posuere eu, velit. Aenean fermentum risus id tortor. Proin pede metus, vulputate nec, fermentum fringilla, vehicula vitae, justo. Donec quis nibh at felis congue commodo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nulla non lectus sed nisl molestie malesuada. Mauris suscipit, ligula sit amet pharetra semper, nibh ante cursus purus, vel sagittis velit mauris vel metus. Nullam faucibus mi quis velit. "}
+					{"Symposion se tradičně koná v listopadu při oslavách Dne studentstva přímo u nás na gymnáziu. Vítáni jsou všichni a vstup je volný. Během tří dnů probíhají bloky různorodých přednášek doprovázených například koncertem studentských kapel, výstavami, promítáním filmů či divadlem. Ve škole, ze které se na tyto krásné dny stává místo poznání, potěšení a inspirativních setkání, nechybí ani kavárna nebo dětský koutek."}
 				</p>
 			</div>
 			<div class="opakujici_most_naopak"></div>

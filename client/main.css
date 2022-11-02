@@ -742,12 +742,14 @@ td a {
 .about_wrapper p {
   font-size: large;
   padding-bottom: 1rem;
+  text-align: justify;
 }
 
 @media only screen and (max-width: 800px) {
   .about_wrapper {
     margin: 1vw 0 0 7vw;
     width: 90vw;
+	text-align: justify;
   }
 }
 
