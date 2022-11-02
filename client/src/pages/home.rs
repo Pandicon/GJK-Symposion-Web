@@ -68,9 +68,9 @@ pub fn home(props: &Props) -> Html {
 			<div class="opakujici_most_naopak"></div>
 		</main>
 		if props.config.one_page {
+			<OAkci />
 			<Harmonogram config={props.config.clone()} />
 			<Kontakty />
-			<OAkci />
 		}
 		<footer>
 		</footer>

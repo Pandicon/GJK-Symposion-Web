@@ -60,6 +60,7 @@ header a {
 
 main {
   flex-grow: 1;
+  min-height: 70vh;
   background-color: #828696;
   position: relative;
   padding-bottom: 23px;
@@ -237,7 +238,7 @@ footer {
 @media only screen and (max-width: 550px) {
   .overlay-back {
     font-size: 1.5rem;
-    padding: 1rem 5rem;
+    padding: 1rem 5rem 3rem 5rem;
     text-align: center;
   }
 
