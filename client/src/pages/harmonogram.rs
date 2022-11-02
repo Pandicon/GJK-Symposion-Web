@@ -166,6 +166,13 @@ pub fn harmonogram(props: &Props) -> Html {
 		</header>
 		<main>
 		<div class="opakujici_most"></div>
+		<p class="harmonogram_disclaimer">
+			<span class="most_bez_s">
+				{"Přednášky označené hvězdičkou jsou vhodné i pro mladší publikum."}
+			</span>
+			<br />
+			{"Pozn: harmonogram není finální a může se kdykoli změnit"}
+		</p>
 		{
 			days.iter().enumerate().map(|(day_index, (day, day_data))| {
 				let utc_date = chrono::Utc.timestamp(day_data.last_updated, 0);

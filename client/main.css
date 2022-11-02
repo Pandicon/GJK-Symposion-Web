@@ -297,6 +297,12 @@ footer {
 
 
 /* ---------------------------------- harmonogram */
+.harmonogram_disclaimer {
+  width: fit-content;
+  text-align: center;
+  margin: 1rem auto 0 auto;
+  line-height: 1.5rem;
+}
 
 .harmonogram_header h1 {
   display: block;
