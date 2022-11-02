@@ -19,20 +19,21 @@ function harmonogram(harmonogram, prirodovedci, humanities, praktici) {
 	let connected_table = connect_lectures(table);
 	let parsed_table = parse_table_data(connected_table);
 	let lecture_times_rooms = pair_time_lecture_room(parsed_table);
-
+	console.log(lecture_times_rooms);
 	let additional_info = {
-		'Přírodní vědy': parse_additional_info(cut_prirodovedci),
-		'Humanitní vědy': parse_additional_info(cut_humanties),
-		Praktici: parse_additional_info(cut_praktici)
+		...parse_additional_info(cut_prirodovedci),
+		...parse_additional_info(cut_humanties),
+		...parse_additional_info(cut_praktici)
 	};
-
 	let final_lectures_data = connect_lecture_additional_info(
 		lecture_times_rooms,
 		additional_info
 	);
 	final_data = [
 		...specials_times,
-		...Object.values(final_lectures_data).flat()
+		...final_lectures_data.filter(
+			(lecture) => lecture[7].toLowerCase() == 'provedena'
+		)
 	];
 	return final_data;
 }

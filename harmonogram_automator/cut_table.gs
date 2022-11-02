@@ -14,7 +14,13 @@ function cut_table(table) {
 					!(
 						typeof element === 'string' || element instanceof String
 					) || element.trim() != ''
-			).length == 0
+			).length == 0 ||
+			row.findIndex(
+				(element) =>
+					(typeof element === 'string' ||
+						element instanceof String) &&
+					element.toLowerCase().trim().startsWith('počítáme')
+			) != -1
 		)
 			break;
 		cut_table.push(row);
