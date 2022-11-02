@@ -748,8 +748,13 @@ td a {
 @media only screen and (max-width: 800px) {
   .about_wrapper {
     margin: 1vw 0 0 7vw;
-    width: 90vw;
+    width: 86vw;
     text-align: justify;
+  }
+
+  .about_wrapper h1 {
+    font-size: 1.5rem;
+    text-align: left;
   }
 }
 
