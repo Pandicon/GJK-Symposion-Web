@@ -150,6 +150,16 @@ namespace api_server {
 				done = true;
 				success = true;
 			}
-		});;
+			if (success && !data.empty()) {
+				std::cerr << "[sheet_fetcher]: fetched sheet - " << data.front().size() << "x" << data.size() << std::endl;
+				for (const auto &i : data) {
+					std::cerr << "[sheet_fetcher]:     ";
+					for (const auto &j : i) {
+						std::cerr << (j.empty() ? '.' : '#');
+					}
+					std::cerr << std::endl;
+				}
+			}
+		});
 	}
 }

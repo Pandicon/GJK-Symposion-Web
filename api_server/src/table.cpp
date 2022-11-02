@@ -72,6 +72,7 @@ namespace api_server {
 	};
 
 	schedule::schedule(const std::vector<std::vector<std::string>> &sheet) {
+		std::cerr << "[schedule]: parsing sheet..." << std::endl;
 		std::set<std::string> places;
 		using time_frame_t = std::unordered_map<std::string, lecture_t>;
 		std::vector<std::map<unsigned int, time_frame_t>> lecture_tables{{},{},{}};
@@ -116,9 +117,19 @@ namespace api_server {
 			}
 		}
 		// generate
+		std::cerr << "[schedule]: generating table - " << annotations.size() << " annotations" << std::endl;
 		day_jsons = std::vector<std::string>(3, std::string());
 		for (unsigned int day = 0; day < 3; day++) {
+			std::cerr << "[schedule]:     > day " << day << std::endl;
 			const auto &d = lecture_tables[day];
+			std::cerr << "[schedule]:         table" << std::endl;
+			for (const auto &j : d) {
+				std::cerr << "[schedule]:             " << j.first << ":";
+				for (const auto &k : j.second) {
+					std::cerr << ' ' << (k.first.empty() ? k.first.front() : '.') << k.second.lecturer.substr(0, 3) << k.second.annotation_id;
+				}
+				std::cerr << std::endl;
+			}
 			std::vector<std::string> times;
 			std::set<std::string> places;
 			std::vector<std::vector<const lecture_t *>> table;
@@ -166,6 +177,7 @@ namespace api_server {
 					}
 				}
 			}
+			std::cerr << "[schedule]:         pre filter - " << table.size() << " rows" << std::endl;
 			// filter empty rows
 			// TODO: optimize in a way std::remove_if works
 			for (unsigned int j = 0; j < table.size(); j++) {
@@ -174,6 +186,7 @@ namespace api_server {
 					times.erase(times.begin() + j);
 				}
 			}
+			std::cerr << "[schedule]:         post filter - " << table.size() << " rows" << std::endl;
 			// prepare annotation_indices
 			annotation_indices.emplace_back(table.size() + 1, std::vector<size_t>(places.size() + 1, 0));
 			// generate the json and save annotation_indices
