@@ -16,7 +16,7 @@ pub struct Props {
 	pub link_style: Option<String>,
 	/// The styles to apply in case it uses browser history so the `<a>` tag has no href attribute
 	pub history_style: Option<String>,
-	pub set_to_value: Option<(UseStateHandle<bool>, bool)>,
+	pub set_to_value: Option<(UseStateHandle<String>, String)>,
 }
 
 /// # The LinkTo component

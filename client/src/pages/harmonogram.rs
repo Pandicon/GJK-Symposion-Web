@@ -61,11 +61,11 @@ pub fn harmonogram(props: &Props) -> Html {
 		}
 	}
 
-	let update_harmonogram_state = use_state(|| true);
+	let day_harmonogram_state = use_state(|| day_from_url.clone());
 	let harmonogram_state: UseStateHandle<HarmonogramState> = use_state(HarmonogramState::default);
-	if (harmonogram_state.data.is_none() && harmonogram_state.error.is_none()) || *update_harmonogram_state {
-		if *update_harmonogram_state {
-			update_harmonogram_state.set(false);
+	if (harmonogram_state.data.is_none() && harmonogram_state.error.is_none()) || *day_harmonogram_state != day_from_url {
+		if *day_harmonogram_state != day_from_url {
+			day_harmonogram_state.set(day_from_url.clone());
 		}
 		set_harmonogram_state(harmonogram_state.clone(), api_base, current_timestamp_seconds, &day_from_url);
 	}
@@ -155,7 +155,7 @@ pub fn harmonogram(props: &Props) -> Html {
 			<div class="hlavicka_most_nad">
 				<div class="opakujici_most"></div>
 				<h2>
-					<LinkTo path="/harmonogram" route={Route::HarmonogramAll} link_style="text-decoration: none; color: inherit;" history_style="cursor: pointer;" set_to_value={(update_harmonogram_state.clone(), true)}>
+					<LinkTo path="/harmonogram" route={Route::HarmonogramAll} link_style="text-decoration: none; color: inherit;" history_style="cursor: pointer;" set_to_value={(day_harmonogram_state.clone(), "all".to_owned())}>
 						<span class="most">{"Harmonogram"}</span>
 					</LinkTo>
 				</h2>
@@ -183,7 +183,7 @@ pub fn harmonogram(props: &Props) -> Html {
 					<>
 					if day_from_url == *"all" {
 						<div class="harmonogram_day_title">
-							<LinkTo path={format!("/harmonogram/{}", day)} route={Route::Harmonogram { day: day.clone() }} link_style="text-decoration: none; color: inherit;" history_style="cursor: pointer;" set_to_value={(update_harmonogram_state.clone(), true)}>
+							<LinkTo path={format!("/harmonogram/{}", day)} route={Route::Harmonogram { day: day.clone() }} link_style="text-decoration: none; color: inherit;" history_style="cursor: pointer;" set_to_value={(day_harmonogram_state.clone(), day.clone())}>
 								<p class="most">{utils::raw_harmonogram_day_to_display_day(day)}</p>
 							</LinkTo>
 							<div class="opakujici_most"></div>
