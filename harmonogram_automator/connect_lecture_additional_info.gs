@@ -7,35 +7,32 @@
  * @customfunction
  */
 function connect_lecture_additional_info(lectures, additional_info) {
-	let data = {};
-	for (const field in lectures) {
-		data[field] = [];
-		for (const lecture of lectures[field]) {
-			let lecturer = lecture[0].trim();
-			let [lecturer_name_full, additional_lecturer_info] =
-				additional_info[field][lecturer]
-					? [lecturer, additional_info[field][lecturer]]
-					: find_lecturer_inefficient(
-							additional_info[field],
-							lecturer
-					  );
-			if (!additional_lecturer_info) continue;
-			lecture[0] = lecturer_name_full;
-			let {
-				title,
-				annotation,
-				lecturer_info,
-				suitable_for_younger,
-				...other
-			} = additional_lecturer_info;
-			data[field].push([
-				...lecture,
-				title,
-				annotation,
-				lecturer_info,
-				suitable_for_younger
-			]);
-		}
+	let data = [];
+	for (const lecture of lectures) {
+		let lecturer = lecture[0].trim();
+		let [lecturer_name_full, additional_lecturer_info] = additional_info[
+			lecturer
+		]
+			? [lecturer, additional_info[lecturer]]
+			: find_lecturer_inefficient(additional_info, lecturer);
+		if (!additional_lecturer_info) continue;
+		lecture[0] = lecturer_name_full;
+		let {
+			title,
+			annotation,
+			lecturer_info,
+			suitable_for_younger,
+			korektura,
+			...other
+		} = additional_lecturer_info;
+		data.push([
+			...lecture,
+			title,
+			annotation,
+			lecturer_info,
+			suitable_for_younger,
+			korektura
+		]);
 	}
 	return data;
 }

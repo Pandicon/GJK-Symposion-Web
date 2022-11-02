@@ -19,8 +19,24 @@ pub fn kontakty() -> Html {
 				<h2><span class="most">{"Kontakty"}</span></h2>
 			</div>
 		</header>
-		<main>
+		<main class="main-contacts">
 			<div class="opakujici_most"></div>
+			<div class="contacts_wrapper">
+			<p class="most_bez_s">
+				{"Jak se k nám přes hory a doly dostat?"}
+			</p>
+			<p class="most_bez_s">
+				{"1) Pomocí svého oblíbeného mostu se dostaňte na levý břeh Vltavy."}
+			</p>
+			<p class="most_bez_s">
+				{"2) Mílovými kroky překonejte vrstevnice petřínských svahů nebo využijte hromadné dopravy do zastávek Pohořelec, Park Maxe van der Stoela, Hládkov či Malovanka."}
+			</p>
+			<p class="most_bez_s">
+				{"3) Neváhejte se k nám připojit na adrese"}
+				<span class="address_pc most">{":"}</span>
+				<span class="address_mobile most_bez_s">{" Parléřova 2, 169 00, Praha 6"}</span>
+			</p>
+			</div>
 			<div class="icons">
 				<a href="https://fb.me/SymposionGjk"><img src="../../images/FACEBOOK.png" height="100px" alt="Facebook logo" /></a>
 				<a href="https://instagram.com/symposion_gjk"><img src="../../images/INSTAGRAM.png" height="100px" alt="Instagram logo" /></a>

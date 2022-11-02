@@ -26,6 +26,50 @@ const ENDING_CHARACTERS = [
 	'&',
 	'*'
 ];
+const LETTERS = [
+	'a',
+	'á',
+	'b',
+	'c',
+	'č',
+	'd',
+	'ď',
+	'e',
+	'é',
+	'ě',
+	'f',
+	'g',
+	'h',
+	'i',
+	'í',
+	'j',
+	'k',
+	'l',
+	'm',
+	'n',
+	'ň',
+	'o',
+	'ó',
+	'p',
+	'q',
+	'r',
+	'ř',
+	's',
+	'š',
+	't',
+	'ť',
+	'u',
+	'ú',
+	'ů',
+	'v',
+	'w',
+	'x',
+	'y',
+	'ý',
+	'z',
+	'ž',
+	' '
+];
 
 /**
  * Parses the names in the table
@@ -53,9 +97,15 @@ function parse_table_data(table) {
  * @customfunction
  */
 function parse_cell(cell) {
-	let s = cell.split('');
-	let i = s.findIndex((character) => ENDING_CHARACTERS.includes(character));
-	if (i < 0) return cell;
+	let s = cell.trim().split('');
+	let first_letter = s.findIndex((character) =>
+		LETTERS.includes(character.toLowerCase())
+	);
+	s = s.slice(first_letter);
+	let i = s.findIndex(
+		(character) => !LETTERS.includes(character.toLowerCase())
+	);
+	if (i < 0) return s.join('').trim();
 	s.length = i;
-	return s.join('');
+	return s.join('').trim();
 }

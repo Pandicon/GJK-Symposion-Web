@@ -237,7 +237,7 @@ footer {
 @media only screen and (max-width: 550px) {
   .overlay-back {
     font-size: 1.5rem;
-    padding: 1rem 5rem;
+    padding: 1rem 5rem 3rem 5rem;
     text-align: center;
   }
 
@@ -297,6 +297,12 @@ footer {
 
 
 /* ---------------------------------- harmonogram */
+.harmonogram_disclaimer {
+  width: fit-content;
+  text-align: center;
+  margin: 1rem auto 0 auto;
+  line-height: 1.5rem;
+}
 
 .harmonogram_header h1 {
   display: block;
@@ -730,6 +736,10 @@ td a {
 
 
 /* ---------------------------------------------------- informace */
+.main-about {
+  min-height: 60vh;
+}
+
 .about_wrapper {
   margin: 2rem 0 0 5rem;
   width: 80vw;
@@ -742,17 +752,29 @@ td a {
 .about_wrapper p {
   font-size: large;
   padding-bottom: 1rem;
+  text-align: justify;
 }
 
 @media only screen and (max-width: 800px) {
   .about_wrapper {
     margin: 1vw 0 0 7vw;
-    width: 90vw;
+    width: 86vw;
+    text-align: justify;
+  }
+
+  .about_wrapper h1 {
+    font-size: 1.5rem;
+    text-align: left;
   }
 }
 
 
 /* ---------------------------------------------------- kontakty */
+.main-contacts {
+  min-height: 70vh;
+}
+
+
 .address {
   width: 60%;
   position: absolute;
@@ -767,6 +789,10 @@ td a {
   border: 3px solid black;
 }
 
+.address_mobile {
+  display: none;
+}
+
 .school_wrapper {
   width: 50vw;
   margin-left: 2rem;
@@ -778,13 +804,30 @@ td a {
 .icons {
   width: 30vw;
   max-width: 260px;
-  margin: 20rem 0 0 10vw;
+  margin: 2rem 0 0 10vw;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
 }
 
+.contacts_wrapper {
+  width: 30vw;
+  margin: 4rem 0 0 3rem;
+}
+
+.contacts_wrapper p {
+  padding-bottom: 1rem;
+}
+
 @media only screen and (max-width: 600px) {
+  .address_mobile {
+    display: initial !important;
+  }
+
+  .address_pc {
+    display: none;
+  }
+
   .address {
     width: 95%;
     position: initial;
@@ -803,10 +846,16 @@ td a {
 
   .icons {
     width: 70vw;
-    margin: 3rem 0 0 15vw;
+    margin: 1rem 0 0 15vw;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+  }
+
+  .contacts_wrapper {
+    width: 90vw;
+    margin-top: 1rem;
+    margin-left: 5vw;
   }
 }
 
