@@ -69,7 +69,9 @@ pub fn home(props: &Props) -> Html {
 		</main>
 		if props.config.one_page {
 			<OAkci />
-			<Harmonogram config={props.config.clone()} />
+			<Harmonogram config={props.config.clone()} day="streda" />
+			<Harmonogram config={props.config.clone()} day="ctvrtek" />
+			<Harmonogram config={props.config.clone()} day="patek" />
 			<Kontakty />
 		}
 		<footer>

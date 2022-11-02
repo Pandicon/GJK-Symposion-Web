@@ -19,7 +19,7 @@ pub fn kontakty() -> Html {
 				<h2><span class="most">{"Kontakty"}</span></h2>
 			</div>
 		</header>
-		<main>
+		<main class="main-contacts">
 			<div class="opakujici_most"></div>
 			<div class="contacts_wrapper">
 			<p class="most_bez_s">

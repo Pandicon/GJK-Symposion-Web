@@ -60,7 +60,6 @@ header a {
 
 main {
   flex-grow: 1;
-  min-height: 70vh;
   background-color: #828696;
   position: relative;
   padding-bottom: 23px;
@@ -737,6 +736,10 @@ td a {
 
 
 /* ---------------------------------------------------- informace */
+.main-about {
+  min-height: 60vh;
+}
+
 .about_wrapper {
   margin: 2rem 0 0 5rem;
   width: 80vw;
@@ -767,6 +770,11 @@ td a {
 
 
 /* ---------------------------------------------------- kontakty */
+.main-contacts {
+  min-height: 70vh;
+}
+
+
 .address {
   width: 60%;
   position: absolute;

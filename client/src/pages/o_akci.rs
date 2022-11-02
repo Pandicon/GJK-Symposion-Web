@@ -19,7 +19,7 @@ pub fn o_akci() -> Html {
 				<h2><span class="most">{"Informace"}</span></h2>
 			</div>
 		</header>
-		<main>
+		<main class="main-about">
 			<div class="opakujici_most"></div>
 			<div class="about_wrapper">
 				<h1 class="most_bez_s">
