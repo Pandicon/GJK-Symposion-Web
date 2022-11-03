@@ -7,8 +7,8 @@ pub fn footer() -> Html {
 	html! {
 		<footer>
 			<h6 style="padding-top: 5px">
-				{"Stránku vytvořili Martin Kudrna, Filip Majer, Vojtěch Černý a Tomáš Pryl"}<br />
-				{"Design stránky vytvořila Julie Pförtnerová"}<br />
+				<br />
+				{"Nákresy Julie Pförtnerové vybudovali Martin Kudrna, Filip Majer, Vojtěch Černý a Tomáš Pryl."}<br />
 				{"S ❤️ k 🌍 "}
 				<a href="https://github.com/Pandicon/GJK-Symposion-Web">{"napsané"}</a>
 				{" v Rustu "}
@@ -21,7 +21,7 @@ pub fn footer() -> Html {
 				</a>
 				{", jedněch z "}
 				<a href="https://haslab.github.io/SAFER/scp21.pdf">{"energeticky nejúspornějších"}</a>
-				{" programovacích jazyků"}
+				{" programovacích jazyků."}
 			</h6>
 		</footer>
 	}
