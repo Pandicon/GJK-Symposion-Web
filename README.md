@@ -1,6 +1,8 @@
 # GJK Symposion Web
 This is a website for the GJK Symposion event.
 
+With ❤️ for the 🌍 written in Rust and C++, ones of the most [energy efficient](https://haslab.github.io/SAFER/scp21.pdf) programming languages.
+
 ## How to run
 ### Frontend
 1. Install the Rust programming language toolchain: [https://www.rust-lang.org/tools/install](https://www.rust-lang.org/tools/install)
