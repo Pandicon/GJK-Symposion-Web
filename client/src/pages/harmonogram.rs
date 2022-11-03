@@ -76,7 +76,7 @@ pub fn harmonogram(props: &Props) -> Html {
 	let harmonogram_state: UseStateHandle<HarmonogramState> = use_state(HarmonogramState::default);
 	if (harmonogram_state.data.is_none() && harmonogram_state.error.is_none()) || *day_harmonogram_state != day_id {
 		if *day_harmonogram_state != day_id {
-			day_harmonogram_state.set(day_id.clone());
+			day_harmonogram_state.set(day_id);
 		}
 		set_harmonogram_state(harmonogram_state.clone(), api_base, current_timestamp_seconds, &day_from_url);
 	}
