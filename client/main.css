@@ -99,6 +99,10 @@ footer {
   flex-grow: 0;
 }
 
+footer img {
+  transform: translateY(2px);
+}
+
 /* ---------------------------------------- generic header */
 
 @media only screen and (max-width: 599px) {
