@@ -22,11 +22,13 @@ pub enum Route {
 	HarmonogramDetails { day: String, id: String },
 	#[at("/kontakty")]
 	Kontakty,
+	#[at("/nazdarek")]
+	Nazdarek,
+	#[at("/o_akci")]
+	OAkci,
 	#[not_found]
 	#[at("/404")]
 	NotFound,
-	#[at("/o_akci")]
-	OAkci,
 }
 
 pub fn switch(route: &Route) -> Html {
@@ -45,6 +47,7 @@ pub fn switch(route: &Route) -> Html {
 		Route::HarmonogramAll => html! { <Harmonogram config={config} />},
 		Route::HarmonogramAllDetails { id } => html! { <Harmonogram config={config} details_id={id.clone()} /> },
 		Route::Kontakty => html! { <Kontakty />},
+		Route::Nazdarek => html! { <><h1>{"Nazdárek!"}</h1><script>{r#"window.location.href = "http://gjk.cz/~kupka/";"#}</script></> },
 		Route::NotFound => html! { <NotFound /> },
 		Route::OAkci => html! { <OAkci /> },
 	}
