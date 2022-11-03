@@ -60,12 +60,23 @@ pub fn harmonogram(props: &Props) -> Html {
 			details_id = Some((day, format!("{}-{}", filtered[0], filtered[1])));
 		}
 	}
-
-	let day_harmonogram_state = use_state(|| day_from_url.clone());
+	let day_id = if let Some(ref details) = details_id {
+		if let Some(details_day) = &details.0 {
+			format!("{}-{}-{}", day_from_url, details_day, details.1)
+		} else {
+			format!("{}-{}", day_from_url, details.1)
+		}
+	} else {
+		day_from_url.clone()
+	};
+	let day_harmonogram_state = use_state(|| day_id.clone());
+	if *additional_cell_info_enabled_state && details_id.is_none() {
+		additional_cell_info_enabled_state.set(false);
+	}
 	let harmonogram_state: UseStateHandle<HarmonogramState> = use_state(HarmonogramState::default);
-	if (harmonogram_state.data.is_none() && harmonogram_state.error.is_none()) || *day_harmonogram_state != day_from_url {
-		if *day_harmonogram_state != day_from_url {
-			day_harmonogram_state.set(day_from_url.clone());
+	if (harmonogram_state.data.is_none() && harmonogram_state.error.is_none()) || *day_harmonogram_state != day_id {
+		if *day_harmonogram_state != day_id {
+			day_harmonogram_state.set(day_id.clone());
 		}
 		set_harmonogram_state(harmonogram_state.clone(), api_base, current_timestamp_seconds, &day_from_url);
 	}
