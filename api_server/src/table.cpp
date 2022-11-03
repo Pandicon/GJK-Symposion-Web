@@ -53,6 +53,7 @@ namespace api_server {
 		}
 	}
 	std::string json_str(std::string s) {
+		s.erase(std::remove_if(s.begin(), s.end(), [](char c) { return c < 32 && 0 <= c && c != 10; }), s.end());
 		for (auto it = s.find_first_of("\\\"\n"); it != std::string::npos; it = s.find_first_of("\\\"\n", it + 2)) {
 			if (s[it] == '\n') {
 				s[it] = 'n';
