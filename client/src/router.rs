@@ -1,5 +1,5 @@
 use crate::{
-	pages::{chyba::Chyba, harmonogram::Harmonogram, home::Home, kontakty::Kontakty, not_found::NotFound, o_akci::OAkci},
+	pages::{chyba::Chyba, clear_storage::ClearStorage, harmonogram::Harmonogram, home::Home, kontakty::Kontakty, not_found::NotFound, o_akci::OAkci},
 	types,
 };
 
@@ -12,6 +12,8 @@ const CONFIG_TEXT: &str = include_str!("../config.json");
 pub enum Route {
 	#[at("/")]
 	Home,
+	#[at("/clear_storage")]
+	ClearStorage,
 	#[at("/harmonogram")]
 	HarmonogramAll,
 	#[at("/harmonogram/details/:id")]
@@ -41,6 +43,7 @@ pub fn switch(route: &Route) -> Html {
 		}
 	};
 	match route {
+		Route::ClearStorage => html! { <ClearStorage /> },
 		Route::Home => html! { <Home config={config} /> },
 		Route::Harmonogram { day } => html! { <Harmonogram day={Some(day.to_owned())} config={config} />},
 		Route::HarmonogramDetails { day, id } => html! { <Harmonogram day={Some(day.to_owned())} config={config} details_id={id.clone()} />},
