@@ -1,0 +1,1 @@
+g++ -O3 -std=c++20 -I./include/ -o./bin/api_server ./src/fetch.cpp ./src/http.cpp ./src/main.cpp ./src/table.cpp ./src/wserver.cpp -lpthread -lssl -lcrypto
