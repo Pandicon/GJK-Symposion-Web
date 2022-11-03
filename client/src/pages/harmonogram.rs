@@ -5,7 +5,7 @@ use crate::types::{
 };
 use crate::utils;
 
-use crate::components::{additional_lecture_info::AdditionalLectureInfo, link_to::LinkTo};
+use crate::components::{additional_lecture_info::AdditionalLectureInfo, footer::Footer, link_to::LinkTo};
 
 use chrono::TimeZone;
 use yew::prelude::*;
@@ -306,7 +306,7 @@ pub fn harmonogram(props: &Props) -> Html {
 		<AdditionalLectureInfo enabled_state={additional_cell_info_enabled_state.clone()} data_state={additional_cell_info_state.clone()} day={day_from_url}/>
 		<div class="opakujici_most_naopak"></div>
 		</main>
-		<footer></footer>
+		<Footer />
 		</>
 	}
 }

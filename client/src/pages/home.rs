@@ -1,5 +1,8 @@
 use crate::pages::{harmonogram::Harmonogram, kontakty::Kontakty, o_akci::OAkci};
-use crate::{components::link_to::LinkTo, router::Route};
+use crate::{
+	components::{footer::Footer, link_to::LinkTo},
+	router::Route,
+};
 
 use yew::prelude::*;
 
@@ -74,8 +77,7 @@ pub fn home(props: &Props) -> Html {
 			<Harmonogram config={props.config.clone()} day="patek" />
 			<Kontakty />
 		}
-		<footer>
-		</footer>
+		<Footer />
 		</>
 	}
 }

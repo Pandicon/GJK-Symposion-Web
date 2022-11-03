@@ -1,4 +1,7 @@
-use crate::{components::link_to::LinkTo, router::Route};
+use crate::{
+	components::{footer::Footer, link_to::LinkTo},
+	router::Route,
+};
 
 use yew::prelude::*;
 
@@ -29,17 +32,16 @@ pub fn not_found() -> Html {
 		<main>
 			<div class="opakujici_most"></div>
 			<div class = "body_notf">
-			    <div class="mosty_jako" style="transform: rotate(-20deg)">
-                				<p class="most" style="transform: rotate(-10deg)">
-                					<h2 class="most" style="transform: rotate(25deg)">{"404"}</h2>
-                					<h3 class="most">{"Most do této destinace spadl"}</h3>
-                				</p>
-                			</div>
+				<div class="mosty_jako" style="transform: rotate(-20deg)">
+								<p class="most" style="transform: rotate(-10deg)">
+									<h2 class="most" style="transform: rotate(25deg)">{"404"}</h2>
+									<h3 class="most">{"Most do této destinace spadl"}</h3>
+								</p>
+							</div>
 			</div>
 			<div class="opakujici_most_naopak"></div>
 		</main>
-		<footer>
-		</footer>
+		<Footer />
 		</>
 	}
 }

@@ -1,4 +1,7 @@
-use crate::{components::link_to::LinkTo, router::Route};
+use crate::{
+	components::{footer::Footer, link_to::LinkTo},
+	router::Route,
+};
 use yew::prelude::*;
 
 /// # The Kontakty page
@@ -52,8 +55,7 @@ pub fn kontakty() -> Html {
 			</div>
 			<div class="opakujici_most_naopak"></div>
 		</main>
-		<footer>
-		</footer>
+		<Footer />
 		</>
 	}
 }

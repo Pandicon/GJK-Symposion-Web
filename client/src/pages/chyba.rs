@@ -1,5 +1,7 @@
 use yew::prelude::*;
 
+use crate::components::footer::Footer;
+
 #[derive(PartialEq, Properties, Debug)]
 pub struct Props {
 	/// The error to display
@@ -17,8 +19,7 @@ pub fn chyba(props: &Props) -> Html {
 		<h1>{"Při načítání stránky nastala chyba, která je uvedená níže. Při komunikaci s vývojářským týmem jim prosím tuto chybu nahlašte:"}</h1>
 		<div class={"error"}>{&props.error}</div>
 		</main>
-		<footer>
-		</footer>
+		<Footer />
 		</>
 	}
 }

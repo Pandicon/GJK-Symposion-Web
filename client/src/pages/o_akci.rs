@@ -1,4 +1,7 @@
-use crate::{components::link_to::LinkTo, router::Route};
+use crate::{
+	components::{footer::Footer, link_to::LinkTo},
+	router::Route,
+};
 use yew::prelude::*;
 
 /// # The OAkci page
@@ -34,8 +37,7 @@ pub fn o_akci() -> Html {
 			</div>
 			<div class="opakujici_most_naopak"></div>
 		</main>
-		<footer>
-		</footer>
+		<Footer />
 		</>
 	}
 }
