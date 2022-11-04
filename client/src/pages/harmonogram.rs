@@ -5,7 +5,7 @@ use crate::types::{
 };
 use crate::utils;
 
-use crate::components::{additional_lecture_info::AdditionalLectureInfo, link_to::LinkTo};
+use crate::components::{additional_lecture_info::AdditionalLectureInfo, footer::Footer, link_to::LinkTo};
 
 use chrono::TimeZone;
 use yew::prelude::*;
@@ -76,7 +76,7 @@ pub fn harmonogram(props: &Props) -> Html {
 	let harmonogram_state: UseStateHandle<HarmonogramState> = use_state(HarmonogramState::default);
 	if (harmonogram_state.data.is_none() && harmonogram_state.error.is_none()) || *day_harmonogram_state != day_id {
 		if *day_harmonogram_state != day_id {
-			day_harmonogram_state.set(day_id.clone());
+			day_harmonogram_state.set(day_id);
 		}
 		set_harmonogram_state(harmonogram_state.clone(), api_base, current_timestamp_seconds, &day_from_url);
 	}
@@ -306,7 +306,7 @@ pub fn harmonogram(props: &Props) -> Html {
 		<AdditionalLectureInfo enabled_state={additional_cell_info_enabled_state.clone()} data_state={additional_cell_info_state.clone()} day={day_from_url}/>
 		<div class="opakujici_most_naopak"></div>
 		</main>
-		<footer></footer>
+		<Footer />
 		</>
 	}
 }
