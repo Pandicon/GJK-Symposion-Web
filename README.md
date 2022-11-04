@@ -1,3 +1,5 @@
+## ⚠️ WARNING: The current API implementation crashed on a segfault and we weren't able to identify the cause as of now ⚠️
+
 # GJK Symposion Web
 This is a website for the GJK Symposion event.
 
