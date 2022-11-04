@@ -17,7 +17,8 @@ With ❤️ for the 🌍 written in Rust and C++, ones of the most [energy effic
 
 ### API Server
 #### Linux
-1. run the build script - `api_server/sh_build.sh` - from it's directory (it uses g++)
-2. wait untill it finishes compiling :)
-3. (Optional) change the config file - `api_server/bin/api_server.cfg`; the certificate chain and private key are not used (because it uses http by default)
-4. run the `api_server/bin/api_server` executable from it's directory
+1. download [asio](https://think-async.com/Asio/Download.html), copy(/move) contents of asio's include folder into `api_server/include/`
+2. run the build script - `api_server/sh_build.sh` - from it's directory (it uses g++)
+3. wait untill it finishes compiling :)
+4. (Optional) change the config file - `api_server/bin/api_server.cfg`; the certificate chain and private key are not used (because it uses http by default)
+5. run the `api_server/bin/repeat_run.sh` script from it's directory (you can provide log filename as argument)
