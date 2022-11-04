@@ -7,12 +7,13 @@ pub fn footer() -> Html {
 	html! {
 		<footer>
 			<h6>
-				{"Nákresy Julie Pförtnerové vybudovali Martin Kudrna, Filip Majer, Vojtěch Černý a Tomáš Pryl."}<br />
+				{"Design stránky vytvořila Julie Pförtnerová."}<br />
+				{"Stránku vybudovali Martin Kudrna, Filip Majer, Vojtěch Černý a Tomáš Pryl."}<br />
 				{"S ❤️ k 🌍 "}
 				<a href="https://github.com/Pandicon/GJK-Symposion-Web">{"napsané"}</a>
-				{" v Rustu "}
+				{" v "}
 				<a href="https://www.rust-lang.org/">
-				<img src="/images/ferris.png" height="13px" alt="" />
+				<img src="/images/ferris.png" height="13px" alt="Rust" />
 				</a>
 				{" a "}
 				<a href="https://en.cppreference.com/w/">
