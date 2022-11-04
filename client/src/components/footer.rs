@@ -6,7 +6,7 @@ use yew::prelude::*;
 pub fn footer() -> Html {
 	html! {
 		<footer>
-			<h6 style="padding-top: 10px">
+			<h6>
 				{"Nákresy Julie Pförtnerové vybudovali Martin Kudrna, Filip Majer, Vojtěch Černý a Tomáš Pryl."}<br />
 				{"S ❤️ k 🌍 "}
 				<a href="https://github.com/Pandicon/GJK-Symposion-Web">{"napsané"}</a>
