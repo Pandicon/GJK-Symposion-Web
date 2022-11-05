@@ -232,13 +232,15 @@ footer img {
 
 .overlay-back {
   cursor: pointer;
+  border: 2px solid black;
 }
 
 
 @media only screen and (min-width: 550px) {
   .overlay-back {
     font-size: 2rem;
-    padding: 2rem 2vw;
+    margin: 1rem 1vw;
+    padding: 1rem 1vw;
     position: absolute;
     top: 0;
     right: 0;
@@ -248,7 +250,9 @@ footer img {
 @media only screen and (max-width: 550px) {
   .overlay-back {
     font-size: 1.5rem;
-    padding: 1rem 5rem 3rem 5rem;
+    padding: 1rem 2rem;
+    width: fit-content;
+    margin: 1rem auto;
     text-align: center;
   }
 
