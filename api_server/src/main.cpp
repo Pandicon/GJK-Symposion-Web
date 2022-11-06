@@ -27,7 +27,8 @@ void day_schedule_response(api_server::http_response &res, unsigned int day) {
 		res.content = "{\"data\":{\"harmonogram\":" + schedule_cache.get().day_jsons[day] + ","
 			"\"last_updated\":" + std::to_string(schedule_cache.get_last_update_time_since_epoch()) + "},\"error\":null}";
 	}
-	if (schedule_cache.should_update(std::chrono::minutes(30))) {
+	if (schedule_cache.should_update(std::chrono::minutes(30)) || schedule_cache.get().annotation_indices[0].size() < 3 ||
+		schedule_cache.get().annotation_indices[1].size() < 3 || schedule_cache.get().annotation_indices[2].size() < 3) {
 		fetch_tasks.emplace(fetch_task_t::SCHEDULE);
 	}
 }
@@ -54,7 +55,8 @@ void annotation_response(const std::string &url, api_server::http_response &res,
 		res.content = "{\"data\":{\"info\":" + schedule_cache.get().annotations[indices[r][c]] + ","
 			"\"last_updated\":" + std::to_string(schedule_cache.get_last_update_time_since_epoch()) + "},\"error\":null}";
 	}
-	if (schedule_cache.should_update(std::chrono::minutes(30))) {
+	if (schedule_cache.should_update(std::chrono::minutes(30)) || schedule_cache.get().annotation_indices[0].size() < 3 ||
+		schedule_cache.get().annotation_indices[1].size() < 3 || schedule_cache.get().annotation_indices[2].size() < 3) {
 		fetch_tasks.emplace(fetch_task_t::SCHEDULE);
 	}
 	return;
