@@ -1,5 +1,5 @@
 echo "usage: ./repeat_run.sh [log_file]"
-echo "\tif there's no log file, stdout is used instead"
+echo "    if there's no log file, stdout is used instead"
 log_counter=0
 while :
 do
