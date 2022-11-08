@@ -274,7 +274,7 @@ pub fn harmonogram(props: &Props) -> Html {
 															/*{"Start: "}{start_time}{" Konec: "}{end_time}*/
 															if !lecture_rooms.is_empty() {
 																<div class="lecture_room">
-																	{lecture_rooms.join(", ")}
+																	<b>{lecture_rooms.join(", ")}</b>
 																</div>
 															}
 														}
