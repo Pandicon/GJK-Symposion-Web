@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <chrono>
 #include <iostream>
 #include <queue>
@@ -130,8 +131,11 @@ int main(int, char**) {
 			case fetch_task_t::NONE: break;
 			case fetch_task_t::SCHEDULE:{
 				if (fetcher.is_success()) {
-					schedule_cache.update(api_server::schedule(fetcher.get_sheet()));
-					std::cout << "\x1b[1m\x1b[96m[tasks::fetcher]: fetched schedule\x1b[0m" << std::endl;
+                                        auto sch = api_server::schedule(fetcher.get_sheet());
+                                        if (schedule_cache.get_last_update_time_since_epoch() <= 1 || (sch.annotation_indices.size() > 2 && std::all_of(sch.annotation_indices.begin(), sch.annotation_indices.end(), [](cons auto &a){return a.size() >=2;}))) {
+					    schedule_cache.update(sch);
+					    std::cout << "\x1b[1m\x1b[96m[tasks::fetcher]: fetched schedule\x1b[0m" << std::endl;
+                                        } else { std::cout << "\x1b[1m\x1b[91m[tasks::fetcher]: fetched schedule was empty\x1b[0m" << std::endl; }
 				} else {
 					std::cout << "\x1b[1m\x1b[91m[tasks::fetcher::error]: failed to fetch schedule\x1b[0m" << std::endl;
 				}
