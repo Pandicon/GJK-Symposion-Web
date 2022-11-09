@@ -72,6 +72,7 @@ pub fn harmonogram(props: &Props) -> Html {
 	let day_harmonogram_state = use_state(|| day_id.clone());
 	if *additional_cell_info_enabled_state && details_id.is_none() {
 		additional_cell_info_enabled_state.set(false);
+		additional_cell_info_state.set(AdditionalCellInfo::default());
 	}
 	let harmonogram_state: UseStateHandle<HarmonogramState> = use_state(HarmonogramState::default);
 	if (harmonogram_state.data.is_none() && harmonogram_state.error.is_none()) || *day_harmonogram_state != day_id {
