@@ -24,6 +24,23 @@ pub fn o_akci() -> Html {
 		</header>
 		<main class="main-about">
 			<div class="opakujici_most"></div>
+			<nav>
+				<b>
+				<LinkTo path="/kontakty" route={Route::Kontakty} link_style="text-decoration: none; color: inherit;" history_style="cursor: pointer;">
+					<span class="most">{"KONTAKTY"}</span>
+				</LinkTo>
+				</b>
+				<b>
+				<LinkTo path="/harmonogram" route={Route::HarmonogramAll} link_style="text-decoration: none; color: inherit;" history_style="cursor: pointer;">
+					<span class="most">{"HARMONOGRAM"}</span>
+				</LinkTo>
+				</b>
+				<b>
+				<LinkTo path="/" route={Route::Home} link_style="text-decoration: none; color: inherit;" history_style="cursor: pointer;">
+					<span class="most">{"DOMŮ"}</span>
+				</LinkTo>
+				</b>
+			</nav>
 			<div class="about_wrapper">
 				<h1 class="most_bez_s">
 					{"25. ročník Symposionu Gymnázia Jana Keplera je tu!"}

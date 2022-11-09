@@ -24,6 +24,23 @@ pub fn kontakty() -> Html {
 		</header>
 		<main class="main-contacts">
 			<div class="opakujici_most"></div>
+			<nav>
+				<b>
+				<LinkTo path="/harmonogram" route={Route::HarmonogramAll} link_style="text-decoration: none; color: inherit;" history_style="cursor: pointer;">
+					<span class="most">{"HARMONOGRAM"}</span>
+				</LinkTo>
+				</b>
+				<b>
+				<LinkTo path="/o_akci" route={Route::OAkci} link_style="text-decoration: none; color: inherit;" history_style="cursor: pointer;">
+					<span class="most">{"O AKCI"}</span>
+				</LinkTo>
+				</b>
+				<b>
+				<LinkTo path="/" route={Route::Home} link_style="text-decoration: none; color: inherit;" history_style="cursor: pointer;">
+					<span class="most">{"DOMŮ"}</span>
+				</LinkTo>
+				</b>
+			</nav>
 			<div class="contacts_wrapper">
 			<p class="most_bez_s">
 				{"Jak se k nám přes hory a doly dostat?"}

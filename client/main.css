@@ -798,13 +798,13 @@ td a {
   width: 60%;
   position: absolute;
   right: 0;
-  top: 0;
+  top: 5rem;
 }
 
 .address iframe {
   width: 50vw;
   height: 20rem;
-  margin: 5rem 2rem 0 2rem;
+  margin: 0rem 2rem 0 2rem;
   border: 3px solid black;
 }
 

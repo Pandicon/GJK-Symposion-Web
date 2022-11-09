@@ -178,6 +178,30 @@ pub fn harmonogram(props: &Props) -> Html {
 		</header>
 		<main>
 		<div class="opakujici_most"></div>
+		<nav>
+			<b>
+			<LinkTo path="/kontakty" route={Route::Kontakty} link_style="text-decoration: none; color: inherit;" history_style="cursor: pointer;">
+				<span class="most">{"KONTAKTY"}</span>
+			</LinkTo>
+			</b>
+			/*if day_from_url != *"all" {
+				<b>
+				<LinkTo path="/harmonogram" route={Route::HarmonogramAll} link_style="text-decoration: none; color: inherit;" history_style="cursor: pointer;">
+					<span class="most">{"HARMONOGRAM"}</span>
+				</LinkTo>
+				</b>
+			}*/
+			<b>
+			<LinkTo path="/o_akci" route={Route::OAkci} link_style="text-decoration: none; color: inherit;" history_style="cursor: pointer;">
+				<span class="most">{"O AKCI"}</span>
+			</LinkTo>
+			</b>
+			<b>
+			<LinkTo path="/" route={Route::Home} link_style="text-decoration: none; color: inherit;" history_style="cursor: pointer;">
+				<span class="most">{"DOMŮ"}</span>
+			</LinkTo>
+			</b>
+		</nav>
 		<p class="harmonogram_disclaimer">
 			<span class="most_bez_s">
 				{"Přednášky označené hvězdičkou jsou vhodné i pro mladší publikum."}
