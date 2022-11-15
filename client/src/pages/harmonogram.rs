@@ -225,11 +225,6 @@ pub fn harmonogram(props: &Props) -> Html {
 							<div class="opakujici_most"></div>
 						</div>
 					}
-					if day == "ctvrtek" {
-						<div class="harmonogram_disclaimer" style="margin-top: 0">
-						{"Celý čtvrtek (17.11) bude probíhat v druhém patře silent disco. Přijďte během dne vypnout s hudbou!"}
-						</div>
-					}
 					<table class="harmonogram_day">
 					{
 						day_data.harmonogram.iter().enumerate().map(|(row_id, row)| {
