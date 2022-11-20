@@ -1,9 +1,9 @@
-## ⚠️ WARNING: The current API implementation crashed on a segfault and we weren't able to identify the cause as of now ⚠️
-
 # GJK Symposion Web
 This is a website for the GJK Symposion event.
 
 With ❤️ for the 🌍 written in Rust and C++, ones of the most [energy efficient](https://haslab.github.io/SAFER/scp21.pdf) programming languages.
+
+Warning: The current API implementation crashed on a segfault and we weren't able to identify the cause as of now. However, it didn't crash since then, so it should be safe to use, especially if you use the `repeat_run.sh` script to launch it, since it will restart it if it crashes.
 
 ## How to run
 ### Frontend
